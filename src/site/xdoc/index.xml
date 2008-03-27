@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <author email="jahlborn@users.sf.net">James Ahlborn</author>
+    <title>Builder style classes for creating SQL queries</title>
+  </properties>
+  <body>
+    <section name="SqlBuilder">
+      <p>
+        SqlBuilder is a library which attempts to take the pain out of
+        generating SQL queries within java programs.  Using one programming
+        language (java) to generate code for another language (i.e. SQL) is
+        always a challenge.  There are always issues with escaping characters
+        within string literals, getting spaces in the right place, and getting
+        the parentheses to match up.  And often, even after the code is
+        debugged and fully tested, it is still very fragile.  The slightest
+        change will throw things out of balance and require another round of
+        testing and tweaking.
+      </p>
+      <p>
+        SqlBuilder changes that whole scenario by wrapping the SQL syntax
+        within very lightweight and easy to use java objects which follow the
+        "builder" paradigm (similar to StringBuilder).  Let's dive right in to
+        some quick examples to to see how it all works.
+      </p>
+      <subsection name="SelectQuery Example">
+        <p>
+          A fairly simple SQL select query embedded in a java program
+          might currently look something like this:
+        </p>
+        <source>
+// assuming a variety of predefined string constants
+String selectQuery = "SELECT " + T1_COL1 + "," + T1_COL2 + "," +
+  T2_COL1 + " FROM " + TABLE1 + " " + T1 + " INNER JOIN " +
+  TABLE2 + " " + T2 + " ON (" + T1_IDCOL + " = " + T2_IDCOL +
+  ") ORDER BY " + T1_COL1;
+</source>
+        <p>
+          Whenever this query is modified, you will need to make sure there
+          are sufficient commas, parentheses, and spaces to generate the
+          correct query (not to mention the correct columns for the given
+          tables and the correct aliases for those tables).  Now, let's see
+          how this query looks using SqlBuilder classes.
+        </p>
+        <source>
+// assuming these objects have already been created
+Table table1, table2;
+Column t1Col1, t1Col2, t2Col1;
+Join joinOfT1AndT2;
+
+String selectQuery =
+  (new SelectQuery())
+  .addColumns(t1Col1, t1Col2, t2Col1)
+  .addJoin(SelectQuery.JoinType.INNER_JOIN, joinOfT1AndT2)
+  .addOrderings(t1Col1)
+  .validate().toString();
+</source>
+        <p>
+          See how easy that was?  Not a single embedded comma, space, or
+          parenthesis to be seen!  Notice how much more readable this version
+          is compared to the first version?  On top of that, check out the
+          <code>validate()</code> method call slipped into the end of the
+          statement.  That call will verify that the columns and tables in the
+          query actually make sense.  Maintainability, readability, and
+          verifiability all wrapped into one easy to use package.
+        </p>
+      </subsection>
+      <subsection>
+        <p>
+          That was a very simple example of course.  Imagine a much more
+          complicated query with multiple sub-expressions in the where clause,
+          and it should be easy to see the power and utility of the SqlBuilder
+          library.
+        </p>
+        <p>
+          As a final note--for all that the SqlBuilder package is, there are a
+          couple of things it is <em>not</em>.  This package will <em>not</em>
+          help you write SQL if you do not already know how to write SQL and
+          use JDBC.  It does not abstract away the knowledge necessary to deal
+          with a database, but instead provides tools for avoiding the more
+          error-prone parts of generating SQL queries.  If you want a tool to
+          completely abstract away the database, check out
+          <a href="http://www.hibernate.org">Hibernate</a> instead.  There is
+          a time and place for straight SQL and a time and place for an ORM
+          tool.  If you are currently in the former time and place, then
+          SqlBuilder is a tool you should definitely check out.
+        </p>
+      </subsection>
+    </section>
+    <section name="Getting Started">
+      <ul>
+        <li>Extended code examples in the <a href="apidocs/overview-summary.html#overview_description">sqlbuilder overview javadocs</a></li>
+        <li>Major highlights of the supported syntax in the <a href="syntax_reference.html">Syntax Reference</a></li>
+        <li>Examples for all the classes in the <a href="xref-test/com/healthmarketscience/sqlbuilder/SqlBuilderTest.html">unit tests</a></li>
+        <li><a href="apidocs/index.html">Javadoc API documentation</a></li>
+        <li><a href="xref/index.html">Complete source code (with cross references)</a></li>
+      </ul>
+    </section>
+    <section name="Features">
+      <ul>
+        <li>Good portion of commonly used SQL (see the <a href="apidocs/com/healthmarketscience/sqlbuilder/package-summary.html#package_description">package summary</a> for a
+            more complete list), including:
+        <ul>
+          <li><code>SELECT, UPDATE, DELETE, INSERT, CREATE, DROP,
+              UNION</code></li>
+          <li>Most boolean logic</li>
+          <li>Most numeric expressions</li>
+        </ul>
+        </li>
+        <li>99% ANSI SQL92 compliant</li>
+        <li>JDBC escape syntax support (<a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcEscape.html">JdbcEscape</a>)</li>
+        <li>Helpers for managing prepared statement parameters (<a href="apidocs/com/healthmarketscience/sqlbuilder/QueryPreparer.html">QueryPreparer</a>) and reading results (<a href="apidocs/com/healthmarketscience/sqlbuilder/QueryReader.html">QueryReader</a>)</li>
+        <li>Optional <a href="apidocs/com/healthmarketscience/sqlbuilder/Query.html#validate()">query validation</a></li>
+        <li>Two usage modes:
+        <ul>
+          <li>Predefined, strongly verifiable <a href="apidocs/com/healthmarketscience/sqlbuilder/dbspec/package-summary.html">database model</a> (optionally using the included <a href="apidocs/com/healthmarketscience/sqlbuilder/dbspec/basic/package-summary.html">basic implementation</a>)</li>
+          <li>Fully customized, weakly verifiable constants using <a href="apidocs/com/healthmarketscience/sqlbuilder/CustomSql.html">CustomSql</a></li>
+        </ul>
+        </li>
+      </ul>
+    </section>
+  </body>
+</document>

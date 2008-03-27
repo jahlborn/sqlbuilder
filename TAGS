@@ -1,0 +1,1631 @@
+
+src/main/java/com/healthmarketscience/sqlbuilder/SqlContext.java,82
+public class SqlContextSqlContext22,956
+  public SqlContext(SqlContext33,1258
+
+src/main/java/com/healthmarketscience/sqlbuilder/CustomCondition.java,150
+public class CustomConditionCustomCondition21,603
+  public CustomCondition(CustomCondition25,680
+  public CustomCondition(CustomCondition31,822
+
+src/main/java/com/healthmarketscience/sqlbuilder/UpdateQuery.java,434
+public class UpdateQueryUpdateQuery19,410
+  public UpdateQuery(UpdateQuery26,616
+  public UpdateQuery(UpdateQuery34,816
+                        Converter.toCustomColumnSqlObject(Converter.toCustomColumnSqlObject55,1597
+                        Converter.toColumnSqlObject(Converter.toColumnSqlObject56,1664
+  private static class SetClauseObjectSetClauseObject110,3346
+    private SetClauseObject(SetClauseObject115,3469
+
+src/main/java/com/healthmarketscience/sqlbuilder/CaseStatement.java,93
+public class CaseStatementCaseStatement13,315
+  public CaseStatement(CaseStatement15,385
+
+src/main/java/com/healthmarketscience/sqlbuilder/FunctionObject.java,126
+class FunctionObjectFunctionObject20,467
+class FunctionObjectFunctionObject20,467
+  FunctionObject(FunctionObject24,545
+
+src/main/java/com/healthmarketscience/sqlbuilder/RevokeQuery.java,85
+public class RevokeQueryRevokeQuery14,278
+  public RevokeQuery(RevokeQuery19,372
+
+src/main/java/com/healthmarketscience/sqlbuilder/OrderObject.java,208
+public class OrderObjectOrderObject18,464
+  public enum DirDir22,580
+    ASCENDING(ASCENDING23,600
+    DESCENDING(DESCENDING24,623
+    private Dir(Dir28,678
+  public OrderObject(OrderObject39,859
+
+src/main/java/com/healthmarketscience/sqlbuilder/TypedColumnObject.java,144
+class TypedColumnObjectTypedColumnObject16,405
+class TypedColumnObjectTypedColumnObject16,405
+  TypedColumnObject(TypedColumnObject19,453
+
+src/main/java/com/healthmarketscience/sqlbuilder/Query.java,131
+public abstract class QueryQuery23,576
+  protected Query(Query25,624
+    SqlContext.popContext(SqlContext.popContext102,3383
+
+src/main/java/com/healthmarketscience/sqlbuilder/TableObject.java,118
+class TableObjectTableObject18,404
+class TableObjectTableObject18,404
+  protected TableObject(TableObject22,473
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseInsertQuery.java,103
+abstract class BaseInsertQueryBaseInsertQuery18,465
+  public BaseInsertQuery(BaseInsertQuery24,693
+
+src/main/java/com/healthmarketscience/sqlbuilder/JdbcScalarFunction.java,187
+public class JdbcScalarFunctionJdbcScalarFunction11,220
+  public JdbcScalarFunction(JdbcScalarFunction17,403
+          Converter.toCustomSqlObject(Converter.toCustomSqlObject19,486
+
+src/main/java/com/healthmarketscience/sqlbuilder/ValidationException.java,231
+public class ValidationExceptionValidationException12,339
+  public ValidationException(ValidationException16,474
+  public ValidationException(ValidationException20,548
+  public ValidationException(ValidationException24,646
+
+src/main/java/com/healthmarketscience/sqlbuilder/NumberValueObject.java,162
+public class NumberValueObjectNumberValueObject19,448
+  public NumberValueObject(NumberValueObject23,526
+  public NumberValueObject(NumberValueObject27,599
+
+src/main/java/com/healthmarketscience/sqlbuilder/QueryPreparer.java,1623
+public class QueryPreparerQueryPreparer95,3988
+  public QueryPreparer(QueryPreparer111,4666
+  public QueryPreparer(QueryPreparer147,5615
+  public static class PlaceHolderPlaceHolder306,10834
+    public PlaceHolder(PlaceHolder316,11252
+      SqlObject.QUESTION_MARK.appendTo(SqlObject.QUESTION_MARK.appendTo495,16366
+  public static class MultiPlaceHolderMultiPlaceHolder508,16793
+    public MultiPlaceHolder(MultiPlaceHolder516,17169
+  public static abstract class StaticPlaceHolderStaticPlaceHolder687,21140
+    public StaticPlaceHolder(StaticPlaceHolder689,21213
+  public static class NullStaticPlaceHolderNullStaticPlaceHolder711,21787
+    public NullStaticPlaceHolder(NullStaticPlaceHolder715,21892
+  public static class ObjectStaticPlaceHolderObjectStaticPlaceHolder738,22371
+    public ObjectStaticPlaceHolder(ObjectStaticPlaceHolder743,22493
+  public static class TypedStaticPlaceHolderTypedStaticPlaceHolder766,22986
+    public TypedStaticPlaceHolder(TypedStaticPlaceHolder771,23110
+  public static class StringStaticPlaceHolderStringStaticPlaceHolder789,23506
+    public StringStaticPlaceHolder(StringStaticPlaceHolder792,23600
+  public static class LongStaticPlaceHolderLongStaticPlaceHolder809,23944
+    public LongStaticPlaceHolder(LongStaticPlaceHolder813,24046
+  public static class IntegerStaticPlaceHolderIntegerStaticPlaceHolder836,24502
+    public IntegerStaticPlaceHolder(IntegerStaticPlaceHolder840,24606
+  public static class BooleanStaticPlaceHolderBooleanStaticPlaceHolder863,25063
+    public BooleanStaticPlaceHolder(BooleanStaticPlaceHolder867,25171
+
+src/main/java/com/healthmarketscience/sqlbuilder/ColumnObject.java,124
+class ColumnObjectColumnObject20,549
+class ColumnObjectColumnObject20,549
+  protected ColumnObject(ColumnObject24,620
+
+src/main/java/com/healthmarketscience/sqlbuilder/InsertSelectQuery.java,162
+public class InsertSelectQueryInsertSelectQuery18,431
+  public InsertSelectQuery(InsertSelectQuery23,586
+  public InsertSelectQuery(InsertSelectQuery33,864
+
+src/main/java/com/healthmarketscience/sqlbuilder/DeleteQuery.java,176
+public class DeleteQueryDeleteQuery17,409
+    ComboCondition.and(ComboCondition.and21,516
+  public DeleteQuery(DeleteQuery23,543
+  public DeleteQuery(DeleteQuery31,743
+
+src/main/java/com/healthmarketscience/sqlbuilder/Converter.java,49
+public abstract class ConverterConverter16,431
+
+src/main/java/com/healthmarketscience/sqlbuilder/BinaryCondition.java,1916
+public class BinaryConditionBinaryCondition22,541
+  public enum OpOp29,766
+    LESS_THAN(LESS_THAN31,787
+    LESS_THAN_OR_EQUAL_TO(LESS_THAN_OR_EQUAL_TO32,809
+    GREATER_THAN(GREATER_THAN33,844
+    GREATER_THAN_OR_EQUAL_TO(GREATER_THAN_OR_EQUAL_TO34,869
+    EQUAL_TO(EQUAL_TO35,907
+    NOT_EQUAL_TO(NOT_EQUAL_TO36,928
+    LIKE(LIKE37,954
+    NOT_LIKE(NOT_LIKE38,974
+    private Op(Op42,1031
+  public BinaryCondition(BinaryCondition60,1413
+         Converter.toColumnSqlObject(Converter.toColumnSqlObject64,1555
+         Converter.toColumnSqlObject(Converter.toColumnSqlObject65,1602
+  public BinaryCondition(BinaryCondition68,1660
+                              Matcher.quoteReplacement(Matcher.quoteReplacement121,3411
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject137,4089
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject138,4157
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject154,4848
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject155,4916
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject168,5396
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject169,5464
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject182,5958
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject183,6026
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject196,6516
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject197,6584
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject210,7088
+                               Converter.toColumnSqlObject(Converter.toColumnSqlObject211,7156
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Index.java,36
+public interface IndexIndex13,256
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Function.java,42
+public interface FunctionFunction11,232
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/RejoinTable.java,181
+public class RejoinTableRejoinTable16,418
+  public RejoinTable(RejoinTable26,680
+  public class RejoinColumnRejoinColumn53,1518
+    private RejoinColumn(RejoinColumn58,1635
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Table.java,36
+public interface TableTable13,253
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Join.java,34
+public interface JoinJoin13,252
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Column.java,38
+public interface ColumnColumn11,230
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbJoin.java,65
+public class DbJoinDbJoin16,366
+  public DbJoin(DbJoin29,882
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbSpec.java,65
+public class DbSpecDbSpec17,413
+  public DbSpec(DbSpec26,755
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbTable.java,69
+public class DbTableDbTable15,305
+  public DbTable(DbTable22,581
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbObject.java,76
+public class DbObjectDbObject12,252
+  protected DbObject(DbObject19,457
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbFunction.java,81
+public class DbFunctionDbFunction12,269
+  public DbFunction(DbFunction15,354
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbColumn.java,73
+public class DbColumnDbColumn14,295
+  public DbColumn(DbColumn20,437
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbFunctionPackage.java,109
+public class DbFunctionPackageDbFunctionPackage16,457
+  public DbFunctionPackage(DbFunctionPackage21,650
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbIndex.java,69
+public class DbIndexDbIndex16,362
+  public DbIndex(DbIndex23,624
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbSchema.java,73
+public class DbSchemaDbSchema14,296
+  public DbSchema(DbSchema26,826
+
+src/main/java/com/healthmarketscience/sqlbuilder/NegateExpression.java,156
+public class NegateExpressionNegateExpression19,437
+  public NegateExpression(NegateExpression27,654
+  public NegateExpression(NegateExpression31,748
+
+src/main/java/com/healthmarketscience/sqlbuilder/Condition.java,90
+public abstract class ConditionCondition18,415
+  protected Condition(Condition36,1089
+
+src/main/java/com/healthmarketscience/sqlbuilder/TableDefObject.java,126
+class TableDefObjectTableDefObject16,379
+class TableDefObjectTableDefObject16,379
+  TableDefObject(TableDefObject18,422
+
+src/main/java/com/healthmarketscience/sqlbuilder/AllTableColumns.java,132
+class AllTableColumnsAllTableColumns19,456
+class AllTableColumnsAllTableColumns19,456
+  AllTableColumns(AllTableColumns21,500
+
+src/main/java/com/healthmarketscience/sqlbuilder/CreateTableQuery.java,538
+public class CreateTableQueryCreateTableQuery18,444
+  public enum ColumnConstraintColumnConstraint22,553
+    NOT_NULL(NOT_NULL24,588
+    UNIQUE(UNIQUE25,615
+    PRIMARY_KEY(PRIMARY_KEY26,638
+    private ColumnConstraint(ColumnConstraint30,711
+  public CreateTableQuery(CreateTableQuery39,903
+  public CreateTableQuery(CreateTableQuery51,1280
+  public CreateTableQuery(CreateTableQuery64,1663
+  private static class ConstrainedColumnConstrainedColumn169,4662
+    protected ConstrainedColumn(ConstrainedColumn174,4791
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseGrantQuery.java,832
+public abstract class BaseGrantQueryBaseGrantQuery18,498
+  protected BaseGrantQuery(BaseGrantQuery39,1274
+  public static class PrivilegePrivilege188,6062
+    public enum TypeType191,6189
+      ALL(ALL192,6212
+      SELECT(SELECT193,6248
+      DELETE(DELETE194,6279
+      INSERT(INSERT195,6310
+      UPDATE(UPDATE196,6340
+      REFERENCES(REFERENCES197,6370
+      USAGE(USAGE198,6408
+      private Type(Type203,6512
+    public Privilege(Privilege219,6932
+  public static class TargetObjectTargetObject263,8222
+    public enum TypeType267,8402
+      TABLE(TABLE268,8425
+      DOMAIN(DOMAIN269,8448
+      COLLATION(COLLATION270,8473
+      CHARACTER_SET(CHARACTER_SET271,8504
+      TRANSLATION(TRANSLATION272,8543
+      private Type(Type276,8611
+    public TargetObject(TargetObject287,8820
+
+src/main/java/com/healthmarketscience/sqlbuilder/AlterTableQuery.java,610
+public class AlterTableQueryAlterTableQuery17,421
+  public AlterTableQuery(AlterTableQuery23,527
+  public AlterTableQuery(AlterTableQuery31,731
+  public static class AddUniqueConstraintActionAddUniqueConstraintAction66,1727
+  public static class AddPrimaryConstraintActionAddPrimaryConstraintAction104,2963
+  public static class AddForeignConstraintActionAddForeignConstraintAction144,4250
+      SqlObjectList.create(SqlObjectList.create155,4640
+    public AddForeignConstraintAction(AddForeignConstraintAction161,4793
+    public AddForeignConstraintAction(AddForeignConstraintAction172,5135
+
+src/main/java/com/healthmarketscience/sqlbuilder/DropQuery.java,526
+public class DropQueryDropQuery18,459
+  public enum TypeType23,569
+    TABLE(TABLE25,592
+    INDEX(INDEX26,614
+    private Type(Type30,667
+  public enum BehaviorBehavior42,956
+    CASCADE(CASCADE44,983
+    RESTRICT(RESTRICT45,1008
+    private Behavior(Behavior49,1065
+  public DropQuery(DropQuery65,1414
+                         Converter.toCustomTableSqlObject(Converter.toCustomTableSqlObject110,2577
+                         Converter.toCustomIndexSqlObject(Converter.toCustomIndexSqlObject128,3084
+
+src/main/java/com/healthmarketscience/sqlbuilder/AliasedObject.java,93
+public class AliasedObjectAliasedObject17,457
+  public AliasedObject(AliasedObject22,556
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseCaseStatement.java,442
+public abstract class BaseCaseStatementBaseCaseStatement17,423
+  protected BaseCaseStatement(BaseCaseStatement29,911
+  private static abstract class BaseWhenObjectBaseWhenObject105,3279
+    protected BaseWhenObject(BaseWhenObject109,3380
+  private static class WhenObjectWhenObject127,3892
+    private WhenObject(WhenObject131,3983
+  private static class ElseObjectElseObject153,4605
+    private ElseObject(ElseObject155,4666
+
+src/main/java/com/healthmarketscience/sqlbuilder/GrantQuery.java,81
+public class GrantQueryGrantQuery13,276
+  public GrantQuery(GrantQuery18,369
+
+src/main/java/com/healthmarketscience/sqlbuilder/IndexObject.java,108
+class IndexObjectIndexObject19,460
+class IndexObjectIndexObject19,460
+  IndexObject(IndexObject23,529
+
+src/main/java/com/healthmarketscience/sqlbuilder/CreateIndexQuery.java,259
+public class CreateIndexQueryCreateIndexQuery17,465
+  public CreateIndexQuery(CreateIndexQuery22,573
+  public CreateIndexQuery(CreateIndexQuery29,785
+  public CreateIndexQuery(CreateIndexQuery33,895
+  public CreateIndexQuery(CreateIndexQuery43,1257
+
+src/main/java/com/healthmarketscience/sqlbuilder/SimpleCaseStatement.java,174
+public class SimpleCaseStatementSimpleCaseStatement15,440
+  public SimpleCaseStatement(SimpleCaseStatement22,638
+  public SimpleCaseStatement(SimpleCaseStatement33,962
+
+src/main/java/com/healthmarketscience/sqlbuilder/UnionQuery.java,310
+public class UnionQueryUnionQuery18,440
+  public enum TypeType21,540
+    UNION(UNION23,563
+    UNION_ALL(UNION_ALL24,585
+    private Type(Type28,646
+  public UnionQuery(UnionQuery40,926
+  public UnionQuery(UnionQuery44,1001
+    SelectQuery.validateOrdering(SelectQuery.validateOrdering154,4340
+
+src/main/java/com/healthmarketscience/sqlbuilder/ComboExpression.java,348
+public class ComboExpressionComboExpression19,636
+  public enum OpOp25,890
+    ADD(ADD27,911
+    SUBTRACT(SUBTRACT28,927
+    MULTIPLY(MULTIPLY29,948
+    DIVIDE(DIVIDE30,969
+    CONCATENATE(CONCATENATE31,988
+    private Op(Op35,1042
+  public ComboExpression(ComboExpression46,1229
+  public ComboExpression(ComboExpression54,1433
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseCreateQuery.java,113
+public abstract class BaseCreateQueryBaseCreateQuery16,406
+  protected BaseCreateQuery(BaseCreateQuery24,633
+
+src/main/java/com/healthmarketscience/sqlbuilder/FunctionCall.java,132
+public class FunctionCallFunctionCall19,518
+  public FunctionCall(FunctionCall25,701
+  public FunctionCall(FunctionCall33,914
+
+src/main/java/com/healthmarketscience/sqlbuilder/InCondition.java,237
+public class InConditionInCondition21,535
+  public InCondition(InCondition33,960
+          Arrays.asList(Arrays.asList36,1068
+          Collections.emptyList(Collections.emptyList37,1105
+  public InCondition(InCondition46,1393
+
+src/main/java/com/healthmarketscience/sqlbuilder/Expression.java,94
+public abstract class ExpressionExpression18,409
+  protected Expression(Expression36,1089
+
+src/main/java/com/healthmarketscience/sqlbuilder/ComboCondition.java,285
+public class ComboConditionComboCondition19,591
+  public enum OpOp25,831
+    AND(AND27,852
+    OR(OR28,870
+    private Op(Op32,915
+  public ComboCondition(ComboCondition43,1096
+  public ComboCondition(ComboCondition47,1174
+  public ComboCondition(ComboCondition56,1408
+
+src/main/java/com/healthmarketscience/sqlbuilder/NestableClause.java,102
+abstract class NestableClauseNestableClause20,616
+  protected NestableClause(NestableClause22,668
+
+src/main/java/com/healthmarketscience/sqlbuilder/CustomExpression.java,156
+public class CustomExpressionCustomExpression21,606
+  public CustomExpression(CustomExpression25,685
+  public CustomExpression(CustomExpression31,828
+
+src/main/java/com/healthmarketscience/sqlbuilder/SqlObject.java,90
+public abstract class SqlObjectSqlObject25,801
+  protected SqlObject(SqlObject65,2173
+
+src/main/java/com/healthmarketscience/sqlbuilder/JdbcEscape.java,473
+public class JdbcEscapeJdbcEscape19,496
+  public enum TypeType25,608
+    SCALAR_FUNCTION(SCALAR_FUNCTION27,631
+    DATE(DATE28,659
+    TIME(TIME29,675
+    TIMESTAMP(TIMESTAMP30,691
+    OUTER_JOIN(OUTER_JOIN31,713
+    STORED_PROCEDURE(STORED_PROCEDURE32,736
+    STORED_PROCEDURE_WITH_RETURN(STORED_PROCEDURE_WITH_RETURN33,767
+    ESCAPE(ESCAPE34,813
+    private Type(Type38,869
+  public JdbcEscape(JdbcEscape49,1071
+              Date (Date82,2292
+
+src/main/java/com/healthmarketscience/sqlbuilder/NotCondition.java,132
+public class NotConditionNotCondition17,435
+  public NotCondition(NotCondition25,643
+  public NotCondition(NotCondition29,742
+
+src/main/java/com/healthmarketscience/sqlbuilder/InsertQuery.java,165
+public class InsertQueryInsertQuery18,439
+  public InsertQuery(InsertQuery23,625
+  public InsertQuery(InsertQuery33,902
+      Arrays.fill(Arrays.fill87,3032
+
+src/main/java/com/healthmarketscience/sqlbuilder/ValueObject.java,85
+public class ValueObjectValueObject18,421
+  public ValueObject(ValueObject22,493
+
+src/main/java/com/healthmarketscience/sqlbuilder/Comment.java,69
+public class CommentComment18,423
+  public Comment(Comment22,498
+
+src/main/java/com/healthmarketscience/sqlbuilder/SelectQuery.java,738
+public class SelectQuerySelectQuery35,1178
+  public enum JoinTypeJoinType40,1298
+    INNER(INNER42,1325
+    LEFT_OUTER(LEFT_OUTER43,1352
+    RIGHT_OUTER(RIGHT_OUTER44,1389
+    FULL_OUTER(FULL_OUTER45,1428
+    private JoinType(JoinType49,1499
+  public SelectQuery(SelectQuery68,2187
+  public SelectQuery(SelectQuery72,2234
+                   Converter.toCustomTableDefSqlObject(Converter.toCustomTableDefSqlObject191,5845
+        Collections.singletonList(Collections.singletonList234,7433
+  private static class JoinToJoinTo560,18760
+    private JoinTo(JoinTo566,18913
+    private JoinTo(JoinTo570,18993
+          BinaryCondition.equalTo(BinaryCondition.equalTo581,19425
+    private JoinTo(JoinTo585,19514
+
+src/main/java/com/healthmarketscience/sqlbuilder/UnaryCondition.java,263
+public class UnaryConditionUnaryCondition20,504
+  public enum OpOp27,753
+    IS_NULL(IS_NULL29,774
+    IS_NOT_NULL(IS_NOT_NULL30,806
+    private Op(Op35,908
+  public UnaryCondition(UnaryCondition54,1332
+  public UnaryCondition(UnaryCondition59,1446
+
+src/main/java/com/healthmarketscience/sqlbuilder/CustomSql.java,79
+public class CustomSqlCustomSql40,1190
+  public CustomSql(CustomSql44,1257
+
+src/main/java/com/healthmarketscience/sqlbuilder/Subquery.java,73
+public class SubquerySubquery21,502
+  public Subquery(Subquery30,704
+
+src/main/java/com/healthmarketscience/sqlbuilder/QueryReader.java,209
+public class QueryReaderQueryReader61,2205
+  public QueryReader(QueryReader75,2729
+  public QueryReader(QueryReader84,2989
+  public static class ColumnColumn108,3831
+    public Column(Column120,4308
+
+src/main/java/com/healthmarketscience/sqlbuilder/SqlObjectList.java,186
+public class SqlObjectListSqlObjectList26,710
+  public SqlObjectList(SqlObjectList35,1028
+  public SqlObjectList(SqlObjectList39,1116
+  public SqlObjectList(SqlObjectList43,1212
+
+src/test/java/com/healthmarketscience/sqlbuilder/SqlBuilderTest.java,1891
+public class SqlBuilderTestSqlBuilderTest26,829
+  public SqlBuilderTest(SqlBuilderTest44,1369
+        BinaryCondition.greaterThan(BinaryCondition.greaterThan234,8949
+                 Arrays.asList(Arrays.asList335,13208
+                 Arrays.asList(Arrays.asList336,13254
+                 Arrays.asList(Arrays.asList338,13370
+                 Arrays.asList(Arrays.asList339,13421
+      BinaryCondition.lessThan(BinaryCondition.lessThan349,13699
+      ComboCondition.or(ComboCondition.or350,13759
+      UnaryCondition.isNotNull(UnaryCondition.isNotNull351,13786
+                           BinaryCondition.like(BinaryCondition.like355,13993
+      ComboCondition.or(ComboCondition.or360,14310
+      BinaryCondition.notLike(BinaryCondition.notLike367,14602
+      BinaryCondition.equalTo(BinaryCondition.equalTo373,15000
+            ComboExpression.multiply(ComboExpression.multiply383,15345
+        ComboExpression.subtract(ComboExpression.subtract384,15404
+      BinaryCondition.lessThan(BinaryCondition.lessThan482,18922
+      BinaryCondition.lessThan(BinaryCondition.lessThan483,18980
+      UnaryCondition.isNotNull(UnaryCondition.isNotNull484,19038
+                           BinaryCondition.like(BinaryCondition.like488,19245
+      ComboCondition.or(ComboCondition.or493,19559
+        BinaryCondition.notEqualTo(BinaryCondition.notEqualTo496,19680
+        BinaryCondition.equalTo(BinaryCondition.equalTo630,24339
+        BinaryCondition.lessThan(BinaryCondition.lessThan631,24396
+                     GrantQuery.privilegeUsage(GrantQuery.privilegeUsage685,26380
+                     GrantQuery.privilegeUsage(GrantQuery.privilegeUsage693,26742
+                 BinaryCondition.escapeLikeLiteral(BinaryCondition.escapeLikeLiteral778,29930
+                 BinaryCondition.escapeLikeLiteral(BinaryCondition.escapeLikeLiteral780,30047
+
+src/main/java/com/healthmarketscience/sqlbuilder/SqlContext.java,437
+  SqlContext getOldContext(getOldContext41,1487
+  void setOldContext(setOldContext49,1709
+  public boolean getUseTableAliases(getUseTableAliases57,1937
+  public void setUseTableAliases(setUseTableAliases65,2137
+  public SqlContext clone(clone70,2260
+  public static SqlContext getContext(getContext83,2657
+  public static final SqlContext pushContext(pushContext99,3167
+  public static void popContext(popContext119,3793
+
+src/main/java/com/healthmarketscience/sqlbuilder/CustomCondition.java,149
+  public boolean isEmpty(isEmpty36,906
+  protected void collectSchemaObjects(collectSchemaObjects39,973
+  public void appendTo(appendTo47,1203
+
+src/main/java/com/healthmarketscience/sqlbuilder/UpdateQuery.java,469
+  public UpdateQuery addSetClause(addSetClause39,987
+  public UpdateQuery addCustomSetClause(addCustomSetClause52,1483
+  public ComboCondition getWhereClause(getWhereClause65,1954
+  public UpdateQuery addCondition(addCondition78,2433
+  protected void collectSchemaObjects(collectSchemaObjects84,2570
+  protected void appendTo(appendTo92,2868
+    protected void collectSchemaObjects(collectSchemaObjects121,3605
+    public void appendTo(appendTo128,3867
+
+src/main/java/com/healthmarketscience/sqlbuilder/CaseStatement.java,105
+  public CaseStatement addWhen(addWhen28,771
+  protected CaseStatement getThisType(getThisType33,892
+
+src/main/java/com/healthmarketscience/sqlbuilder/FunctionObject.java,107
+  protected void collectSchemaObjects(collectSchemaObjects29,626
+  public void appendTo(appendTo34,773
+
+src/main/java/com/healthmarketscience/sqlbuilder/RevokeQuery.java,152
+  public RevokeQuery setBehavior(setBehavior23,450
+  protected void appendTo(appendTo29,582
+  protected RevokeQuery getThisType(getThisType42,927
+
+src/main/java/com/healthmarketscience/sqlbuilder/OrderObject.java,194
+    public String toString(toString33,756
+  SqlObject getObject(getObject47,1019
+  protected void collectSchemaObjects(collectSchemaObjects52,1081
+  public void appendTo(appendTo58,1278
+
+src/main/java/com/healthmarketscience/sqlbuilder/TypedColumnObject.java,40
+  public void appendTo(appendTo24,530
+
+src/main/java/com/healthmarketscience/sqlbuilder/Query.java,251
+  public Query validate(validate31,779
+  protected static void getColumnTables(getColumnTables44,1105
+  protected void validate(validate66,2084
+  public final void appendTo(appendTo96,3015
+  protected abstract void appendTo(appendTo114,3911
+
+src/main/java/com/healthmarketscience/sqlbuilder/TableObject.java,107
+  protected void collectSchemaObjects(collectSchemaObjects27,549
+  public void appendTo(appendTo33,722
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseInsertQuery.java,123
+  protected void collectSchemaObjects(collectSchemaObjects29,780
+  protected void appendPrefixTo(appendPrefixTo39,1116
+
+src/main/java/com/healthmarketscience/sqlbuilder/JdbcScalarFunction.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/ValidationException.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/NumberValueObject.java,193
+  Number getValue(getValue32,732
+  boolean isFloatingPoint(isFloatingPoint39,869
+  protected void collectSchemaObjects(collectSchemaObjects45,982
+  public void appendTo(appendTo50,1129
+
+src/main/java/com/healthmarketscience/sqlbuilder/QueryPreparer.java,3191
+  public String toString(toString118,4790
+  public PlaceHolder getNewPlaceHolder(getNewPlaceHolder159,6025
+  public MultiPlaceHolder getNewMultiPlaceHolder(getNewMultiPlaceHolder168,6340
+  public StaticPlaceHolder addStaticPlaceHolder(addStaticPlaceHolder177,6574
+  public StaticPlaceHolder addStaticPlaceHolder(addStaticPlaceHolder186,6847
+  public StaticPlaceHolder addStaticPlaceHolder(addStaticPlaceHolder200,7308
+  public StaticPlaceHolder addStaticPlaceHolder(addStaticPlaceHolder214,7774
+  public StaticPlaceHolder addStaticPlaceHolder(addStaticPlaceHolder228,8237
+  public StaticPlaceHolder addStaticPlaceHolder(addStaticPlaceHolder237,8509
+  public StaticPlaceHolder addStaticPlaceHolder(addStaticPlaceHolder246,8785
+  public StaticPlaceHolder addStaticPlaceHolder(addStaticPlaceHolder255,9064
+  public StaticPlaceHolder addStaticPlaceHolder(addStaticPlaceHolder265,9439
+  public StaticPlaceHolder addStaticPlaceHolder(addStaticPlaceHolder275,9812
+  public void setStaticValues(setStaticValues287,10192
+    public boolean isInQuery(isInQuery320,11327
+    private void setIndex(setIndex324,11409
+    public int getIndex(getIndex328,11477
+    protected void addIndex(addIndex330,11523
+    public void setNull(setNull342,11931
+    public void setInt(setInt354,12239
+    public void setInt(setInt367,12640
+    public void setLong(setLong383,13053
+    public void setLong(setLong396,13457
+    public void setBoolean(setBoolean412,13871
+    public void setBoolean(setBoolean425,14288
+    public void setString(setString441,14711
+    public void setObject(setObject463,15451
+    public void setObject(setObject475,15788
+    protected void collectSchemaObjects(collectSchemaObjects488,16102
+    public final void appendTo(appendTo493,16259
+    public boolean isInQuery(isInQuery523,17321
+    protected void addIndex(addIndex528,17413
+    public int getIndex(getIndex533,17506
+    private void setMultiNull(setMultiNull545,17880
+    public void setNull(setNull554,18088
+    public void setInt(setInt563,18271
+    public void setInt(setInt574,18505
+    public void setLong(setLong589,18847
+    public void setLong(setLong600,19084
+    public void setBoolean(setBoolean615,19424
+    public void setBoolean(setBoolean626,19670
+    public void setString(setString641,20020
+    public void setObject(setObject656,20377
+    public void setObject(setObject667,20616
+    public abstract void setValue(setValue698,21456
+    public abstract String displayToString(displayToString704,21619
+    public void setValue(setValue722,22032
+    public String displayToString(displayToString729,22161
+    public void setValue(setValue750,22627
+    public String displayToString(displayToString757,22754
+    public void setValue(setValue778,23268
+    public void setValue(setValue798,23720
+    public void setValue(setValue820,24175
+    public String displayToString(displayToString827,24300
+    public void setValue(setValue847,24737
+    public String displayToString(displayToString854,24861
+    public void setValue(setValue874,25306
+    public String displayToString(displayToString881,25434
+
+src/main/java/com/healthmarketscience/sqlbuilder/ColumnObject.java,107
+  protected void collectSchemaObjects(collectSchemaObjects29,701
+  public void appendTo(appendTo35,872
+
+src/main/java/com/healthmarketscience/sqlbuilder/InsertSelectQuery.java,292
+  public InsertSelectQuery setSelectQuery(setSelectQuery39,1061
+  public InsertSelectQuery addCustomColumns(addCustomColumns50,1358
+  public InsertSelectQuery addColumns(addColumns57,1568
+  public InsertSelectQuery validate(validate62,1696
+  protected void appendTo(appendTo88,2393
+
+src/main/java/com/healthmarketscience/sqlbuilder/DeleteQuery.java,231
+  public ComboCondition getWhereClause(getWhereClause40,1051
+  public DeleteQuery addCondition(addCondition53,1530
+  protected void collectSchemaObjects(collectSchemaObjects59,1667
+  protected void appendTo(appendTo66,1916
+
+src/main/java/com/healthmarketscience/sqlbuilder/Converter.java,2281
+      public SqlObject convert(convert24,719
+    public SqlObject convert(convert41,1233
+      public SqlObject convert(convert51,1607
+      public SqlObject convert(convert61,1961
+      public SqlObject convert(convert71,2324
+      public SqlObject convert(convert81,2693
+      public Expression convert(convert93,3053
+      public Condition convert(convert105,3403
+      public SqlObject convert(convert116,3777
+  public abstract DstType convert(convert131,4168
+  public static SqlObject toColumnSqlObject(toColumnSqlObject146,4612
+  public static SqlObject toColumnSqlObject(toColumnSqlObject166,5328
+  public static SqlObject toTableSqlObject(toTableSqlObject181,5792
+  public static SqlObject toIndexSqlObject(toIndexSqlObject196,6204
+  public static SqlObject toFunctionSqlObject(toFunctionSqlObject211,6634
+  public static SqlObject toColumnSqlObject(toColumnSqlObject229,7257
+  public static SqlObject toColumnSqlObject(toColumnSqlObject254,8170
+  public static SqlObject toCustomColumnSqlObject(toCustomColumnSqlObject273,8902
+  public static SqlObject toCustomColumnSqlObject(toCustomColumnSqlObject296,9728
+  public static SqlObject toCustomTableSqlObject(toCustomTableSqlObject315,10470
+  public static SqlObject toCustomIndexSqlObject(toCustomIndexSqlObject337,11233
+  public static SqlObject toCustomFunctionSqlObject(toCustomFunctionSqlObject359,12008
+  public static SqlObject toNumericColumnSqlObject(toNumericColumnSqlObject381,12798
+  public static SqlObject toNumericColumnSqlObject(toNumericColumnSqlObject407,13812
+  public static SqlObject toNumericValueSqlObject(toNumericValueSqlObject425,14471
+  public static SqlObject toNumericValueSqlObject(toNumericValueSqlObject450,15383
+  public static SqlObject toValueSqlObject(toValueSqlObject467,15955
+  public static SqlObject toValueSqlObject(toValueSqlObject493,16819
+  public static SqlObject toCustomSqlObject(toCustomSqlObject511,17445
+  public static SqlObject toCustomSqlObject(toCustomSqlObject543,18507
+  public static SqlObject toCustomTableDefSqlObject(toCustomTableDefSqlObject562,19257
+  public static Expression toExpressionObject(toExpressionObject589,20194
+  public static Condition toConditionObject(toConditionObject618,21261
+
+src/main/java/com/healthmarketscience/sqlbuilder/BinaryCondition.java,651
+    public String toString(toString47,1105
+  protected void collectSchemaObjects(collectSchemaObjects77,1894
+  public BinaryCondition setLikeEscapeChar(setLikeEscapeChar86,2215
+  public void appendTo(appendTo99,2584
+  public static String escapeLikeLiteral(escapeLikeLiteral116,3155
+  public static BinaryCondition lessThan(lessThan131,3765
+  public static BinaryCondition greaterThan(greaterThan148,4509
+  public static BinaryCondition equalTo(equalTo165,5240
+  public static BinaryCondition notEqualTo(notEqualTo179,5792
+  public static BinaryCondition like(like193,6370
+  public static BinaryCondition notLike(notLike207,6932
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Index.java,97
+  public String getIndexNameSQL(getIndexNameSQL17,414
+  public Table getTable(getTable20,491
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Function.java,62
+  public String getFunctionNameSQL(getFunctionNameSQL15,396
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/RejoinTable.java,532
+  public Table getOriginalTable(getOriginalTable35,946
+  public String getAlias(getAlias37,1002
+  public String getTableNameSQL(getTableNameSQL39,1051
+  public String toString(toString44,1198
+    public Column getOriginalColumn(getOriginalColumn62,1708
+    public RejoinTable getTable(getTable64,1771
+    public String getColumnNameSQL(getColumnNameSQL66,1837
+    public String getTypeNameSQL(getTypeNameSQL68,1914
+    public Integer getTypeLength(getTypeLength70,1987
+    public String toString(toString73,2073
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Table.java,98
+  public String getAlias(getAlias17,391
+  public String getTableNameSQL(getTableNameSQL21,554
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Join.java,94
+  public Table getFromTable(getFromTable16,342
+  public Table getToTable(getToTable19,442
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Column.java,206
+  public Table getTable(getTable14,315
+  public String getColumnNameSQL(getColumnNameSQL17,393
+  public String getTypeNameSQL(getTypeNameSQL20,471
+  public Integer getTypeLength(getTypeLength24,593
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbJoin.java,137
+  public DbSpec getSpec(getSpec44,1331
+  public Table getFromTable(getFromTable48,1382
+  public Table getToTable(getToTable52,1446
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbSpec.java,351
+  public String getNextAlias(getNextAlias32,856
+  public DbSchema getDefaultSchema(getDefaultSchema40,1041
+  public DbSchema findSchema(findSchema49,1283
+  public DbSchema addDefaultSchema(addDefaultSchema60,1618
+  public DbSchema addSchema(addSchema71,1930
+  public DbJoin addJoin(addJoin88,2577
+  public DbJoin addJoin(addJoin108,3426
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbTable.java,284
+  public String getAlias(getAlias27,706
+  public String getTableNameSQL(getTableNameSQL31,763
+  public DbColumn findColumn(findColumn44,1073
+  public DbColumn addColumn(addColumn55,1409
+  public DbColumn addColumn(addColumn68,1865
+  public String toString(toString75,2081
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbObject.java,307
+  public DbSpec getSpec(getSpec28,683
+  protected ParentType getParent(getParent32,750
+  public String getName(getName36,812
+  public String getAbsoluteName(getAbsoluteName44,1013
+  protected static <T extends DbObject<?>> T findObject(findObject62,1584
+  public String toString(toString74,1875
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbFunction.java,135
+  public DbFunctionPackage getFunctionPackage(getFunctionPackage19,445
+  public String getFunctionNameSQL(getFunctionNameSQL23,524
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbColumn.java,206
+  public Table getTable(getTable27,627
+  public String getColumnNameSQL(getColumnNameSQL31,688
+  public String getTypeNameSQL(getTypeNameSQL35,756
+  public Integer getTypeLength(getTypeLength39,822
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbFunctionPackage.java,153
+  public DbSchema getSchema(getSchema25,739
+  public DbFunction findFunction(findFunction34,980
+  public DbFunction addFunction(addFunction45,1321
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbIndex.java,143
+  public DbSchema getSchema(getSchema32,860
+  public String getIndexNameSQL(getIndexNameSQL36,925
+  public Table getTable(getTable40,996
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbSchema.java,501
+  public DbSpec getSpec(getSpec32,930
+  public DbTable findTable(findTable41,1150
+  public DbTable addTable(addTable52,1472
+  public DbIndex addIndex(addIndex67,1965
+  public DbFunctionPackage getDefaultFunctionPackage(getDefaultFunctionPackage78,2303
+  public DbFunctionPackage findFunctionPackage(findFunctionPackage87,2574
+  public DbFunctionPackage addDefaultFunctionPackage(addDefaultFunctionPackage98,2940
+  public DbFunctionPackage addFunctionPackage(addFunctionPackage109,3282
+
+src/main/java/com/healthmarketscience/sqlbuilder/NegateExpression.java,108
+  protected void collectSchemaObjects(collectSchemaObjects36,838
+  public void appendTo(appendTo42,1042
+
+src/main/java/com/healthmarketscience/sqlbuilder/Condition.java,160
+      public boolean isEmpty(isEmpty25,711
+      protected void collectSchemaObjects(collectSchemaObjects27,775
+      public void appendTo(appendTo30,928
+
+src/main/java/com/healthmarketscience/sqlbuilder/TableDefObject.java,40
+  public void appendTo(appendTo23,489
+
+src/main/java/com/healthmarketscience/sqlbuilder/AllTableColumns.java,107
+  protected void collectSchemaObjects(collectSchemaObjects26,568
+  public void appendTo(appendTo37,948
+
+src/main/java/com/healthmarketscience/sqlbuilder/CreateTableQuery.java,704
+    public String toString(toString35,836
+  public DropQuery getDropQuery(getDropQuery73,1890
+  public CreateTableQuery addCustomColumns(addCustomColumns85,2254
+  public CreateTableQuery addColumn(addColumn92,2521
+  public CreateTableQuery addCustomColumn(addCustomColumn104,2880
+  public CreateTableQuery setColumnConstraint(setColumnConstraint114,3243
+  public CreateTableQuery validate(validate131,3775
+  protected CreateTableQuery getThisType(getThisType146,4060
+  protected void appendTo(appendTo149,4135
+  protected void appendTableSpace(appendTableSpace160,4419
+    protected void collectSchemaObjects(collectSchemaObjects180,4939
+    public void appendTo(appendTo186,5145
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseGrantQuery.java,1570
+  public ThisType addCustomGrantees(addCustomGrantees48,1485
+  public ThisType addGrantees(addGrantees54,1689
+  public ThisType addCustomPrivileges(addCustomPrivileges66,2108
+  public ThisType addPrivileges(addPrivileges74,2458
+  public ThisType setCustomTarget(setCustomTarget86,2891
+  public ThisType setTarget(setTarget94,3212
+  public static Privilege privilegeAll(privilegeAll99,3354
+  public static Privilege privilegeSelect(privilegeSelect104,3481
+  public static Privilege privilegeDelete(privilegeDelete109,3614
+  public static Privilege privilegeInsert(privilegeInsert115,3786
+  public static Privilege privilegeUpdate(privilegeUpdate121,4004
+  public static Privilege privilegeReferences(privilegeReferences127,4228
+  public static Privilege privilegeUsage(privilegeUsage132,4414
+  public static TargetObject targetTable(targetTable137,4567
+  protected void collectSchemaObjects(collectSchemaObjects142,4720
+  public ThisType validate(validate150,5027
+  protected abstract ThisType getThisType(getThisType183,5960
+      public boolean maySpecifyColumns(maySpecifyColumns208,6661
+      public String toString(toString213,6770
+    public Privilege addCustomColumns(addCustomColumns232,7318
+    public Privilege addColumns(addColumns240,7579
+    protected void collectSchemaObjects(collectSchemaObjects245,7703
+    public void appendTo(appendTo251,7910
+      public String toString(toString281,8701
+    protected void collectSchemaObjects(collectSchemaObjects293,8934
+    public void appendTo(appendTo299,9138
+
+src/main/java/com/healthmarketscience/sqlbuilder/AlterTableQuery.java,1169
+  public AlterTableQuery setAction(setAction41,1005
+  protected void collectSchemaObjects(collectSchemaObjects47,1142
+  protected void appendTo(appendTo54,1390
+    public AddUniqueConstraintAction addColumns(addColumns73,1944
+    public AddUniqueConstraintAction addCustomColumns(addCustomColumns83,2278
+    protected void collectSchemaObjects(collectSchemaObjects89,2467
+    public void appendTo(appendTo95,2674
+    public AddPrimaryConstraintAction addColumns(addColumns111,3190
+    public AddPrimaryConstraintAction addCustomColumns(addCustomColumns121,3530
+    protected void collectSchemaObjects(collectSchemaObjects127,3720
+    public void appendTo(appendTo133,3927
+    public AddForeignConstraintAction addPrimaryKeyReference(addPrimaryKeyReference180,5371
+    public AddForeignConstraintAction addCustomPrimaryKeyReference(addCustomPrimaryKeyReference191,5725
+    public AddForeignConstraintAction addReference(addReference199,5976
+    public AddForeignConstraintAction addCustomReference(addCustomReference212,6509
+    protected void collectSchemaObjects(collectSchemaObjects223,6882
+    public void appendTo(appendTo231,7215
+
+src/main/java/com/healthmarketscience/sqlbuilder/DropQuery.java,476
+    public String toString(toString35,753
+    public String toString(toString54,1148
+  public DropQuery setBehavior(setBehavior71,1572
+  protected void collectSchemaObjects(collectSchemaObjects77,1690
+  protected void appendTo(appendTo83,1883
+  public static DropQuery dropTable(dropTable98,2205
+  public static DropQuery dropTable(dropTable108,2485
+  public static DropQuery dropIndex(dropIndex116,2712
+  public static DropQuery dropIndex(dropIndex126,2992
+
+src/main/java/com/healthmarketscience/sqlbuilder/AliasedObject.java,175
+  public static SqlObject toAliasedObject(toAliasedObject32,860
+  protected void collectSchemaObjects(collectSchemaObjects40,1041
+  public void appendTo(appendTo46,1234
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseCaseStatement.java,648
+  public boolean isEmpty(isEmpty34,1003
+  public ThisType addCustomWhen(addCustomWhen47,1409
+  public ThisType addElse(addElse62,1981
+  public ThisType addElseNull(addElseNull73,2425
+  protected void collectSchemaObjects(collectSchemaObjects79,2537
+  public void appendTo(appendTo88,2823
+  protected abstract ThisType getThisType(getThisType99,3131
+    protected void collectSchemaObjects(collectSchemaObjects114,3504
+    protected void appendResult(appendResult119,3700
+    protected void collectSchemaObjects(collectSchemaObjects137,4105
+    public void appendTo(appendTo144,4364
+    public void appendTo(appendTo160,4752
+
+src/main/java/com/healthmarketscience/sqlbuilder/GrantQuery.java,173
+  public GrantQuery setAllowGranteeToGrant(setAllowGranteeToGrant23,488
+  protected void appendTo(appendTo29,652
+  protected GrantQuery getThisType(getThisType42,1008
+
+src/main/java/com/healthmarketscience/sqlbuilder/IndexObject.java,107
+  protected void collectSchemaObjects(collectSchemaObjects28,599
+  public void appendTo(appendTo33,746
+
+src/main/java/com/healthmarketscience/sqlbuilder/CreateIndexQuery.java,485
+  public CreateIndexQuery setTableName(setTableName51,1497
+  public CreateIndexQuery setCustomTableName(setCustomTableName61,1799
+  public DropQuery getDropQuery(getDropQuery67,1946
+  public CreateIndexQuery addCustomColumns(addCustomColumns79,2213
+  public CreateIndexQuery validate(validate85,2385
+  protected CreateIndexQuery getThisType(getThisType93,2513
+  protected void collectSchemaObjects(collectSchemaObjects96,2590
+  protected void appendTo(appendTo103,2834
+
+src/main/java/com/healthmarketscience/sqlbuilder/SimpleCaseStatement.java,187
+  public SimpleCaseStatement addNumericWhen(addNumericWhen49,1565
+  public SimpleCaseStatement addWhen(addWhen63,2096
+  protected SimpleCaseStatement getThisType(getThisType68,2239
+
+src/main/java/com/healthmarketscience/sqlbuilder/UnionQuery.java,848
+    public String toString(toString33,728
+  public UnionQuery addQueries(addQueries52,1227
+  public UnionQuery addCustomOrdering(addCustomOrdering65,1567
+  public UnionQuery addCustomOrderings(addCustomOrderings77,1983
+  public UnionQuery addOrdering(addOrdering84,2225
+  public UnionQuery addOrderings(addOrderings89,2400
+  public UnionQuery addIndexedOrdering(addIndexedOrdering95,2604
+  public UnionQuery addIndexedOrderings(addIndexedOrderings101,2838
+  public UnionQuery validate(validate106,2973
+  protected final void collectSchemaObjects(collectSchemaObjects160,4453
+  protected void appendTo(appendTo167,4735
+  public static UnionQuery union(union185,5216
+  public static UnionQuery union(union192,5358
+  public static UnionQuery unionAll(unionAll199,5537
+  public static UnionQuery unionAll(unionAll206,5690
+
+src/main/java/com/healthmarketscience/sqlbuilder/ComboExpression.java,906
+    public String toString(toString40,1116
+  protected void collectSchemaObjects(collectSchemaObjects60,1651
+  public boolean isEmpty(isEmpty66,1852
+  public ComboExpression addExpression(addExpression77,2144
+  public ComboExpression addExpressions(addExpressions88,2459
+  public void appendTo(appendTo94,2620
+  public static ComboExpression add(add104,2844
+  public static ComboExpression add(add115,3166
+  public static ComboExpression subtract(subtract123,3394
+  public static ComboExpression subtract(subtract134,3726
+  public static ComboExpression multiply(multiply142,3964
+  public static ComboExpression multiply(multiply153,4296
+  public static ComboExpression divide(divide161,4536
+  public static ComboExpression divide(divide172,4864
+  public static ComboExpression concatenate(concatenate180,5099
+  public static ComboExpression concatenate(concatenate191,5438
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseCreateQuery.java,525
+  public ThisType setName(setName31,774
+  public ThisType setCustomName(setCustomName41,1038
+  public ThisType addColumns(addColumns47,1222
+  public ThisType setTableSpace(setTableSpace57,1561
+  protected void collectSchemaObjects(collectSchemaObjects63,1687
+  protected void appendTableSpace(appendTableSpace73,2042
+  protected abstract ThisType getThisType(getThisType80,2270
+  public abstract ThisType addCustomColumns(addCustomColumns84,2413
+  public abstract DropQuery getDropQuery(getDropQuery90,2598
+
+src/main/java/com/healthmarketscience/sqlbuilder/FunctionCall.java,661
+  public FunctionCall setIsDistinct(setIsDistinct39,1143
+  public FunctionCall addCustomParams(addCustomParams50,1439
+  public FunctionCall addColumnParams(addColumnParams57,1693
+  public FunctionCall addNumericValueParam(addNumericValueParam67,2002
+  protected void collectSchemaObjects(collectSchemaObjects72,2148
+  public void appendTo(appendTo79,2405
+  public static FunctionCall avg(avg91,2716
+  public static FunctionCall min(min99,2915
+  public static FunctionCall max(max107,3114
+  public static FunctionCall sum(sum115,3313
+  public static FunctionCall count(count123,3514
+  public static FunctionCall countAll(countAll131,3749
+
+src/main/java/com/healthmarketscience/sqlbuilder/InCondition.java,303
+  public InCondition addObject(addObject57,1774
+  public InCondition addObjects(addObjects67,2042
+  public InCondition setNegate(setNegate73,2253
+  public boolean isEmpty(isEmpty79,2358
+  protected void collectSchemaObjects(collectSchemaObjects86,2597
+  public void appendTo(appendTo93,2824
+
+src/main/java/com/healthmarketscience/sqlbuilder/Expression.java,160
+      public boolean isEmpty(isEmpty25,711
+      protected void collectSchemaObjects(collectSchemaObjects27,775
+      public void appendTo(appendTo30,928
+
+src/main/java/com/healthmarketscience/sqlbuilder/ComboCondition.java,748
+    public String toString(toString37,989
+  protected void collectSchemaObjects(collectSchemaObjects63,1622
+  public boolean isEmpty(isEmpty69,1822
+  public ComboCondition addCondition(addCondition74,1951
+  public ComboCondition addConditions(addConditions79,2121
+  public ComboCondition addCustomCondition(addCustomCondition89,2441
+  public ComboCondition addCustomConditions(addCustomConditions99,2749
+  public void appendTo(appendTo105,2922
+  public static ComboCondition and(and115,3145
+  public static ComboCondition and(and123,3345
+  public static ComboCondition and(and134,3694
+  public static ComboCondition or(or142,3915
+  public static ComboCondition or(or150,4112
+  public static ComboCondition or(or161,4460
+
+src/main/java/com/healthmarketscience/sqlbuilder/NestableClause.java,245
+  public boolean isEmpty(isEmpty30,901
+  protected static boolean areEmpty(areEmpty38,1119
+  protected static void appendCustomIfNotNull(appendCustomIfNotNull56,1572
+  protected static void appendNestedClauses(appendNestedClauses69,1942
+
+src/main/java/com/healthmarketscience/sqlbuilder/CustomExpression.java,149
+  public boolean isEmpty(isEmpty36,913
+  protected void collectSchemaObjects(collectSchemaObjects39,980
+  public void appendTo(appendTo47,1210
+
+src/main/java/com/healthmarketscience/sqlbuilder/SqlObject.java,471
+      public void appendTo(appendTo32,1047
+      protected void collectSchemaObjects(collectSchemaObjects36,1163
+      public void appendTo(appendTo45,1495
+      protected void collectSchemaObjects(collectSchemaObjects49,1611
+      public void appendTo(appendTo57,1909
+      protected void collectSchemaObjects(collectSchemaObjects61,2028
+  public String toString(toString76,2594
+  protected abstract void collectSchemaObjects(collectSchemaObjects89,3114
+
+src/main/java/com/healthmarketscience/sqlbuilder/JdbcEscape.java,301
+    public String toString(toString43,961
+  protected void collectSchemaObjects(collectSchemaObjects55,1170
+  public void appendTo(appendTo61,1367
+  public static JdbcEscape date(date66,1573
+  public static JdbcEscape time(time74,1934
+  public static JdbcEscape timestamp(timestamp83,2339
+
+src/main/java/com/healthmarketscience/sqlbuilder/NotCondition.java,149
+  public boolean isEmpty(isEmpty34,832
+  protected void collectSchemaObjects(collectSchemaObjects39,915
+  public void appendTo(appendTo45,1118
+
+src/main/java/com/healthmarketscience/sqlbuilder/InsertQuery.java,626
+  public InsertQuery addCustomColumn(addCustomColumn44,1361
+  public InsertQuery addCustomColumns(addCustomColumns57,1942
+  public InsertQuery addColumn(addColumn66,2284
+  public InsertQuery addColumns(addColumns72,2509
+  public InsertQuery addCustomPreparedColumns(addCustomPreparedColumns83,2853
+  public InsertQuery addPreparedColumns(addPreparedColumns94,3234
+  public InsertQuery addPreparedColumnCollection(addPreparedColumnCollection100,3452
+  public InsertQuery validate(validate116,3835
+  protected void collectSchemaObjects(collectSchemaObjects130,4116
+  protected void appendTo(appendTo137,4363
+
+src/main/java/com/healthmarketscience/sqlbuilder/ValueObject.java,107
+  protected void collectSchemaObjects(collectSchemaObjects27,567
+  public void appendTo(appendTo32,714
+
+src/main/java/com/healthmarketscience/sqlbuilder/Comment.java,107
+  protected void collectSchemaObjects(collectSchemaObjects27,583
+  public void appendTo(appendTo32,730
+
+src/main/java/com/healthmarketscience/sqlbuilder/SelectQuery.java,1996
+    public String toString(toString54,1598
+  boolean hasAllColumns(hasAllColumns84,2663
+  private void addJoinFromTable(addJoinFromTable98,2961
+  public SelectQuery setIsDistinct(setIsDistinct110,3354
+  public SelectQuery setForUpdate(setForUpdate117,3573
+  public SelectQuery addCustomColumns(addCustomColumns128,3867
+  public SelectQuery addAllColumns(addAllColumns134,4079
+  public SelectQuery addAllTableColumns(addAllTableColumns141,4267
+  public SelectQuery addColumns(addColumns147,4455
+  public SelectQuery addCustomFromTable(addCustomFromTable158,4808
+  public SelectQuery addFromTable(addFromTable171,5195
+  public SelectQuery addCustomJoin(addCustomJoin183,5543
+  public SelectQuery addJoin(addJoin198,6073
+  public SelectQuery addJoin(addJoin210,6532
+  public SelectQuery addJoin(addJoin227,7171
+  public SelectQuery addJoins(addJoins241,7791
+  public SelectQuery addCustomOrdering(addCustomOrdering258,8301
+  public SelectQuery addCustomOrderings(addCustomOrderings270,8719
+  public SelectQuery addOrdering(addOrdering277,8962
+  public SelectQuery addOrderings(addOrderings282,9138
+  public SelectQuery addIndexedOrdering(addIndexedOrdering288,9341
+  public SelectQuery addIndexedOrderings(addIndexedOrderings294,9576
+  public SelectQuery addCustomGroupings(addCustomGroupings304,9886
+  public SelectQuery addGroupings(addGroupings310,10099
+  public ComboCondition getWhereClause(getWhereClause319,10419
+  public SelectQuery addCondition(addCondition333,10967
+  public ComboCondition getHavingClause(getHavingClause343,11300
+  public SelectQuery addHaving(addHaving358,11858
+  protected void collectSchemaObjects(collectSchemaObjects364,11991
+  public SelectQuery validate(validate375,12449
+  protected static void validateOrdering(validateOrdering458,15652
+  protected void appendTo(appendTo492,16879
+    protected void collectSchemaObjects(collectSchemaObjects593,19709
+    public void appendTo(appendTo602,20017
+
+src/main/java/com/healthmarketscience/sqlbuilder/UnaryCondition.java,319
+    public boolean isPrefixOp(isPrefixOp40,1020
+    public String toString(toString43,1095
+  protected void collectSchemaObjects(collectSchemaObjects66,1572
+  public void appendTo(appendTo72,1771
+  public static UnaryCondition isNull(isNull90,2255
+  public static UnaryCondition isNotNull(isNotNull101,2607
+
+src/main/java/com/healthmarketscience/sqlbuilder/CustomSql.java,109
+  protected void collectSchemaObjects(collectSchemaObjects49,1323
+  public void appendTo(appendTo54,1470
+
+src/main/java/com/healthmarketscience/sqlbuilder/Subquery.java,149
+  public boolean isEmpty(isEmpty36,845
+  protected void collectSchemaObjects(collectSchemaObjects41,920
+  public void appendTo(appendTo49,1152
+
+src/main/java/com/healthmarketscience/sqlbuilder/QueryReader.java,791
+  public Column getNewColumn(getNewColumn96,3392
+    public Column setColumnObject(setColumnObject128,4530
+    public Column setCustomColumnObject(setCustomColumnObject140,4974
+    public SqlObject getCustomColumnObject(getCustomColumnObject149,5244
+    public boolean isInQuery(isInQuery153,5327
+    private void setIndex(setIndex157,5409
+    public int getIndex(getIndex161,5477
+    protected void addIndex(addIndex163,5523
+    public int getInt(getInt174,5881
+    public long getLong(getLong183,6089
+    public boolean getBoolean(getBoolean193,6310
+    public String getString(getString202,6532
+    public Object getObject(getObject214,6804
+    protected void collectSchemaObjects(collectSchemaObjects224,6995
+    public final void appendTo(appendTo232,7273
+
+src/main/java/com/healthmarketscience/sqlbuilder/SqlObjectList.java,618
+  public String getDelimiter(getDelimiter68,2068
+  public void setDelimiter(setDelimiter72,2129
+  public int size(size79,2274
+  public boolean isEmpty(isEmpty85,2436
+  public void clear(clear90,2547
+  public void addObject(addObject108,2994
+  public void addObjects(addObjects116,3177
+  public void addObjects(addObjects129,3446
+  public <SrcType, DstType extends ObjType> void addObjects(addObjects145,3920
+  public <SrcType, DstType extends ObjType> void addObjects(addObjects163,4477
+  protected void collectSchemaObjects(collectSchemaObjects176,4769
+  public void appendTo(appendTo184,5007
+
+src/test/java/com/healthmarketscience/sqlbuilder/SqlBuilderTest.java,2522
+  protected void setUp(setUp49,1442
+  public void testCreateTable(testCreateTable68,2295
+                "CREATE TABLE Schema1.Table1 (Schema1.Table173,2482
+                "CREATE TABLE Schema1.Table1 (Schema1.Table178,2688
+                "CREATE TABLE Table1 (Table183,2908
+                "CREATE TABLE Table1 (Table192,3348
+  public void testCreateIndex(testCreateIndex100,3613
+  public void testDropTable(testDropTable110,3955
+  public void testInsert(testInsert129,4664
+                "INSERT INTO Schema1.Table1 (Schema1.Table1136,4943
+                "INSERT INTO Schema1.Table1 (Schema1.Table1144,5296
+                "INSERT INTO Table1 (Table1152,5651
+  public void testInsertSelect(testInsertSelect163,6011
+                "INSERT INTO Table1 (Table1174,6409
+  public void testSelect(testSelect193,7050
+  public void testCondition(testCondition346,13602
+  public void testExpression(testExpression378,15189
+  public void testFunction(testFunction397,15851
+  public void testCustom(testCustom449,17572
+  public void testPreparer(testPreparer466,18340
+  private void doTestPreparer(doTestPreparer472,18425
+  public void testReader(testReader510,20377
+  private void doTestReader(doTestReader515,20454
+  public void testCaseStatement(testCaseStatement540,21322
+                "(CASE WHEN (WHEN555,21892
+  public void testDelete(testDelete562,22122
+                "DELETE FROM Schema1.Table1 WHERE (WHERE569,22330
+  public void testUpdate(testUpdate573,22407
+  public void testUnion(testUnion586,22795
+  public void testSqlContext(testSqlContext626,24220
+  public void testRejoinTable(testRejoinTable644,24776
+  public void testJdbcEscape(testJdbcEscape662,25458
+                "INSERT INTO Schema1.Table1 (Schema1.Table1669,25735
+  public void testGrantRevoke(testGrantRevoke680,26191
+    checkResult(grantStr1, "GRANT INSERT(INSERT688,26494
+    checkResult(revokeStr1, "REVOKE INSERT(INSERT696,26875
+  public void testSubquery(testSubquery708,27280
+  public void testAlterTable(testAlterTable722,27815
+    checkResult(queryStr2, "ALTER TABLE Table1 ADD PRIMARY KEY (KEY736,28330
+                "ALTER TABLE Table1 ADD FOREIGN KEY (KEY744,28662
+                "ALTER TABLE Table1 ADD FOREIGN KEY (KEY753,29073
+                "REFERENCES Table2 (Table2754,29143
+  public void testComment(testComment758,29199
+  public void testEscapeLiteral(testEscapeLiteral773,29788
+  private void checkResult(checkResult783,30119
+
+src/main/java/com/healthmarketscience/sqlbuilder/SqlContext.java,247
+  private SqlContext _oldContext;_oldContext26,1063
+  private boolean _useTableAliases =_useTableAliases30,1211
+    SqlContext context =context85,2718
+    SqlContext oldContext =oldContext101,3235
+    SqlContext context =context102,3293
+
+src/main/java/com/healthmarketscience/sqlbuilder/CustomCondition.java,40
+  private SqlObject _cond;_cond23,652
+
+src/main/java/com/healthmarketscience/sqlbuilder/UpdateQuery.java,192
+  private SqlObject _table;_table21,451
+  private ComboCondition _condition =_condition23,552
+    private SqlObject _column;_column112,3407
+    private SqlObject _value;_value113,3438
+
+src/main/java/com/healthmarketscience/sqlbuilder/CaseStatement.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/FunctionObject.java,49
+  protected Function _function;_function22,508
+
+src/main/java/com/healthmarketscience/sqlbuilder/RevokeQuery.java,57
+  private DropQuery.Behavior _behavior;_behavior17,329
+
+src/main/java/com/healthmarketscience/sqlbuilder/OrderObject.java,113
+    private String _dirStr;_dirStr26,649
+  private Dir _dir;_dir36,810
+  private SqlObject _obj;_obj37,830
+
+src/main/java/com/healthmarketscience/sqlbuilder/TypedColumnObject.java,51
+    Integer colFieldLength =colFieldLength27,689
+
+src/main/java/com/healthmarketscience/sqlbuilder/Query.java,47
+    SqlContext newContext =newContext97,3084
+
+src/main/java/com/healthmarketscience/sqlbuilder/TableObject.java,40
+  protected Table _table;_table20,442
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseInsertQuery.java,42
+  private SqlObject _table;_table20,512
+
+src/main/java/com/healthmarketscience/sqlbuilder/JdbcScalarFunction.java,58
+  public static final JdbcScalarFunction NOW =NOW24,667
+
+src/main/java/com/healthmarketscience/sqlbuilder/ValidationException.java,71
+  private static final long serialVersionUID =serialVersionUID14,399
+
+src/main/java/com/healthmarketscience/sqlbuilder/NumberValueObject.java,39
+  private Number _value;_value21,500
+
+src/main/java/com/healthmarketscience/sqlbuilder/QueryPreparer.java,1132
+ *   QueryPreparer preparer =preparer54,2381
+ *   QueryPreparer.PlaceHolder param1PH =param1PH55,2432
+ *   QueryPreparer.PlaceHolder param2PH =param2PH56,2504
+ *   String prepQueryStr =prepQueryStr57,2576
+ *   PreparedStatement ps =ps58,2645
+ *     ResultSet rs =rs62,2844
+ *   Long param1 =param168,3043
+ *   String param2 =param269,3066
+ *   QueryPreparer preparer =preparer70,3094
+ *   QueryPreparer.PlaceHolder param3PH =param3PH71,3145
+ *   String prepQueryStr =prepQueryStr72,3217
+ *   PreparedStatement ps =ps83,3656
+ *     ResultSet rs =rs87,3860
+  public static final int DEFAULT_START_INDEX =DEFAULT_START_INDEX98,4089
+  private static final int NO_INDEX =NO_INDEX103,4377
+  private int _curIndex;_curIndex107,4512
+    Formatter fmt =fmt119,4818
+    private QueryPreparer _outer;_outer309,10936
+    private int _index =_index314,11216
+    private int _sqlType;_sqlType713,21861
+    protected ObjType _val;_val741,22460
+    private int _sqlType;_sqlType769,23079
+    private long _val;_val811,24018
+    private int _val;_val838,24579
+    private boolean _val;_val865,25140
+
+src/main/java/com/healthmarketscience/sqlbuilder/ColumnObject.java,43
+  protected Column _column;_column22,589
+
+src/main/java/com/healthmarketscience/sqlbuilder/InsertSelectQuery.java,56
+  private SelectQuery _selectQuery;_selectQuery20,488
+
+src/main/java/com/healthmarketscience/sqlbuilder/DeleteQuery.java,98
+  private SqlObject _table;_table19,450
+  private ComboCondition _condition =_condition20,478
+
+src/main/java/com/healthmarketscience/sqlbuilder/Converter.java,39
+    SqlObject rtnObj;rtnObj512,17503
+
+src/main/java/com/healthmarketscience/sqlbuilder/BinaryCondition.java,285
+    private String _opStr;_opStr40,1003
+  private Op _binaryOp;_binaryOp51,1159
+  private SqlObject _leftValue;_leftValue52,1183
+  private SqlObject _rightValue;_rightValue53,1215
+  private ValueObject _escapeChar;_escapeChar54,1248
+    String escapeStr =escapeStr119,3288
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Index.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Function.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/RejoinTable.java,121
+  private Table _table;_table19,490
+  private String _alias;_alias21,559
+    private Column _column;_column56,1606
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Table.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Join.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/Column.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbJoin.java,147
+  private final DbSpec _spec;_spec19,483
+  private final DbTable _fromTable;_fromTable21,545
+  private final DbTable _toTable;_toTable23,614
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbSpec.java,119
+  private int _nextAliasNum;_nextAliasNum24,725
+    DbSchema schema =schema72,1973
+    DbJoin join =join112,3616
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbTable.java,76
+  private String _alias;_alias18,440
+    DbColumn column =column69,1945
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbObject.java,176
+  private final ParentType _parent;_parent15,347
+  private final String _name;_name17,426
+    String absoluteName =absoluteName45,1049
+    String prefix =prefix46,1086
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbFunction.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbColumn.java,107
+  private final String _typeName;_typeName17,365
+  private final Integer _typeLength;_typeLength18,399
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbFunctionPackage.java,43
+    DbFunction function =function46,1368
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbIndex.java,46
+  private final DbTable _table;_table19,466
+
+src/main/java/com/healthmarketscience/sqlbuilder/dbspec/basic/DbSchema.java,176
+  private final DbSpec _spec;_spec17,397
+    DbTable table =table53,1513
+    DbIndex index =index69,2070
+    DbFunctionPackage functionPackage =functionPackage110,3343
+
+src/main/java/com/healthmarketscience/sqlbuilder/NegateExpression.java,53
+  private Expression _expression;_expression21,488
+
+src/main/java/com/healthmarketscience/sqlbuilder/Condition.java,53
+  public static final Condition EMPTY =EMPTY23,637
+
+src/main/java/com/healthmarketscience/sqlbuilder/TableDefObject.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/AllTableColumns.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/CreateTableQuery.java,205
+    private String _constraintClause;_constraintClause28,672
+      SqlObject tmpCol =tmpCol119,3475
+    private SqlObject _column;_column171,4725
+    private Object _constraint;_constraint172,4756
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseGrantQuery.java,747
+  public static final SqlObject PUBLIC_GRANTEE =PUBLIC_GRANTEE23,642
+  private static final Privilege PRIVILEGE_ALL =PRIVILEGE_ALL25,717
+  private static final Privilege PRIVILEGE_SELECT =PRIVILEGE_SELECT27,805
+  private static final Privilege PRIVILEGE_DELETE =PRIVILEGE_DELETE29,899
+  private static final Privilege PRIVILEGE_USAGE =PRIVILEGE_USAGE31,993
+  protected SqlObject _targetObj;_targetObj36,1236
+    boolean hasAll =hasAll167,5499
+      private String _typeStr;_typeStr200,6438
+      private boolean _maySpecifyColumns;_maySpecifyColumns201,6469
+    private Type _type;_type216,6835
+      private String _typeStr;_typeStr274,8579
+    private Type _type;_type284,8766
+    private SqlObject _name;_name285,8790
+
+src/main/java/com/healthmarketscience/sqlbuilder/AlterTableQuery.java,152
+  private SqlObject _table;_table20,467
+  private SqlObject _action;_action21,495
+    private SqlObject _referencedTable;_referencedTable148,4373
+
+src/main/java/com/healthmarketscience/sqlbuilder/DropQuery.java,212
+    private String _typeStr;_typeStr28,637
+    private String _bvrStr;_bvrStr47,1036
+  private Type _type;_type57,1204
+  private SqlObject _obj;_obj58,1226
+  private Behavior _behavior;_behavior59,1252
+
+src/main/java/com/healthmarketscience/sqlbuilder/AliasedObject.java,77
+  private SqlObject _obj;_obj19,504
+  private String _alias;_alias20,530
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseCaseStatement.java,201
+  private static final ElseObject NULL_ELSE =NULL_ELSE21,571
+  private SqlObject _operand;_operand24,707
+    private SqlObject _result;_result107,3348
+    private SqlObject _test;_test129,3953
+
+src/main/java/com/healthmarketscience/sqlbuilder/GrantQuery.java,68
+  private boolean _allowGranteeToGrant;_allowGranteeToGrant16,326
+
+src/main/java/com/healthmarketscience/sqlbuilder/IndexObject.java,40
+  protected Index _index;_index21,498
+
+src/main/java/com/healthmarketscience/sqlbuilder/CreateIndexQuery.java,44
+  protected SqlObject _table;_table20,542
+
+src/main/java/com/healthmarketscience/sqlbuilder/SimpleCaseStatement.java,0
+
+src/main/java/com/healthmarketscience/sqlbuilder/UnionQuery.java,184
+    private String _typeStr;_typeStr26,616
+  private Type _type;_type36,783
+    int currentCount =currentCount114,3187
+    boolean ignoreColumnCount =ignoreColumnCount115,3214
+
+src/main/java/com/healthmarketscience/sqlbuilder/ComboExpression.java,42
+    private String _opStr;_opStr33,1014
+
+src/main/java/com/healthmarketscience/sqlbuilder/BaseCreateQuery.java,97
+  protected SqlObject _object;_object20,497
+  protected String _tableSpace;_tableSpace22,600
+
+src/main/java/com/healthmarketscience/sqlbuilder/FunctionCall.java,106
+  private boolean _isDistinct;_isDistinct21,565
+  private SqlObject _functionName;_functionName22,596
+
+src/main/java/com/healthmarketscience/sqlbuilder/InCondition.java,92
+  private boolean _negate;_negate23,581
+  private SqlObject _leftValue;_leftValue24,608
+
+src/main/java/com/healthmarketscience/sqlbuilder/Expression.java,54
+  public static final Expression EMPTY =EMPTY23,635
+
+src/main/java/com/healthmarketscience/sqlbuilder/ComboCondition.java,41
+    private String _opStr;_opStr30,887
+
+src/main/java/com/healthmarketscience/sqlbuilder/NestableClause.java,64
+    boolean hasEmptyNestedClause =hasEmptyNestedClause77,2274
+
+src/main/java/com/healthmarketscience/sqlbuilder/CustomExpression.java,40
+  private SqlObject _expr;_expr23,657
+
+src/main/java/com/healthmarketscience/sqlbuilder/SqlObject.java,239
+  public static final SqlObject QUESTION_MARK =QUESTION_MARK29,960
+  public static final SqlObject ALL_SYMBOL =ALL_SYMBOL42,1412
+  public static final SqlObject NULL_VALUE =NULL_VALUE54,1825
+    StringAppendableExt app =app77,2651
+
+src/main/java/com/healthmarketscience/sqlbuilder/JdbcEscape.java,271
+    private String _prefixStr;_prefixStr36,837
+  private Type _type;_type46,1020
+  private SqlObject _val;_val47,1042
+    java.sql.Date sqlDate =sqlDate67,1615
+    java.sql.Time sqlTime =sqlTime75,1976
+    java.sql.Timestamp sqlTimestamp =sqlTimestamp84,2386
+
+src/main/java/com/healthmarketscience/sqlbuilder/NotCondition.java,50
+  private Condition _condition;_condition19,481
+
+src/main/java/com/healthmarketscience/sqlbuilder/InsertQuery.java,40
+    SqlObject[] values =values84,2923
+
+src/main/java/com/healthmarketscience/sqlbuilder/ValueObject.java,39
+  private Object _value;_value20,467
+
+src/main/java/com/healthmarketscience/sqlbuilder/Comment.java,49
+  private Object _commentStr;_commentStr20,465
+
+src/main/java/com/healthmarketscience/sqlbuilder/SelectQuery.java,685
+    private String _joinClause;_joinClause47,1466
+  private boolean _isDistinct;_isDistinct58,1657
+  private boolean _forUpdate;_forUpdate59,1688
+  private ComboCondition _condition =_condition63,1927
+  private ComboCondition _having =_having66,2129
+    SqlObject tableObj =tableObj160,4869
+    boolean checkTables =checkTables380,12662
+        NumberValueObject numObj =numObj475,16326
+        long idx =idx481,16594
+    private SqlObject _toTable;_toTable562,18812
+    private JoinType _joinType;_joinType563,18844
+    private Condition _onCondition;_onCondition564,18876
+      ComboCondition onCondition =onCondition578,19274
+      for(int i =i579,19339
+
+src/main/java/com/healthmarketscience/sqlbuilder/UnaryCondition.java,176
+    private String _opStr;_opStr32,847
+    private boolean _isPrefixOp;_isPrefixOp33,874
+  private Op _unaryOp;_unaryOp47,1151
+  private SqlObject _value;_value48,1174
+
+src/main/java/com/healthmarketscience/sqlbuilder/CustomSql.java,79
+ * String selectQuery =selectQuery20,454
+  private Object _obj;_obj42,1233
+
+src/main/java/com/healthmarketscience/sqlbuilder/Subquery.java,42
+  private SqlObject _query;_query24,546
+
+src/main/java/com/healthmarketscience/sqlbuilder/QueryReader.java,756
+ *   QueryReader reader =reader34,1344
+ *   QueryReader.Column col1 =col135,1389
+ *   QueryReader.Column col2 =col236,1443
+ *   String queryStr =queryStr37,1497
+ *   Statement stmt =stmt38,1554
+ *   ResultSet rs =rs39,1600
+ *     String col1Str =col1Str41,1676
+ *     int col2Int =col2Int42,1720
+ *  QueryReader.Column rCol1;rCol147,1833
+ *  QueryReader.Column rCol2;rCol248,1863
+ *  String queryStr =queryStr51,1926
+  public static final int DEFAULT_START_INDEX =DEFAULT_START_INDEX64,2300
+  private static final int NO_INDEX =NO_INDEX69,2573
+  private int _curIndex;_curIndex73,2703
+    private QueryReader _outer;_outer111,3926
+    private int _index =_index116,4194
+    private SqlObject _columnObj;_columnObj118,4269
+
+src/main/java/com/healthmarketscience/sqlbuilder/SqlObjectList.java,121
+  public static final String DEFAULT_DELIMITER =DEFAULT_DELIMITER30,905
+  private String _delimiter;_delimiter32,960
+
+src/test/java/com/healthmarketscience/sqlbuilder/SqlBuilderTest.java,5066
+  private DbSpec _spec;_spec28,876
+  private DbSchema _schema1;_schema129,900
+  private DbSchema _defSchema;_defSchema30,929
+  private DbTable _table1;_table131,960
+  private DbColumn _table1_col1;_table1_col132,987
+  private DbColumn _table1_col2;_table1_col233,1020
+  private DbColumn _table1_col3;_table1_col334,1053
+  private DbTable _defTable1;_defTable135,1086
+  private DbColumn _defTable1_col_id;_defTable1_col_id36,1116
+  private DbColumn _defTable1_col2;_defTable1_col237,1154
+  private DbColumn _defTable1_col3;_defTable1_col338,1190
+  private DbTable _defTable2;_defTable239,1226
+  private DbColumn _defTable2_col_id;_defTable2_col_id40,1256
+  private DbColumn _defTable2_col4;_defTable2_col441,1294
+  private DbColumn _defTable2_col5;_defTable2_col542,1330
+    String createStr1 =createStr170,2331
+    String createStr2 =createStr275,2570
+    String createStr3 =createStr380,2787
+    String createStr4 =createStr485,2992
+    DbIndex index =index102,3649
+    String createStr1 =createStr1105,3767
+    String dropStr1 =dropStr1112,3989
+    String dropStr2 =dropStr2115,4120
+    String dropStr3 =dropStr3119,4301
+    String dropStr4 =dropStr4124,4505
+    String insertStr1 =insertStr1131,4695
+    String insertStr2 =insertStr2138,5038
+    String insertStr3 =insertStr3146,5379
+    SelectQuery selectQuery =selectQuery165,6048
+    String insertStr1 =insertStr1168,6169
+    DbJoin idJoin =idJoin196,7125
+    DbJoin col4Join =col4Join203,7344
+      SelectQuery selectQuery1 =selectQuery1209,7586
+      String selectStr1 =selectStr1212,7707
+      String selectStr2 =selectStr2216,7894
+      String selectStr3 =selectStr3221,8121
+      String selectStr4 =selectStr4228,8562
+      String selectStr5 =selectStr5233,8896
+      String selectStr6 =selectStr6239,9302
+      String selectStr7 =selectStr7245,9751
+      String selectStr8 =selectStr8249,10167
+    String selectStr6 =selectStr6256,10659
+    String selectStr7 =selectStr7262,10850
+    String selectStr8 =selectStr8270,11093
+    String selectStr9 =selectStr9279,11373
+      DbTable table3 =table3330,13025
+    String reallyComplicatedConditionStr =reallyComplicatedConditionStr348,13636
+    String reallyComplicatedExpression =reallyComplicatedExpression380,15224
+    String concatExpression =concatExpression390,15617
+    DbFunctionPackage funcPack1 =funcPack1400,15923
+    DbFunction func1 =func1401,15994
+    DbFunctionPackage funcPack2 =funcPack2402,16049
+    DbFunction func2 =func2403,16118
+    DbFunctionPackage funcPack3 =funcPack3404,16173
+    DbFunction func3 =func3405,16247
+    String funcStr1 =funcStr1407,16307
+    String funcStr2 =funcStr2410,16417
+    String funcStr3 =funcStr3415,16577
+    String funcStr4 =funcStr4421,16773
+    String funcStr5 =funcStr5427,16957
+    String funcStr6 =funcStr6432,17134
+    String funcStr7 =funcStr7437,17275
+    String funcStr8 =funcStr8441,17380
+    String customStr1 =customStr1451,17603
+    QueryPreparer prep =prep474,18475
+    QueryPreparer.PlaceHolder ph1 =ph1475,18531
+    QueryPreparer.PlaceHolder ph2 =ph2476,18593
+    QueryPreparer.PlaceHolder ph3 =ph3477,18655
+    QueryPreparer.PlaceHolder sph1 =sph1478,18717
+    QueryPreparer.MultiPlaceHolder mph1 =mph1479,18785
+    String reallyComplicatedConditionStr =reallyComplicatedConditionStr481,18859
+    QueryReader prep =prep517,20502
+    QueryReader.Column col1 =col1518,20554
+    QueryReader.Column col2 =col2519,20605
+    QueryReader.Column col3 =col3520,20656
+    QueryReader.Column col4 =col4521,20707
+    String selectStr =selectStr523,20759
+    String caseClause1 =caseClause1541,21358
+    String caseClause2 =caseClause2549,21640
+    String caseClause3 =caseClause3557,22001
+    String deleteQuery1 =deleteQuery1564,22153
+    String updateQuery1 =updateQuery1575,22438
+                "UPDATE Schema1.Table1 SET col1 =col1582,22694
+    SelectQuery q1 =q1588,22825
+    SelectQuery q2 =q2590,22925
+    UnionQuery unionQuery =unionQuery593,23037
+    String unionQuery1 =unionQuery1595,23095
+    String unionQuery2 =unionQuery2614,23806
+    SqlContext context =context628,24255
+    Condition cond =cond629,24298
+    String condStr1 =condStr1633,24456
+    String condStr2 =condStr2638,24634
+    RejoinTable rejoinTable1 =rejoinTable1646,24812
+    String rejoinQuery =rejoinQuery650,25032
+    String escapeStr1 =escapeStr1664,25493
+    Date d =d671,25824
+    String dateStr =dateStr672,25863
+    String timeStr =timeStr674,25961
+    String timestampStr =timestampStr676,26057
+    String grantStr1 =grantStr1682,26227
+    String revokeStr1 =revokeStr1690,26587
+    String queryStr =queryStr710,27313
+    String queryStr1 =queryStr1724,27850
+    String queryStr2 =queryStr2731,28124
+    String queryStr3 =queryStr3738,28406
+    String queryStr4 =queryStr4746,28745
+    String queryStr1 =queryStr1760,29231
+    String queryStr2 =queryStr2765,29488
+    String orig =orig775,29826

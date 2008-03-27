@@ -1,0 +1,631 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <author email="jahlborn@users.sf.net">James Ahlborn</author>
+    <title>SqlBuilder Supported SQL Reference</title>
+  </properties>
+  <body>
+    <section name="SqlBuilder Supported SQL Reference">
+      <p>
+        The reference below attempts to enumerate most of the SQL syntax
+        supported by SqlBuilder, although it is <i>not</i> exhaustive.
+      </p>
+      <ul>
+        <li><a href="#Queries">Queries</a></li>
+        <ul>
+          <li><a href="#DDL_Queries">DDL Queries</a></li>
+          <li><a href="#DML_Queries">DML Queries</a></li>
+        </ul>
+        <li><a href="#Clauses">Clauses</a></li>
+        <ul>
+          <li><a href="#Conditions">Conditions</a></li>
+          <li><a href="#Expressions">Expressions</a></li>
+          <li><a href="#Simple_Values">Simple Values</a></li>
+          <li><a href="#Complex_Values">Complex Values</a></li>
+          <li><a href="#JDBC_Support">JDBC Support</a></li>
+        </ul>
+      </ul>
+      
+      <subsection name="General Notes">
+      <p>
+        Almost every method has a "custom" variation which supports
+        inserting more complicated objects in place of the more common
+        ones.  The custom variation will often handle a range of Object
+        types automatically.
+      </p>
+      <ul>
+        <table>
+          <tr>
+            <th>Example Common Method</th>
+            <th>Equivalent Custom Method</th>
+          </tr>
+          <tr>
+            <td><a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#addColumns(com.healthmarketscience.sqlbuilder.dbspec.Column...)"><source>SelectQuery.addColumns(Column...)</source></a></td>
+            <td><a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#addCustomColumns(java.lang.Object...)"><source>SelectQuery.addCustomColumns(Object...)</source></a></td>
+          </tr>
+        </table>
+      </ul>
+      <p>
+        Most constructors which take an enum value have a named static
+        method for constructing the object with each enum value.
+      </p>
+      <ul>
+        <table>
+          <tr>
+            <th>Example Constructor With Enum</th>
+            <th>Equivalent Static Method</th>
+          </tr>
+          <tr>
+            <td><a href="apidocs/com/healthmarketscience/sqlbuilder/ComboCondition.html#ComboCondition(com.healthmarketscience.sqlbuilder.ComboCondition.Op)"><source>new ComboCondition(Op.AND)</source></a></td>
+            <td><a href="apidocs/com/healthmarketscience/sqlbuilder/ComboCondition.html"><source>ComboCondition.and()</source></a></td>
+          </tr>
+        </table>
+      </ul>
+      </subsection>
+    </section>
+
+    <section name="Queries">
+      <subsection name="DDL Queries"
+                  id="DDL_Queries">
+        <table>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/CreateTableQuery.html">CreateTableQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CreateTableQuery.html#CreateTableQuery(com.healthmarketscience.sqlbuilder.dbspec.Table)">&lt;tableName&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseCreateQuery.html#addColumns(com.healthmarketscience.sqlbuilder.dbspec.Column...)">&lt;column&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CreateTableQuery.html#setColumnConstraint(com.healthmarketscience.sqlbuilder.dbspec.Column,%20com.healthmarketscience.sqlbuilder.CreateTableQuery.ColumnConstraint)">&lt;columnConstraint&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/CreateTableQuery.ColumnConstraint.html">NOT_NULL, PRIMARY_KEY, UNIQUE</a>)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseCreateQuery.html#setTableSpace(java.lang.String)">&lt;tableSpace&gt;</a> <a href="#note1"><sup><small>[1]</small></sup></a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  CREATE TABLE &lt;tableName&gt; (&lt;column&gt; [ &lt;columnConstraint&gt; ], ...)
+  [ TABLESPACE &lt;tableSpace&gt; ]
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/CreateIndexQuery.html">CreateIndexQuery</a> <a href="#note1"><sup><small>[1]</small></sup></a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CreateIndexQuery.html#CreateIndexQuery(com.healthmarketscience.sqlbuilder.dbspec.Index)">&lt;indexName&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CreateIndexQuery.html#setTableName(java.lang.String)">&lt;table&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseCreateQuery.html#addColumns(com.healthmarketscience.sqlbuilder.dbspec.Column...)">&lt;column&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseCreateQuery.html#setTableSpace(java.lang.String)">&lt;tableSpace&gt;</a> <a href="#note1"><sup><small>[1]</small></sup></a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  CREATE INDEX &lt;indexName&gt; ON &lt;table&gt; (&lt;column&gt;, ...)
+  [ TABLESPACE &lt;tableSpace&gt; ]
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/AlterTableQuery.html">AlterTableQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/AlterTableQuery.html#AlterTableQuery(com.healthmarketscience.sqlbuilder.dbspec.Table)">&lt;table&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/AlterTableQuery.html#setAction(com.healthmarketscience.sqlbuilder.SqlObject)">&lt;action&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/AlterTableQuery.AddForeignConstraintAction.html">ADD FOREIGN KEY</a>, <a href="apidocs/com/healthmarketscience/sqlbuilder/AlterTableQuery.AddPrimaryConstraintAction.html">ADD PRIMARY KEY</a>, <a href="apidocs/com/healthmarketscience/sqlbuilder/AlterTableQuery.AddUniqueConstraintAction.html">ADD UNIQUE</a>)</li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ALTER TABLE &lt;table&gt; &lt;action&gt;
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.html">DropQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.html#DropQuery(com.healthmarketscience.sqlbuilder.DropQuery.Type,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;objType&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.Type.html">INDEX, TABLE</a>)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.html#DropQuery(com.healthmarketscience.sqlbuilder.DropQuery.Type,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;objName&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.html#setBehavior(com.healthmarketscience.sqlbuilder.DropQuery.Behavior)">&lt;behavior&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.Behavior.html">CASCADE, RESTRICT</a>)</li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  DROP &lt;objType&gt; &lt;objName&gt; [ &lt;behavior&gt; ]
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/GrantQuery.html">GrantQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseGrantQuery.html#addPrivileges(com.healthmarketscience.sqlbuilder.BaseGrantQuery.Privilege...)">&lt;privilege&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseGrantQuery.html#setTarget(com.healthmarketscience.sqlbuilder.BaseGrantQuery.TargetObject)">&lt;target&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseGrantQuery.html#addGrantees(java.lang.String...)">&lt;grantee&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/GrantQuery.html#setAllowGranteeToGrant(boolean)">WITH GRANT OPTION</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  GRANT &lt;privilege&gt;, ... ON &lt;target&gt; TO &lt;grantee&gt;, ... [ WITH GRANT OPTION ]
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/RevokeQuery.html">RevokeQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseGrantQuery.html#addPrivileges(com.healthmarketscience.sqlbuilder.BaseGrantQuery.Privilege...)">&lt;privilege&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseGrantQuery.html#setTarget(com.healthmarketscience.sqlbuilder.BaseGrantQuery.TargetObject)">&lt;target&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseGrantQuery.html#addGrantees(java.lang.String...)">&lt;grantee&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.html#setBehavior(com.healthmarketscience.sqlbuilder.DropQuery.Behavior)">&lt;behavior&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.Behavior.html">CASCADE, RESTRICT</a>)</li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  REVOKE &lt;privilege&gt;, ... ON &lt;target&gt; FROM &lt;grantee&gt;, ... [ &lt;behavior&gt; ]
+</source>
+            </td>
+          </tr>          
+        </table>
+      </subsection>
+
+      <subsection name="DML Queries"
+                  id="DML_Queries">
+        <table>
+          <tr>
+            <td>
+              <a name="SelectQuery"/>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html">SelectQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#setIsDistinct(boolean)">DISTINCT</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#addColumns(com.healthmarketscience.sqlbuilder.dbspec.Column...)">&lt;column&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#addJoins(com.healthmarketscience.sqlbuilder.SelectQuery.JoinType,%20com.healthmarketscience.sqlbuilder.dbspec.Join...)">&lt;join&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.JoinType.html">INNER, LEFT | RIGHT | FULL OUTER</a>) | <a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#addFromTable(com.healthmarketscience.sqlbuilder.dbspec.Table)">&lt;table&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#addCondition(com.healthmarketscience.sqlbuilder.Condition)">&lt;condition&gt;</a> (see <a href="#Conditions">Conditions</a> below)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#addGroupings(com.healthmarketscience.sqlbuilder.dbspec.Column...)">&lt;group&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#addHaving(com.healthmarketscience.sqlbuilder.Condition)">&lt;havingCondition&gt;</a> (see <a href="#Conditions">Conditions</a> below)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#addOrderings(com.healthmarketscience.sqlbuilder.dbspec.Column...)">&lt;ordering&gt;</a> (or <a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#addIndexedOrderings(java.lang.Integer...)">&lt;number&gt;</a>)</li>
+                <li>&lt;orderingDir&gt; (<a href="apidocs/com/healthmarketscience/sqlbuilder/OrderObject.Dir.html">ASC, DESC</a>)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/SelectQuery.html#setForUpdate(boolean)">FOR UPDATE</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  SELECT [ DISTINCT ] &lt;column&gt;, ...
+  FROM [ &lt;join&gt;, ... ] | [ &lt;table&gt;, ... ]
+  [ WHERE &lt;condition&gt; ]
+  [ GROUP BY &lt;group&gt;, ...
+    [ HAVING &lt;havingCondition&gt; ] ]
+  [ ORDER BY &lt;ordering&gt; [ &lt;orderingDir&gt; ], ... ]
+  [ FOR UPDATE ]
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/InsertQuery.html">InsertQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/InsertQuery.html#InsertQuery(com.healthmarketscience.sqlbuilder.dbspec.Table)">&lt;table&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/InsertQuery.html#addColumns(com.healthmarketscience.sqlbuilder.dbspec.Column[],%20java.lang.Object[])">&lt;column&gt; &lt;value&gt;</a> | <a href="apidocs/com/healthmarketscience/sqlbuilder/InsertQuery.html#addPreparedColumns(com.healthmarketscience.sqlbuilder.dbspec.Column...)">&lt;column&gt; ?</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  INSERT INTO &lt;table&gt; ( &lt;column&gt;, ... ) VALUES ( &lt;value&gt;, ... )
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/InsertSelectQuery.html">InsertSelectQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/InsertSelectQuery.html#InsertSelectQuery(com.healthmarketscience.sqlbuilder.dbspec.Table)">&lt;table&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/InsertSelectQuery.html#addColumns(com.healthmarketscience.sqlbuilder.dbspec.Column...)">&lt;column&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/InsertSelectQuery.html#setSelectQuery(com.healthmarketscience.sqlbuilder.SelectQuery)">&lt;selectQuery&gt;</a> (see <a href="#SelectQuery">SelectQuery</a> above)</li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  INSERT INTO &lt;table&gt; ( &lt;column&gt;, ... ) &lt;selectQuery&gt;
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/DeleteQuery.html">DeleteQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/DeleteQuery.html#DeleteQuery(com.healthmarketscience.sqlbuilder.dbspec.Table)">&lt;table&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/DeleteQuery.html#addCondition(com.healthmarketscience.sqlbuilder.Condition)">&lt;condition&gt;</a> (see <a href="#Conditions">Conditions</a> below)</li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  DELETE FROM &lt;table&gt;
+  [ WHERE &lt;condition&gt; ]
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/UnionQuery.html">UnionQuery</a>
+              <ul>
+                <li>(<a href="apidocs/com/healthmarketscience/sqlbuilder/UnionQuery.Type.html">UNION, UNION ALL</a>)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/UnionQuery.html#addQueries(com.healthmarketscience.sqlbuilder.SelectQuery...)">&lt;selectQuery&gt;</a> (see <a href="#SelectQuery">SelectQuery</a> above)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/UnionQuery.html#addOrderings(com.healthmarketscience.sqlbuilder.dbspec.Column...)">&lt;ordering&gt;</a> (or <a href="apidocs/com/healthmarketscience/sqlbuilder/UnionQuery.html#addIndexedOrderings(java.lang.Integer...)">&lt;number&gt;</a>)</li>
+                <li>&lt;orderingDir&gt; (<a href="apidocs/com/healthmarketscience/sqlbuilder/OrderObject.Dir.html">ASC, DESC</a>)</li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  &lt;selectQuery&gt; UNION [ ALL ] &lt;selectQuery&gt; ...
+  [ ORDER BY &lt;ordering&gt; [ &lt;orderingDir&gt; ], ... ]
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/UpdateQuery.html">UpdateQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/UpdateQuery.html#UpdateQuery(com.healthmarketscience.sqlbuilder.dbspec.Table)">&lt;table&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/UpdateQuery.html#addSetClause(com.healthmarketscience.sqlbuilder.dbspec.Column,%20java.lang.Object)">&lt;column&gt; &lt;value&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/UpdateQuery.html#addCondition(com.healthmarketscience.sqlbuilder.Condition)">&lt;condition&gt;</a> (see <a href="#Conditions">Conditions</a> below)</li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  UPDATE &lt;table&gt; SET &lt;column&gt; = &lt;value&gt;, ...
+  [ WHERE &lt;condition&gt; ]
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/Subquery.html">Subquery</a>
+              <ul>
+                <li>Embeds a <a href="apidocs/com/healthmarketscience/sqlbuilder/Subquery.html#Subquery(com.healthmarketscience.sqlbuilder.SqlObject)">&lt;subQuery&gt;</a> within another query</li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( &lt;subQuery&gt; )
+</source>
+            </td>
+          </tr>
+        </table>
+      </subsection>
+
+    </section>
+    
+    <section name="Clauses">
+      <subsection name="Conditions"
+                  id="Conditions">
+        <p>
+          <a href="apidocs/com/healthmarketscience/sqlbuilder/Condition.html">Condition</a> objects represent boolean clauses.  All conditions have logic for
+          determining whether or not they actually contain any content and
+          will not write anything to the generated query if they consider
+          themselves empty.
+        </p>
+
+        <table>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/ComboCondition.html">ComboCondition</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/ComboCondition.html#addConditions(com.healthmarketscience.sqlbuilder.Condition...)">&lt;subCondition&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/ComboCondition.html#ComboCondition(com.healthmarketscience.sqlbuilder.ComboCondition.Op)">&lt;comboOp&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/ComboCondition.Op.html">AND | OR</a>)</li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( &lt;subCondition&gt; [ &lt;comboOp&gt; &lt;subCondition&gt; ... ] )
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/UnaryCondition.html">UnaryCondition</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/UnaryCondition.html#UnaryCondition(com.healthmarketscience.sqlbuilder.UnaryCondition.Op,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;unaryOp&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/UnaryCondition.Op.html">IS [ NOT ] NULL</a>)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/UnaryCondition.html#UnaryCondition(com.healthmarketscience.sqlbuilder.UnaryCondition.Op,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;value&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( &lt;unaryOp&gt; &lt;value&gt; )
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/BinaryCondition.html">BinaryCondition</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BinaryCondition.html#BinaryCondition(com.healthmarketscience.sqlbuilder.BinaryCondition.Op,%20com.healthmarketscience.sqlbuilder.SqlObject,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;binaryOp&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/BinaryCondition.Op.html">'&lt;' | '&lt;=' | '&gt;' | '&gt;=' | '=' | '&lt;&gt;' | [ NOT ] LIKE</a>)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BinaryCondition.html#BinaryCondition(com.healthmarketscience.sqlbuilder.BinaryCondition.Op,%20com.healthmarketscience.sqlbuilder.SqlObject,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;value1&gt;, &lt;value2&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( &lt;value1&gt; &lt;binaryOp&gt; &lt;value2&gt;)
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/InCondition.html">InCondition</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/InCondition.html#InCondition(java.lang.Object,%20java.lang.Object...)">&lt;column&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/InCondition.html#InCondition(java.lang.Object,%20java.lang.Object...)">&lt;value&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/InCondition.html#setNegate(boolean)">NOT</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( &lt;column&gt; [ NOT ] IN ( &lt;value&gt; , ... ) )
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/NotCondition.html">NotCondition</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/NotCondition.html#NotCondition(com.healthmarketscience.sqlbuilder.Condition)">&lt;subCondition&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( NOT &lt;subCondition&gt; )
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/CustomCondition.html">CustomCondition</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CustomCondition.html#CustomCondition(com.healthmarketscience.sqlbuilder.SqlObject)">&lt;customCondition&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( &lt;customCondition&gt; )
+</source>
+            </td>
+          </tr>
+        </table>
+        
+      </subsection>
+      
+      <subsection name="Expressions"
+                  id="Expressions">
+        <p>
+          <a href="apidocs/com/healthmarketscience/sqlbuilder/Expression.html">Expression</a> objects represent value clauses.  All expressions have similar
+          logic to <a href="#Conditions">Conditions</a> for handling empty
+          content.
+        </p>
+        
+        <table>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/ComboExpression.html">ComboExpression</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/ComboExpression.html#addExpressions(java.lang.Object...)">&lt;subExpression&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/ComboExpression.html#ComboExpression(com.healthmarketscience.sqlbuilder.ComboExpression.Op)">&lt;comboOp&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/ComboExpression.Op.html">'+' | '-' | '*' | '/' | '||'</a>)</li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( &lt;subExpression&gt; [ &lt;comboOp&gt; &lt;subExpression&gt; ... ] )
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/NegateExpression.html">NegateExpression</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/NegateExpression.html#NegateExpression(com.healthmarketscience.sqlbuilder.Expression)">&lt;subExpression&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( - &lt;subExpression&gt; )
+</source>
+            </td>
+          </tr>          
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/CustomExpression.html">CustomExpression</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CustomExpression.html#CustomExpression(com.healthmarketscience.sqlbuilder.SqlObject)">&lt;customExpression&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( &lt;customExpression&gt; )
+</source>
+            </td>
+          </tr>
+        </table>
+      
+      </subsection>
+
+      <subsection name="Simple Values"
+                  id="Simple_Values">
+        <table>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/ValueObject.html">ValueObject</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/ValueObject.html#ValueObject(java.lang.Object)">&lt;value&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  '&lt;value&gt;'
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/NumberValueObject.html">NumberValueObject</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/NumberValueObject.html#NumberValueObject(java.lang.Number)">&lt;number&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  &lt;number&gt;
+</source>
+            </td>
+          </tr>          
+        </table>
+      </subsection>
+
+      <subsection name="Complex Values"
+                  id="Complex_Values">
+        <table>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/SimpleCaseStatement.html">SimpleCaseStatement</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/SimpleCaseStatement.html#SimpleCaseStatement(com.healthmarketscience.sqlbuilder.dbspec.Column)">&lt;column&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/SimpleCaseStatement.html#addWhen(java.lang.String,%20java.lang.Object)">&lt;value&gt; &lt;result&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseCaseStatement.html#addElse(java.lang.Object)">&lt;elseResult&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( CASE &lt;column&gt;
+    WHEN &lt;value&gt; THEN &lt;result&gt;
+    [ WHEN &lt;value&gt; THEN &lt;result&gt; ... ]
+    [ ELSE &lt;elseResult&gt; ]
+    END )
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/CaseStatement.html">CaseStatement</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CaseStatement.html#addWhen(com.healthmarketscience.sqlbuilder.Condition,%20java.lang.Object)">&lt;condition&gt; &lt;result&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseCaseStatement.html#addElse(java.lang.Object)">&lt;elseResult&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  ( CASE
+    WHEN &lt;condition&gt; THEN &lt;result&gt;
+    [ WHEN &lt;condition&gt; THEN &lt;result&gt; ... ]
+    [ ELSE &lt;elseResult&gt; ]
+    END )
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/FunctionCall.html">FunctionCall</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/FunctionCall.html#FunctionCall(com.healthmarketscience.sqlbuilder.dbspec.Function)">&lt;functionName&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/FunctionCall.html#addColumnParams(com.healthmarketscience.sqlbuilder.dbspec.Column...)">&lt;parameter&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/FunctionCall.html#setIsDistinct(boolean)">DISTINCT</a></li>
+                <li>Predefined:</li>
+                <ul>
+                  <li><a href="apidocs/com/healthmarketscience/sqlbuilder/FunctionCall.html#avg()">AVG</a></li>
+                  <li><a href="apidocs/com/healthmarketscience/sqlbuilder/FunctionCall.html#min()">MIN</a></li>
+                  <li><a href="apidocs/com/healthmarketscience/sqlbuilder/FunctionCall.html#max()">MAX</a></li>
+                  <li><a href="apidocs/com/healthmarketscience/sqlbuilder/FunctionCall.html#sum()">SUM</a></li>
+                  <li><a href="apidocs/com/healthmarketscience/sqlbuilder/FunctionCall.html#count()">COUNT</a></li>
+                  <li><a href="apidocs/com/healthmarketscience/sqlbuilder/FunctionCall.html#countAll()">COUNT(*)</a></li>
+                </ul>
+              </ul>
+            </td>
+            <td>
+              <source>
+  &lt;functionName&gt;( [ DISTINCT ] [ &lt;parameter&gt;, ... ] )
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/Comment.html">Comment</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/Comment.html#Comment(java.lang.Object)">&lt;myCommentHere&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  -- &lt;myCommentHere&gt;\n
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/AliasedObject.html">AliasedObject</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/AliasedObject.html#AliasedObject(com.healthmarketscience.sqlbuilder.SqlObject,%20java.lang.String)">&lt;obj&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/AliasedObject.html#AliasedObject(com.healthmarketscience.sqlbuilder.SqlObject,%20java.lang.String)">&lt;alias&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  &lt;obj&gt; AS &lt;alias&gt;
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/CustomSql.html">CustomSql</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CustomSql.html#CustomSql(java.lang.Object)">&lt;customSql&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  &lt;customSql&gt;
+</source>
+            </td>
+          </tr>
+        </table>
+      </subsection>
+
+      <subsection name="JDBC Support"
+                  id="JDBC_Support">
+        <table>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcEscape.html">JdbcEscape</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcEscape.html#JdbcEscape(com.healthmarketscience.sqlbuilder.JdbcEscape.Type,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;escapeType&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcEscape.Type.html">'fn' | 'd' | 't' | 'ts' | 'oj' | 'call' | '?= call' | 'escape'</a>)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcEscape.html#JdbcEscape(com.healthmarketscience.sqlbuilder.JdbcEscape.Type,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;sql&gt;</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  { &lt;escapeType&gt; &lt;sql&gt; }
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcScalarFunction.html">JdbcScalarFunction</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcScalarFunction.html#JdbcScalarFunction(com.healthmarketscience.sqlbuilder.SqlObject)">&lt;funcCall&gt;</a></li>
+                <li>Predefined:</li>
+                <ul>
+                  <li><a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcScalarFunction.html#NOW">NOW</a></li>
+                </ul>
+              </ul>
+            </td>
+            <td>
+              <source>
+  { fn &lt;funcCall&gt; }
+</source>
+            </td>
+          </tr>
+        </table>
+      </subsection>
+    </section>
+    
+    <section>
+      <dl>
+        <dt><a name="note1">[1]</a></dt>
+        <dd>This syntax is not ANSI SQL92 compliant.</dd>
+      </dl>
+    </section>
+  </body>
+</document>

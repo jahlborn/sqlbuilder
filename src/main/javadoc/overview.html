@@ -1,0 +1,130 @@
+<body>
+
+<p>
+Facility for programmatically generating SQL statements.  Can be used either
+with the {@link com.healthmarketscience.sqlbuilder.dbspec dbspec} utilities or
+with simple SQL strings (or a combination thereof).  Has validation for
+checking internal consistency of the statements (more effective when using the
+{@code dbspec} utilities).  Note that although the objects are not built for
+concurrent construction, once a query object has been created, all append
+methods are thread-safe.  See the 
+<a href="{@docRoot}/../syntax_reference.html" target="_top">Syntax Reference</a> for a list
+of the major highlights.
+</p>
+<p>
+This package will <em>not</em> help you write SQL if you do not already know
+how to write SQL and use JDBC.  It does not abstract away the knowledge
+necessary to deal with a database, but instead provides tools for avoiding the
+more error-prone parts of generating SQL queries.
+If you want a tool to completely abstract away the database, check out 
+<a href="http://www.hibernate.org" target="_top">Hibernate</a> instead.
+</p>
+<p>
+Although this facility has full support for "custom" sql (arbitrary strings
+inserted using the {@link com.healthmarketscience.sqlbuilder.CustomSql}
+object), it is highly recommended that the 
+{@link com.healthmarketscience.sqlbuilder.dbspec} utilities be used in
+conjunction with this package (there are very basic implementations in the
+{@link com.healthmarketscience.sqlbuilder.dbspec.basic dbspec.basic} package).
+Using the {@code dbspec} utilities with this facility allow for better
+validation of queries, simpler method calls, and no custom SQL at all.  What
+more reasons do you need?
+</p>
+<p>
+Additionally, there is support for dynamically generated prepared statements.
+The {@link com.healthmarketscience.sqlbuilder.QueryPreparer} class can be
+used to keep track of the positions of prepared statement parameters while
+building a prepared statement (see that class for examples).
+</p>
+
+<p>
+Examples:
+<pre>
+
+//
+// CreateTableQuery
+//
+
+// custom sql example (validated)
+String createQuery =
+  (new CreateTableQuery(new CustomSql("table1")))
+  .addCustomColumns(new CustomSql("id number"),
+                    new CustomSql("foo varchar(255)"),
+                    new CustomSql("baz number"),
+                    new CustomSql("buzz date"))
+  .validate().toString();
+
+// Output:
+CREATE TABLE table1 (id number,foo varchar(255),baz number,buzz date)
+
+// Assume these objects have been created already
+Table table1;
+
+// dbspec sql example (validated)
+String createQuery =
+  (new CreateTableQuery(table1, true))
+  .validate().toString();
+
+// Output:
+CREATE TABLE TABLE1 (ID NUMBER,FOO VARCHAR(255),BAZ NUMBER,BUZZ DATE)
+
+
+//
+// SelectQuery
+//
+
+// custom sql example (validated)
+String selectQuery =
+  (new SelectQuery())
+  .addCustomColumns(new CustomSql("foo"),
+                    new CustomSql("baz"),
+                    new CustomSql("buzz"))
+  .addCustomJoin(SelectQuery.JoinType.INNER_JOIN,
+                 new CustomSql("table1"), new CustomSql("table2"),
+                 BinaryCondition.equalTo(
+                   new CustomSql("table1.id"), new CustomSql("table2.id")))
+  .addCustomOrderings(new CustomSql("foo"))
+  .validate().toString();
+
+// Output:
+SELECT foo,baz,buzz FROM table1 INNER JOIN table2 ON (table1.id = table2.id) ORDER BY foo
+
+// Assume these objects have been created already
+Table table1, table2;
+Column t1Col1, t1Col2, t2Col1;
+Join joinOfT1AndT2;
+
+// dbspec sql example (validated)
+String selectQuery =
+  (new SelectQuery())
+  .addColumns(t1Col1, t1Col2, t2Col1)
+  .addJoin(SelectQuery.JoinType.INNER_JOIN, joinOfT1AndT2)
+  .addOrderings(t1Col1)
+  .validate().toString();
+
+// Output:
+SELECT T1.COL1,T1.COL2,T2.COL1 FROM TABLE1 T1 INNER JOIN TABLE2 T2 ON (T1.IDCOL = T2.IDCOL) ORDER BY T1.COL1
+
+</pre>
+
+<h2>JMS</h2>
+
+Since the syntax for JMS message selectors is a subset of SQL92, many of the
+expression related classes in this package can be used to create JMS message
+selectors.  
+
+<pre>
+
+String selector = ComboCondition.and(
+  BinaryCondition.equalTo(new CustomSql("field1"),
+                          "the_value"),
+  BinaryCondition.lessThan(new CustomSql("otherField"),
+                           new NumberValueObject(37)), false)
+  .toString();
+
+// Output:
+((field1 = 'the_value') AND (otherField < 37))
+
+</pre>
+
+</body>
