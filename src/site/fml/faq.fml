@@ -13,7 +13,7 @@
           syntax only (with a few minor deviances).  While allowing for custom
           syntax would certainly be useful, no good design has yet been found
           for such functionality (feel free to post a feature request if you
-          can think of a good db customization infrstructure).  For now, you
+          can think of a good db customization infrastructure).  For now, you
           can use the "custom" methods to insert custom SQL syntax into a
           query.
         </p>
