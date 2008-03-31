@@ -4,75 +4,9 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="1.0.6" date="2008-03-26">
-      <action dev="jahlborn" type="update">
-        Added BinaryCondition.escapeLikeLiteral method for correctly escaping
-        literal strings in like patterns.
-      </action>
-      <action dev="jahlborn" type="update">
-        clean up preparer tostring
-      </action>
-      <action dev="jahlborn" type="update">
-        move basic dbspec implementation from SqlBuilderTest to basic pacakge;
-        update documentation (add more package javadocs)
-      </action>
-      <action dev="mdelaurentis" type="update">
-        Add foreign key constraint action to AlterTableQuery.
-      </action>
-      <action dev="jliang" type="update">
-        Cleaned out some duplicate null checks.
-      </action>
-      <action dev="jahlborn" type="update">
-        Add accessors for the internal ComboConditions to facilitate common
-        condition building code.
-      </action>
-      <action dev="jahlborn" type="update">
-        Cleanup some inconsistencies around Conditions and Expressions.  Make
-        most simple SqlObjects extend Expression.  Ditch ValueExpression.  Add
-        CustomExpression.
-      </action>
-      <action dev="jahlborn" type="update">
-        Move some helper code out of SqlObject (code review feedback).
-      </action>
-      <action dev="jahlborn" type="update">
-        Make getSchemaObjects abstract (code review feedback).  While this is
-        a slight pain for most value objects, it makes code addition slightly
-        safer as implementor is forced to deal with the method.
-      </action>
-    </release>   
-    <release version="1.0.5" date="2007-07-09">
-      <action dev="jliang" type="add">
-        Added null check to QueryPreparer.toString() method
-      </action>
-    </release>  
-    <release version="1.0.4" date="2007-02-14">
-      <action dev="jliang" type="add">
-        Added toString method to QueryPreparer
-      </action>
-    </release>  
-    <release version="1.0.3" date="2007-02-08">
-      <action dev="kmudrick" type="add">
-        Added support for the "HAVING" clause that can
-        be used in combination with the "GROUP BY" clause
-        to SelectQuery.
-      </action>
-    </release>
-    <release version="1.0.2" date="2007-01-03">
+    <release version="2.0.0" date="TBD">
       <action dev="jahlborn" type="add">
-        add comment support
-      </action>
-      <action dev="jahlborn" type="add">
-        add alter table query generation
-      </action>
-    </release>
-    <release version="1.0.1" date="2006-12-17">
-      <action dev="jahlborn" type="fix">
-        fixed group by clauses in SelectQuery
-      </action>
-    </release>
-    <release version="1.0" date="2006-10-17">
-      <action dev="jahlborn" type="add">
-        Initial release as separate sqlbuilder project.
+        Initial open source release.
       </action>
     </release>
   </body>
