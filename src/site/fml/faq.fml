@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<faqs title="Frequently Asked Questions">
+
+  <part id="general">
+    <title>General</title>
+
+    <faq id="customdb">
+      <question>How can I get Oracle (DB2, SqlServer, MySql...) specific syntax?</question>
+      <answer>
+        <p>
+          In general, the SqlBuilder package has strived to use ANSI SQL92
+          syntax only (with a few minor deviances).  While allowing for custom
+          syntax would certainly be useful, no good design has yet been found
+          for such functionality (feel free to post a feature request if you
+          can think of a good db customization infrstructure).  For now, you
+          can use the "custom" methods to insert custom SQL syntax into a
+          query.
+        </p>
+      </answer>
+    </faq>
+
+    <faq id="customsyn">
+      <question>I don't want to use the DbSchema objects for just one
+                query...</question>
+      <answer>
+        <p>
+          Well, that's not really a question, but we get where you're coming
+          from.  Pretty much every method has a "custom" counterpart which can
+          be used to inject pretty much any custom syntax you want.  The
+          queries use different converters to interpret the arguments to these
+          methods.  If they are doing the wrong conversion, you generally just
+          need to wrap your custom object in a CustomSql object.
+        </p>
+      </answer>
+    </faq>
+    
+    <faq id="dependencies">
+      <question>Why do I get a NoClassDefFoundError?</question>
+      <answer>
+        <p>
+          Probably because you're missing a jar that SqlBuilder depends on from
+          your classpath.  Take a look at the <a href="dependencies.html">dependencies list</a>.  The "compile" and
+          "runtime" dependencies are necessary for using SqlBuilder in your
+          application.  One great place to track down these dependencies is in
+          the <a href="http://repo1.maven.org/maven2/">Ibiblio Maven
+          Repository</a>.
+        </p>
+      </answer>
+    </faq>
+
+    <faq id="hms">
+      <question>Who is Health Market Science?</question>
+      <answer>
+        <p>
+          HMS is a small company located in suburban Philadelphia.
+          Using proprietary matching and consolidation software,
+          HMS scientifically manufactures the most comprehensive
+          and accurate healthcare data sets in the market today.
+          <a href="http://www.healthmarketscience.com/abouthms/careers.php">We're hiring!</a>
+          HMS is always looking for talented individuals, especially Java
+          developers.
+        </p>
+      </answer>
+    </faq>
+
+  </part>
+
+</faqs>
