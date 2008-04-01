@@ -99,7 +99,7 @@ String selectQuery =
     </section>
     <section name="Getting Started">
       <ul>
-        <li><a href="example.xml">Basic examples</a></li>
+        <li><a href="example.html">Basic examples</a></li>
         <li>Additional code examples in the <a href="apidocs/overview-summary.html#overview_description">sqlbuilder overview javadocs</a></li>
         <li>Major highlights of the supported syntax in the <a href="syntax_reference.html">Syntax Reference</a></li>
         <li>Examples for all the classes in the <a href="xref-test/com/healthmarketscience/sqlbuilder/SqlBuilderTest.html">unit tests</a></li>

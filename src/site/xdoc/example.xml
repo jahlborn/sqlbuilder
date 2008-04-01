@@ -88,6 +88,7 @@
 
       <subsection name="Run some queries" id="RunQueries">
         <source>
+    ////
     // find a customer name by id
     String query1 =
       new SelectQuery()
@@ -99,6 +100,7 @@
     // => SELECT t0.name FROM customer t0
     //      WHERE (t0.cust_id = 1)
 
+    ////
     // find all the orders for a customer, given name, order by date
     String query2 =
       new SelectQuery()
@@ -114,6 +116,7 @@
     //      WHERE (t0.name = 'bob')
     //      ORDER BY t1.order_date
 
+    ////
     // find the totals of all orders for people named bob who spent over $100
     // this year, grouped by name
     String query3 =
@@ -143,6 +146,7 @@
 
       <subsection name="Use schema objects not predefined (use custom SQL)" id="CustomSql">
         <source>
+    ////
     // find addresses for customers from PA,NJ,DE from table:
     //   address(cust_id, street, city, state, zip)
     String customQuery1 =
