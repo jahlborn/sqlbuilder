@@ -98,16 +98,6 @@ public abstract class Converter<SrcType, DstType>
       }
     };
 
-  /** Converter which converts a numeric value object to a SqlObject using
-      {@link #toNumericValueSqlObject(Object)} */
-  protected static final Converter<Object, SqlObject> NUMERIC_VALUE_TO_OBJ =
-    new Converter<Object, SqlObject>() {
-      @Override
-      public SqlObject convert(Object value) {
-        return toNumericValueSqlObject(value);
-      }
-    };
-
   /**
    * Converter which converts an Object to an Expression using
    * {@link #toExpressionObject(Object)}
@@ -244,6 +234,7 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
+   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
    * </ul>
@@ -265,6 +256,7 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
+   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
    * </ul>
@@ -387,94 +379,6 @@ public abstract class Converter<SrcType, DstType>
     }
     return toCustomSqlObject(obj);
   }
-  
-  /**
-   * Converts a numeric column Object to a SqlObject.
-   * <p>
-   * Conversions (in order):
-   * <ul>
-   * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
-   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
-   * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
-   * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
-   * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
-   * </ul>
-   * 
-   * @param obj object to coerce to a numeric column SqlObject
-   * @return a SqlObject for the given Object.
-   */
-  public static SqlObject toNumericColumnSqlObject(Object obj) {
-    if(obj instanceof Column) {
-      return toColumnSqlObject((Column)obj);
-    }
-    return toNumericValueSqlObject(obj);
-  }
-  
-  /**
-   * Converts a numeric column Object to a SqlObject with the given alias.
-   * <p>
-   * Conversions (in order):
-   * <ul>
-   * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
-   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
-   * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
-   * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
-   * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
-   * </ul>
-   * <p>
-   * Result of previous conversion is wrapped as an {@link AliasedObject} if
-   * the given alias is non-{@code null}.
-   * 
-   * @param obj object to coerce to a numeric column SqlObject
-   * @param alias optional column alias for the object
-   * @return a SqlObject for the given Object with the given alias.
-   */
-  public static SqlObject toNumericColumnSqlObject(Object obj, String alias) {
-    return AliasedObject.toAliasedObject(toNumericColumnSqlObject(obj), alias);
-  }
-  
-  /**
-   * Converts a numeric value Object to a SqlObject.
-   * <p>
-   * Conversions (in order):
-   * <ul>
-   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
-   * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
-   * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
-   * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
-   * </ul>
-   * 
-   * @param obj object to coerce to a numeric value SqlObject
-   * @return a SqlObject for the given Object.
-   */
-  public static SqlObject toNumericValueSqlObject(Object obj) {
-    if(obj instanceof Number) {
-      return new NumberValueObject((Number)obj);
-    }
-    return toValueSqlObject(obj);
-  }
-    
-  /**
-   * Converts a numeric value Object to a SqlObject with the given alias.
-   * <p>
-   * Conversions (in order):
-   * <ul>
-   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
-   * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
-   * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
-   * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
-   * </ul>
-   * <p>
-   * Result of previous conversion is wrapped as an {@link AliasedObject} if
-   * the given alias is non-{@code null}.
-   * 
-   * @param obj object to coerce to a numeric value SqlObject
-   * @param alias optional column alias for the object
-   * @return a SqlObject for the given Object with the given alias.
-   */
-  public static SqlObject toNumericValueSqlObject(Object obj, String alias) {
-    return AliasedObject.toAliasedObject(toNumericValueSqlObject(obj), alias);
-  }
     
   /**
    * Converts a value Object to a SqlObject.
@@ -482,6 +386,7 @@ public abstract class Converter<SrcType, DstType>
    * Conversions (in order):
    * <ul>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
+   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
    * </ul>
@@ -492,6 +397,8 @@ public abstract class Converter<SrcType, DstType>
   public static SqlObject toValueSqlObject(Object obj) {
     if(obj == null) {
       return SqlObject.NULL_VALUE;
+    } else if(obj instanceof Number) {
+      return new NumberValueObject((Number)obj);
     } else if(obj instanceof SqlObject) {
       return (SqlObject)obj;
     }
@@ -504,6 +411,7 @@ public abstract class Converter<SrcType, DstType>
    * Conversions (in order):
    * <ul>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
+   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
    * </ul>
@@ -615,7 +523,7 @@ public abstract class Converter<SrcType, DstType>
     if(obj instanceof Expression) {
       return (Expression)obj;
     }
-    obj = toNumericColumnSqlObject(obj);
+    obj = toColumnSqlObject(obj);
     // the wrapper may be an Expression, so check again
     return ((obj instanceof Expression) ?
             (Expression)obj : new CustomExpression(obj));

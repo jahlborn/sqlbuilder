@@ -87,10 +87,10 @@ public class FunctionCall extends Expression
    * Adds a numeric value parameter to the function call.
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
-   * {@link Converter#toNumericValueSqlObject}.
+   * {@link Converter#COLUMN_VALUE_TO_OBJ}.
    */
   public FunctionCall addNumericValueParam(Object obj) {
-    return addCustomParams(Converter.toNumericValueSqlObject(obj));
+    return addCustomParams(obj);
   }
     
   @Override

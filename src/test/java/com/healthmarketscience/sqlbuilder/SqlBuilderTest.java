@@ -155,14 +155,14 @@ public class SqlBuilderTest extends TestCase
   {
     String insertStr1 = new InsertQuery(_table1)
       .addColumns(new DbColumn[]{_table1_col1, _table1_col3},
-                  new Object[]{new Integer(13), new String("feed me seymor")})
+                  new Object[]{13, "feed me seymor"})
       .validate().toString();
     checkResult(insertStr1,
-                "INSERT INTO Schema1.Table1 (col1,col3) VALUES ('13','feed me seymor')");
+                "INSERT INTO Schema1.Table1 (col1,col3) VALUES (13,'feed me seymor')");
     
     String insertStr2 = new InsertQuery(_table1)
       .addColumns(new DbColumn[]{_table1_col1},
-                  new Object[]{new Integer(13)})
+                  new Object[]{"13"})
       .addPreparedColumns(_table1_col2, _table1_col3)
       .validate().toString();
     checkResult(insertStr2,
@@ -170,16 +170,16 @@ public class SqlBuilderTest extends TestCase
 
     String insertStr3 = new InsertQuery(_defTable1)
       .addColumns(new DbColumn[]{_defTable1_col_id},
-                  new Object[]{new Integer(13)})
+                  new Object[]{13})
       .addPreparedColumns(_defTable1_col2, _defTable1_col3)
       .validate().toString();
     checkResult(insertStr3,
-                "INSERT INTO Table1 (col_id,col2,col3) VALUES ('13',?,?)");
+                "INSERT INTO Table1 (col_id,col2,col3) VALUES (13,?,?)");
     
     try {
       new InsertQuery(_table1)
         .addColumns(new DbColumn[]{_table1_col1, _table1_col3},
-                    new Object[]{new Integer(13)})
+                    new Object[]{13})
         .validate();
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
@@ -259,23 +259,23 @@ public class SqlBuilderTest extends TestCase
         BinaryCondition.greaterThan(_defTable2_col4, 42, true))
         .validate().toString();
       checkResult(selectStr5,
-                  "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= '42') ORDER BY t1.col2");
+                  "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= 42) ORDER BY t1.col2");
 
       String selectStr6 = selectQuery1.addOrdering(_defTable2_col5,
                                                    OrderObject.Dir.DESCENDING)
         .validate().toString();
       checkResult(selectStr6,
-                  "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= '42') ORDER BY t1.col2,t2.col5 DESC");
+                  "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= 42) ORDER BY t1.col2,t2.col5 DESC");
 
       String selectStr7 = selectQuery1.addHaving(BinaryCondition.greaterThan(_defTable1_col2, new NumberValueObject(1), false)).toString();
       checkResult(selectStr7,
-                  "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= '42') ORDER BY t1.col2,t2.col5 DESC");
+                  "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= 42) ORDER BY t1.col2,t2.col5 DESC");
       
       String selectStr8 = selectQuery1.addGroupings(_defTable1_col2,
                                                     _defTable2_col5)
         .validate().toString();
       checkResult(selectStr8,
-                  "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= '42') GROUP BY t1.col2,t2.col5 HAVING (t1.col2 > 1) ORDER BY t1.col2,t2.col5 DESC");
+                  "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= 42) GROUP BY t1.col2,t2.col5 HAVING (t1.col2 > 1) ORDER BY t1.col2,t2.col5 DESC");
     }
 
     String selectStr6 = new SelectQuery()
@@ -445,7 +445,7 @@ public class SqlBuilderTest extends TestCase
     
     String funcStr4 = new FunctionCall(func3)
       .addColumnParams(_table1_col1)
-      .addCustomParams(42)
+      .addCustomParams("42")
       .toString();
     checkResult(funcStr4, "func3(t0.col1,'42')");
     
@@ -604,7 +604,7 @@ public class SqlBuilderTest extends TestCase
       .validate().toString();
 
     checkResult(updateQuery1,
-                "UPDATE Schema1.Table1 SET col1 = '47',col3 = 'foo' WHERE (col2 = '13')");
+                "UPDATE Schema1.Table1 SET col1 = 47,col3 = 'foo' WHERE (col2 = '13')");
     
   }
 
@@ -657,12 +657,12 @@ public class SqlBuilderTest extends TestCase
 
     String condStr1 = cond.toString(32, context);
     checkResult(condStr1,
-                "((t1.col3 = 'foo') AND (t0.col1 <= '13'))");
+                "((t1.col3 = 'foo') AND (t0.col1 <= 13))");
 
     context.setUseTableAliases(false);
     String condStr2 = cond.toString(32, context);
     checkResult(condStr2,
-                "((col3 = 'foo') AND (col1 <= '13'))");
+                "((col3 = 'foo') AND (col1 <= 13))");
     
   }
 
@@ -688,10 +688,10 @@ public class SqlBuilderTest extends TestCase
   {
     String escapeStr1 = new InsertQuery(_table1)
       .addColumns(new DbColumn[]{_table1_col1, _table1_col3},
-                  new Object[]{new Integer(13), JdbcScalarFunction.NOW})
+                  new Object[]{13, JdbcScalarFunction.NOW})
       .validate().toString();
     checkResult(escapeStr1,
-                "INSERT INTO Schema1.Table1 (col1,col3) VALUES ('13',{fn NOW()})");
+                "INSERT INTO Schema1.Table1 (col1,col3) VALUES (13,{fn NOW()})");
     
     Date d = new Date(1204909500692L);
     String dateStr = JdbcEscape.date(d).toString();

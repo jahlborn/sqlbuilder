@@ -63,7 +63,7 @@ public class SimpleCaseStatement extends BaseCaseStatement<SimpleCaseStatement>
    * Adds a "WHEN" clause to the "CASE" statement.
    * <p>
    * Value {@code Object} -&gt; {@code SqlObject} conversions handled by
-   * {@link Converter#toNumericValueSqlObject(Object)}.
+   * {@link Converter#toValueSqlObject(Object)}.
    * Result {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toColumnSqlObject(Object)}.
    *
@@ -72,7 +72,7 @@ public class SimpleCaseStatement extends BaseCaseStatement<SimpleCaseStatement>
    * @param result the result to output if this "WHEN" clause is selected
    */
   public SimpleCaseStatement addNumericWhen(Object value, Object result) {
-    return addCustomWhen(Converter.toNumericValueSqlObject(value), result);
+    return addCustomWhen(Converter.toValueSqlObject(value), result);
   }
   
   /**
