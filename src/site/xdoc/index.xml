@@ -42,8 +42,24 @@ String selectQuery = "SELECT " + T1_COL1 + "," + T1_COL2 + "," +
           Whenever this query is modified, you will need to make sure there
           are sufficient commas, parentheses, and spaces to generate the
           correct query (not to mention the correct columns for the given
-          tables and the correct aliases for those tables).  Now, let's see
-          how this query looks using SqlBuilder classes.
+          tables and the correct aliases for those tables).  An attempted
+          improvement may look something like this:
+        </p>
+        <source>
+String selectQuery = MessageFormat.format(
+  "SELECT {0},{1},{2} FROM {3} {4} INNER JOIN {5} {6} ON ({7} = {8}) " +
+  "ORDER BY {9}",
+  T1_COL1, T2_COL2, T2_COL1, TABLE1, T1, TABLE2, T2,
+  T1_IDCOL, T2_IDCOL, T1_COL1);
+</source>
+        <p>
+          This technique at least removes some of the formatting issues, as
+          the query syntax is in one contiguous string.  However, matching up
+          the placeholders with the arguments is no simple task and simple
+          rearrangements can easily mess up the resulting query string.
+          Additionally, this is still not a viable solution for any sort of
+          dynamic query generation.  Now, let's see how this query looks using
+          SqlBuilder classes:
         </p>
         <source>
 // assuming these objects have already been created
@@ -61,7 +77,7 @@ String selectQuery =
         <p>
           See how easy that was?  Not a single embedded comma, space, or
           parenthesis to be seen!  Notice how much more readable this version
-          is compared to the first version?  While the Java is a bit more
+          is compared to the previous versions?  While the Java is a bit more
           verbose, turning the SQL into Java allows you to utilize your
           existing Java toolset when writing SQL (think compile-time syntax
           checking and IDE code completion).  This added functionality is well
