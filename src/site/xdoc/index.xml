@@ -42,8 +42,10 @@ String selectQuery = "SELECT " + T1_COL1 + "," + T1_COL2 + "," +
           Whenever this query is modified, you will need to make sure there
           are sufficient commas, parentheses, and spaces to generate the
           correct query (not to mention the correct columns for the given
-          tables and the correct aliases for those tables).  An attempted
-          improvement may look something like this:
+          tables and the correct aliases for those tables).
+        </p>
+        <p>
+          An attempted improvement may look something like this:
         </p>
         <source>
 String selectQuery = MessageFormat.format(
@@ -58,8 +60,10 @@ String selectQuery = MessageFormat.format(
           the placeholders with the arguments is no simple task and simple
           rearrangements can easily mess up the resulting query string.
           Additionally, this is still not a viable solution for any sort of
-          dynamic query generation.  Now, let's see how this query looks using
-          SqlBuilder classes:
+          dynamic query generation.
+        </p>
+        <p>
+          Now, let's see how this query looks using SqlBuilder classes:
         </p>
         <source>
 // assuming these objects have already been created
