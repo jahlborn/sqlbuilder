@@ -29,8 +29,9 @@
           from.  Pretty much every method has a "custom" counterpart which can
           be used to inject pretty much any custom syntax you want.  The
           queries use different converters to interpret the arguments to these
-          methods.  If they are doing the wrong conversion, you generally just
-          need to wrap your custom object in a CustomSql object.
+          methods.  In most cases these converters "do the right thing", but
+          if they do not, you generally just need to wrap your custom object
+          in a CustomSql object.
         </p>
       </answer>
     </faq>
