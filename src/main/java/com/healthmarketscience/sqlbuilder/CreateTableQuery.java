@@ -28,7 +28,6 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.ListIterator;
 
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
@@ -202,9 +201,8 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     }
 
     @Override
-    protected void collectSchemaObjects(Collection<Table> tables,
-                                    Collection<Column> columns) {
-      _column.collectSchemaObjects(tables, columns);
+    protected void collectSchemaObjects(ValidationContext vContext) {
+      _column.collectSchemaObjects(vContext);
     }
 
     @Override

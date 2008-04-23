@@ -28,12 +28,9 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
  * Outputs SQL and a prefix enclosed within JDBC escape syntax
@@ -77,9 +74,8 @@ public class JdbcEscape extends Expression
   }
 
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
-    _val.collectSchemaObjects(tables, columns);
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    _val.collectSchemaObjects(vContext);
   }
     
   @Override

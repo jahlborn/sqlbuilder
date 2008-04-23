@@ -30,7 +30,6 @@ package com.healthmarketscience.sqlbuilder;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
 
 import com.healthmarketscience.common.util.AppendableExt;
 
@@ -262,11 +261,9 @@ public class QueryReader {
     }
     
     @Override
-    protected void collectSchemaObjects(
-        Collection<com.healthmarketscience.sqlbuilder.dbspec.Table> tables,
-        Collection<com.healthmarketscience.sqlbuilder.dbspec.Column> columns)
+    protected void collectSchemaObjects(ValidationContext vContext)
     {
-      _columnObj.collectSchemaObjects(tables, columns);
+      _columnObj.collectSchemaObjects(vContext);
     }
 
     @Override

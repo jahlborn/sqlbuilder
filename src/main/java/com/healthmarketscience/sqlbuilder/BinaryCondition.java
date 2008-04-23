@@ -28,12 +28,9 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 import com.healthmarketscience.common.util.AppendableExt;
 
 
@@ -99,10 +96,9 @@ public class BinaryCondition extends Condition
   }
 
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
-    _leftValue.collectSchemaObjects(tables, columns);
-    _rightValue.collectSchemaObjects(tables, columns);
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    _leftValue.collectSchemaObjects(vContext);
+    _rightValue.collectSchemaObjects(vContext);
   }
 
   /**

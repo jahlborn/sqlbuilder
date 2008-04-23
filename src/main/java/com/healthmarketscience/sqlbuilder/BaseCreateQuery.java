@@ -30,8 +30,6 @@ package com.healthmarketscience.sqlbuilder;
 import java.io.IOException;
 import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
-import java.util.Collection;
 
 /**
  * Query which generates a CREATE statement.
@@ -85,10 +83,9 @@ public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery>
   }
 
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
-    _object.collectSchemaObjects(tables, columns);
-    _columns.collectSchemaObjects(tables, columns);
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    _object.collectSchemaObjects(vContext);
+    _columns.collectSchemaObjects(vContext);
   }
 
   /**

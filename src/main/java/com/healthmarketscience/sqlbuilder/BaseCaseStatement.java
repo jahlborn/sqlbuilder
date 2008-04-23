@@ -28,11 +28,8 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
  * Common base class for <code>"CASE ... END"</code> clauses
@@ -101,12 +98,11 @@ public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement>
   }
   
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
+  protected void collectSchemaObjects(ValidationContext vContext) {
     if(_operand != null) {
-      _operand.collectSchemaObjects(tables, columns);
+      _operand.collectSchemaObjects(vContext);
     }
-    _whens.collectSchemaObjects(tables, columns);
+    _whens.collectSchemaObjects(vContext);
   }
     
   @Override
@@ -136,9 +132,8 @@ public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement>
     }
     
     @Override
-    protected void collectSchemaObjects(Collection<Table> tables,
-                                    Collection<Column> columns) {
-      _result.collectSchemaObjects(tables, columns);
+    protected void collectSchemaObjects(ValidationContext vContext) {
+      _result.collectSchemaObjects(vContext);
     }
     
     protected void appendResult(AppendableExt app) throws IOException {
@@ -159,10 +154,9 @@ public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement>
     }
     
     @Override
-    protected void collectSchemaObjects(Collection<Table> tables,
-                                    Collection<Column> columns) {
-      super.collectSchemaObjects(tables, columns);
-      _test.collectSchemaObjects(tables, columns);
+    protected void collectSchemaObjects(ValidationContext vContext) {
+      super.collectSchemaObjects(vContext);
+      _test.collectSchemaObjects(vContext);
     }
     
     @Override

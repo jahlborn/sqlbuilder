@@ -732,7 +732,7 @@ public class SqlBuilderTest extends TestCase
 
   public void testSubquery()
   {
-    String queryStr =
+    String queryStr1 =
       new SelectQuery()
       .addColumns(_table1_col1, _table1_col2)
       .addCondition(new InCondition(
@@ -741,7 +741,20 @@ public class SqlBuilderTest extends TestCase
                             .addColumns(_defTable1_col3)
                             .validate())))
       .validate().toString();
-    checkResult(queryStr, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0,Table1 t1 WHERE (t0.col1 IN ((SELECT t1.col3 FROM Table1 t1)) )");
+    checkResult(queryStr1, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 WHERE (t0.col1 IN ((SELECT t1.col3 FROM Table1 t1)) )");
+
+    SelectQuery innerSelect = new SelectQuery()
+      .addCustomColumns(_defTable2_col_id);
+    innerSelect.validate();
+    SelectQuery outerSelect = new SelectQuery()
+      .addCustomColumns(_table1_col1, _table1_col2)
+      .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1, _table1_col1,
+               _defTable1_col_id)
+      .addCondition(new InCondition(_table1_col1, new
+                                    Subquery(innerSelect)));
+    outerSelect.validate();
+    String queryStr2 = outerSelect.toString();
+    checkResult(queryStr2, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN ((SELECT t2.col_id FROM Table2 t2)) )");    
   }
 
   public void testAlterTable()

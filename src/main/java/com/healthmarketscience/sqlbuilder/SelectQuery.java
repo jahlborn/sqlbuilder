@@ -391,14 +391,13 @@ public class SelectQuery extends Query
   }
   
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
-    _joins.collectSchemaObjects(tables, columns);
-    _columns.collectSchemaObjects(tables, columns);
-    _condition.collectSchemaObjects(tables, columns);
-    _grouping.collectSchemaObjects(tables, columns);
-    _ordering.collectSchemaObjects(tables, columns);
-    _having.collectSchemaObjects(tables, columns);
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    _joins.collectSchemaObjects(vContext);
+    _columns.collectSchemaObjects(vContext);
+    _condition.collectSchemaObjects(vContext);
+    _grouping.collectSchemaObjects(vContext);
+    _ordering.collectSchemaObjects(vContext);
+    _having.collectSchemaObjects(vContext);
   }
 
   @Override
@@ -410,14 +409,12 @@ public class SelectQuery extends Query
     boolean checkTables = !(_joins.isEmpty());
 
     // validate super class
-    Set<Table> tables = new HashSet<Table>();
-    Set<Column> columns = new HashSet<Column>();
-    Set<Table> columnTables = new HashSet<Table>();
-    super.validate(checkTables, tables, columns, columnTables);
+    ValidationContext vContext = new ValidationContext();
+    super.validate(checkTables, vContext);
 
     // if we don't have any tables, but we don't have any Columns either,
     // that's a problem (because we can't infer the tables in this case)
-    if((!checkTables) && (columns.isEmpty())) {
+    if((!checkTables) && (vContext.getColumns().isEmpty())) {
       // we must have some tables in this case
       throw new ValidationException("No tables given in select");
     }
@@ -443,7 +440,8 @@ public class SelectQuery extends Query
       Iterator<SqlObject> toIter = _joins.iterator();
       
       // the first toIter table is actually F0 (see comment above)
-      toIter.next().collectSchemaObjects(fromTable, joinColumns);
+      toIter.next().collectSchemaObjects(
+          new ValidationContext(fromTable, joinColumns));
 
       while(fromIter.hasNext() && toIter.hasNext()) {
         
@@ -452,7 +450,8 @@ public class SelectQuery extends Query
 
         // grab the next from table
         fromTable.clear();
-        fromIter.next().collectSchemaObjects(fromTable, joinColumns);
+        fromIter.next().collectSchemaObjects(
+            new ValidationContext(fromTable, joinColumns));
 
         // verify that it exists among the previous from/to tables
         if(!joinTables.containsAll(fromTable)) {
@@ -463,7 +462,8 @@ public class SelectQuery extends Query
         }
 
         // grab the next to table
-        toIter.next().collectSchemaObjects(joinTables, joinColumns);
+        toIter.next().collectSchemaObjects(
+            new ValidationContext(joinTables, joinColumns));
       }
       if(fromIter.hasNext() || toIter.hasNext()) {
         // mismatched tables?
@@ -543,12 +543,12 @@ public class SelectQuery extends Query
       // appendTo() method to mutate object state.
       // note, we use LinkedHashSet to preserve the order that the tables were
       // referenced (for lack of a better choice of ordering)
-      Set<Table> tables = new HashSet<Table>();
-      Set<Column> columns = new LinkedHashSet<Column>();
-      collectSchemaObjects(tables, columns);
+      ValidationContext tmpContext = new ValidationContext(
+          new HashSet<Table>(), new LinkedHashSet<Column>());
+      collectSchemaObjects(tmpContext);
         
-      Set<Table> columnTables = new LinkedHashSet<Table>();
-      getColumnTables(columns, columnTables);
+      Collection<Table> columnTables = tmpContext.getColumnTables(
+          new LinkedHashSet<Table>());
 
       for(Table table : columnTables) {
         joins.addObject(new TableDefObject(table));
@@ -620,11 +620,10 @@ public class SelectQuery extends Query
     }
 
     @Override
-    protected void collectSchemaObjects(Collection<Table> tables,
-                                    Collection<Column> columns) {
-      _toTable.collectSchemaObjects(tables, columns);
+    protected void collectSchemaObjects(ValidationContext vContext) {
+      _toTable.collectSchemaObjects(vContext);
       if(_onCondition != null) {
-        _onCondition.collectSchemaObjects(tables, columns);
+        _onCondition.collectSchemaObjects(vContext);
       }
     }
 

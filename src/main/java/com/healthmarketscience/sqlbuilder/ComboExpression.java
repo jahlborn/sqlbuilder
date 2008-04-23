@@ -28,11 +28,8 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
  * Outputs combination expressions joined by a given mathematical operation (+,
@@ -82,9 +79,8 @@ public class ComboExpression extends Expression
   }
     
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
-    _expressions.collectSchemaObjects(tables, columns);
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    _expressions.collectSchemaObjects(vContext);
   }
 
   @Override

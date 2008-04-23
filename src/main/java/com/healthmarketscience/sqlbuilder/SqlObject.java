@@ -28,13 +28,10 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.common.util.AppendeeObject;
 import com.healthmarketscience.common.util.StringAppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 
 
@@ -58,8 +55,7 @@ public abstract class SqlObject extends AppendeeObject
         app.append("?");
       }
       @Override
-      protected void collectSchemaObjects(Collection<Table> tables,
-                                      Collection<Column> columns) {}
+      protected void collectSchemaObjects(ValidationContext vContext) {}
     };
 
   /** SqlObject which represents a <code>*</code> string for generating
@@ -71,8 +67,7 @@ public abstract class SqlObject extends AppendeeObject
         app.append("*");
       }
       @Override
-      protected void collectSchemaObjects(Collection<Table> tables,
-                                      Collection<Column> columns) {}
+      protected void collectSchemaObjects(ValidationContext vContext) {}
     };
 
   /** SqlObject which represents a <code>NULL</code> value string */
@@ -83,8 +78,7 @@ public abstract class SqlObject extends AppendeeObject
         app.append("NULL");
       }
       @Override
-      protected void collectSchemaObjects(Collection<Table> tables,
-                                      Collection<Column> columns) {}
+      protected void collectSchemaObjects(ValidationContext vContext) {}
     };
 
   protected SqlObject() {
@@ -108,11 +102,9 @@ public abstract class SqlObject extends AppendeeObject
    * Used during Query.validate() calls to collect the dbschema objects
    * referenced in a query.  Any subclass of this class should add all
    * referenced tables and columns to the appropriate collections.
-   * @param tables collection of reference tables
-   * @param columns collection of reference columns
+   * @param vContext handle to the current validation context
    */
-  protected abstract void collectSchemaObjects(Collection<Table> tables,
-                                           Collection<Column> columns);
+  protected abstract void collectSchemaObjects(ValidationContext vContext);
 
 
 }

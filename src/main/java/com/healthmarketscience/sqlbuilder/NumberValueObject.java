@@ -29,11 +29,8 @@ package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Collection;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 
 /**
@@ -67,8 +64,7 @@ public class NumberValueObject extends Expression
   }
 
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
+  protected void collectSchemaObjects(ValidationContext vContext) {
   }
   
   @Override

@@ -48,31 +48,32 @@ public class SqlContext implements Cloneable
 {
 
   /** Previous context replaced by this context, if any */
-  private SqlContext _oldContext;
+  private SqlContext _parentContext;
 
   /** flag indicating whether or not table aliases should be used in the
       current SQL generation context */
   private boolean _useTableAliases = true;
 
+  /** handle to the immediate wrapping query */
+  private Query _query;
   
   public SqlContext() {
   }
 
   /**
    * Gets the SqlContext which was in effect before this SqlContext was
-   * "pushed" onto the context stack.  Used by {@link SqlObject#pushContext}
-   * and {@link SqlObject#popContext}.
+   * "pushed" onto the context stack.
    */
-  SqlContext getOldContext() {
-    return _oldContext;
+  public SqlContext getParentContext() {
+    return _parentContext;
   }
 
   /**
    * Sets the SqlContext which was in effect before this SqlContext was
-   * "pushed" onto the context stack.  Used by {@link SqlObject#pushContext}.
+   * "pushed" onto the context stack.  Used by {@link #pushContext}.
    */
-  void setOldContext(SqlContext newOldContext) {
-    _oldContext = newOldContext;
+  private void setParentContext(SqlContext newParentContext) {
+    _parentContext = newParentContext;
   }
 
   /**
@@ -91,6 +92,20 @@ public class SqlContext implements Cloneable
     _useTableAliases = newUseTableAliases;
   }
 
+  /**
+   * Gets the handle to the immediate wrapping query
+   */
+  public Query getQuery() {
+    return _query;
+  }
+
+  /**
+   * Sets the handle to the immediate wrapping query
+   */
+  public void setQuery(Query newQuery) {
+    _query = newQuery;
+  }
+  
   @Override
   public SqlContext clone() {
     try {
@@ -123,11 +138,11 @@ public class SqlContext implements Cloneable
    */
   public static final SqlContext pushContext(AppendableExt app)
   {
-    SqlContext oldContext = (SqlContext)app.getContext();
+    SqlContext parentContext = (SqlContext)app.getContext();
     SqlContext context = null;
-    if(oldContext != null) {
-      context = oldContext.clone();
-      context.setOldContext(oldContext);
+    if(parentContext != null) {
+      context = parentContext.clone();
+      context.setParentContext(parentContext);
     } else {
       context = new SqlContext();
     }
@@ -137,7 +152,7 @@ public class SqlContext implements Cloneable
 
   /**
    * Replaces the current SqlContext (checking it against the given
-   * SqlContext) with the old SqlContext (stored within the new one).  All
+   * SqlContext) with the parent SqlContext (stored within the new one).  All
    * <code>popContext</code> calls should come after a corresponding
    * {@link #pushContext} call.
    */
@@ -146,7 +161,7 @@ public class SqlContext implements Cloneable
     if(app.getContext() != context) {
       throw new IllegalStateException("Mismatched push/pop SqlContext");
     }
-    app.setContext((context != null) ? context.getOldContext() : null);
+    app.setContext((context != null) ? context.getParentContext() : null);
   }
 
   

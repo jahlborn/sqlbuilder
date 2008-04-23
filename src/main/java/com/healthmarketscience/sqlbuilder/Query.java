@@ -56,23 +56,8 @@ public abstract class Query extends SqlObject
   public Query validate()
     throws ValidationException
   {
-    validate(true, null, null, null);
+    validate(true, new ValidationContext());
     return this;
-  }
-
-  /**
-   * Retrieves the tables referenced by the given columns.
-   *
-   * @param columns (in) current collection of columns
-   * @param columnTables (out) all tables referenced by the given columns
-   */
-  protected static void getColumnTables(Collection<Column> columns,
-                                        Collection<Table> columnTables)
-  {
-    // get the tables from the columns referenced
-    for(Column column : columns) {
-      columnTables.add(column.getTable());
-    }
   }
     
   /**
@@ -81,38 +66,18 @@ public abstract class Query extends SqlObject
    *
    * @param checkTables iff <code>true</code>, check tables against
    *                    referenced columns, otherwise, don't
-   * @param tables (out) if not <code>null</code>, returns the current
-   *               collection of tables referenced in this query
-   * @param columns (out) if not <code>null</code>, returns the current
-   *                collection of columns referenced in this query
-   * @param columnTables (out) if not <code>null</code>, returns all
-   *                     tables referenced by the columns in this query
+   * @param vContext handle to the current validation context
    */
-  protected void validate(boolean checkTables,
-                          Collection<Table> tables,
-                          Collection<Column> columns,
-                          Collection<Table> columnTables)
+  protected void validate(boolean checkTables, ValidationContext vContext)
     throws ValidationException
-  {
-    // create necessary collections if not given
-    if(tables == null) {
-      tables = new HashSet<Table>();
-    }
-    if(columns == null) {
-      columns = new HashSet<Column>();
-    }
-    if(columnTables == null) {
-      columnTables = new HashSet<Table>();
-    }
-      
+  {      
     // collect the tables and columns
-    collectSchemaObjects(tables, columns);
-
-    // get the tables from the columns referenced
-    getColumnTables(columns, columnTables);
+    collectSchemaObjects(vContext);
 
     // make sure all column tables are referenced by a table (if desired)
-    if(checkTables && !tables.containsAll(columnTables)) {
+    if(checkTables &&
+       !vContext.getTables().containsAll(
+           vContext.getColumnTables())) {
       throw new ValidationException("Columns used for unreferenced tables");
     }
   }
@@ -120,6 +85,7 @@ public abstract class Query extends SqlObject
   @Override
   public final void appendTo(AppendableExt app) throws IOException {
     SqlContext newContext = SqlContext.pushContext(app);
+    newContext.setQuery(this);
     appendTo(app, newContext);
     // note, this is not within a finally block because any exceptions from
     // appendTo are expected to be unrecoverable, and we don't want to muddy

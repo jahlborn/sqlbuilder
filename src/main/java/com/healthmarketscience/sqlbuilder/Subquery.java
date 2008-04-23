@@ -30,11 +30,8 @@ package com.healthmarketscience.sqlbuilder;
 import java.io.IOException;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
 
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
-import java.util.Collection;
 
 /**
  * Outputs the given query surrounded by parentheses
@@ -63,10 +60,12 @@ public class Subquery extends Expression
   }
   
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
+  protected void collectSchemaObjects(ValidationContext vContext) {
     if(_query != null) {
-      _query.collectSchemaObjects(tables, columns);
+      // subqueries need a nested validation context because their schema
+      // objects *do not* affect the outer query, but the outer query's
+      // schema objects *do* affect their query
+      _query.collectSchemaObjects(new ValidationContext(vContext));
     }
   }
     

@@ -30,11 +30,8 @@ package com.healthmarketscience.sqlbuilder;
 import java.io.IOException;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
 
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
-import java.util.Collection;
 
 /**
  * Outputs the negation of the given expression "(- &lt;expression&gt;)"
@@ -58,9 +55,8 @@ public class NegateExpression extends Expression
   }
     
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
-    _expression.collectSchemaObjects(tables, columns);
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    _expression.collectSchemaObjects(vContext);
   }
     
   @Override

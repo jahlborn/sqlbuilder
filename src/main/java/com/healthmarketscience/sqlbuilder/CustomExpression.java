@@ -28,11 +28,8 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 
 /**
@@ -61,10 +58,9 @@ public class CustomExpression extends Expression
   public boolean isEmpty() { return(_expr == null); }
 
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
+  protected void collectSchemaObjects(ValidationContext vContext) {
     if(_expr != null) {
-      _expr.collectSchemaObjects(tables, columns);
+      _expr.collectSchemaObjects(vContext);
     }
   }
     

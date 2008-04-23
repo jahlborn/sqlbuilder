@@ -28,7 +28,6 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
@@ -69,10 +68,9 @@ public class AlterTableQuery extends Query
   }
 
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
-    _table.collectSchemaObjects(tables, columns);
-    _action.collectSchemaObjects(tables, columns);
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    _table.collectSchemaObjects(vContext);
+    _action.collectSchemaObjects(vContext);
   }
   
   @Override
@@ -111,9 +109,8 @@ public class AlterTableQuery extends Query
     }
 
     @Override
-    protected void collectSchemaObjects(Collection<Table> tables,
-                                    Collection<Column> columns) {
-      _columns.collectSchemaObjects(tables, columns);
+    protected void collectSchemaObjects(ValidationContext vContext) {
+      _columns.collectSchemaObjects(vContext);
     }
 
     @Override
@@ -149,9 +146,8 @@ public class AlterTableQuery extends Query
     }
 
     @Override
-    protected void collectSchemaObjects(Collection<Table> tables,
-                                    Collection<Column> columns) {
-      _columns.collectSchemaObjects(tables, columns);
+    protected void collectSchemaObjects(ValidationContext vContext) {
+      _columns.collectSchemaObjects(vContext);
     }
 
     @Override
@@ -245,11 +241,10 @@ public class AlterTableQuery extends Query
     }
 
     @Override
-    protected void collectSchemaObjects(Collection<Table> tables,
-                                    Collection<Column> columns) {
-      _columns.collectSchemaObjects(tables, columns);
-      _referencedColumns.collectSchemaObjects(tables, columns);
-      _referencedTable.collectSchemaObjects(tables, columns);
+    protected void collectSchemaObjects(ValidationContext vContext) {
+      _columns.collectSchemaObjects(vContext);
+      _referencedColumns.collectSchemaObjects(vContext);
+      _referencedTable.collectSchemaObjects(vContext);
     }
 
     @Override

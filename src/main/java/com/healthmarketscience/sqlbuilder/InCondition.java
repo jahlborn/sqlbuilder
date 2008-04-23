@@ -35,7 +35,6 @@ import java.util.Collections;
 
 import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
  * Outputs an "IN" condition
@@ -108,10 +107,9 @@ public class InCondition extends Condition {
   }
   
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-      Collection<Column> columns) {
-    _leftValue.collectSchemaObjects(tables, columns);
-    _rightValues.collectSchemaObjects(tables, columns);
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    _leftValue.collectSchemaObjects(vContext);
+    _rightValues.collectSchemaObjects(vContext);
   }
 
   @Override

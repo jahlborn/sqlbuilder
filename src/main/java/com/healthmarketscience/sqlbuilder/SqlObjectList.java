@@ -34,8 +34,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 import com.healthmarketscience.common.util.AppendableExt;
 
 
@@ -198,10 +196,9 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
   }
 
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
+  protected void collectSchemaObjects(ValidationContext vContext) {
     for(ObjType obj : _objects) {
-      obj.collectSchemaObjects(tables, columns);
+      obj.collectSchemaObjects(vContext);
     }
   }
     

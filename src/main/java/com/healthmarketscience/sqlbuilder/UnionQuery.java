@@ -28,11 +28,9 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 
 /**
@@ -182,8 +180,7 @@ public class UnionQuery extends Query {
   }
 
   @Override
-  protected final void collectSchemaObjects(Collection<Table> tables,
-                                        Collection<Column> columns) {
+  protected final void collectSchemaObjects(ValidationContext vContext) {
     // we do not collect schema objects across the select subqueries.
     // instead, each subquery is handled separately.
   }

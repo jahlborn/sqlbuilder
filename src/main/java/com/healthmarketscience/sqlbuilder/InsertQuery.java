@@ -152,10 +152,9 @@ public class InsertQuery extends BaseInsertQuery
   }
 
   @Override
-  protected void collectSchemaObjects(Collection<Table> tables,
-                                  Collection<Column> columns) {
-    super.collectSchemaObjects(tables, columns);
-    _values.collectSchemaObjects(tables, columns);
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
+    _values.collectSchemaObjects(vContext);
   }
   
   @Override

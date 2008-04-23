@@ -32,14 +32,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 
 /**
@@ -533,8 +530,7 @@ public class QueryPreparer
     }
     
     @Override
-    protected void collectSchemaObjects(Collection<Table> tables,
-                                    Collection<Column> columns) {
+    protected void collectSchemaObjects(ValidationContext vContext) {
     }
     
     @Override

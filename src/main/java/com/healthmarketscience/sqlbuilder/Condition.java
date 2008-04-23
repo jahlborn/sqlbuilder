@@ -28,11 +28,8 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 
 /**
@@ -49,8 +46,7 @@ public abstract class Condition extends NestableClause
       @Override
       public boolean isEmpty() { return true; }
       @Override
-      protected void collectSchemaObjects(Collection<Table> tables,
-                                      Collection<Column> columns) {}
+      protected void collectSchemaObjects(ValidationContext vContext) {}
       @Override
       public void appendTo(AppendableExt app) throws IOException {
         throw new UnsupportedOperationException("Should never be called");
