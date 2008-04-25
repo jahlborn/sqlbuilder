@@ -305,9 +305,10 @@ public class SqlBuilderTest extends TestCase
       .addColumns(_table1_col1, _defTable1_col2)
       .addCustomColumns(Converter.toColumnSqlObject(
                             _defTable2_col5, "MyCol"))
+      .addAliasedColumn(_defTable2_col4, "SomeCol")
       .validate().toString();
     checkResult(selectStr9,
-                "SELECT t0.col1,t1.col2,t2.col5 AS MyCol FROM Schema1.Table1 t0,Table1 t1,Table2 t2");
+                "SELECT t0.col1,t1.col2,t2.col5 AS MyCol,t2.col4 AS SomeCol FROM Schema1.Table1 t0,Table1 t1,Table2 t2");
 
     
     try {

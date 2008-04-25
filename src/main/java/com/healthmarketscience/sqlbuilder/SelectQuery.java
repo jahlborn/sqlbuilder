@@ -179,6 +179,15 @@ public class SelectQuery extends Query
   }
 
   /**
+   * Adds the given column with the given alias to the SELECT column list.
+   * This is equivalent to
+   * {@code addCustomColumns(Converter.toColumnSqlObject(column, alias))}.
+   */
+  public SelectQuery addAliasedColumn(Object column, String alias) {
+    return addCustomColumns(Converter.toColumnSqlObject(column, alias));
+  }
+
+  /**
    * Adds a table to the FROM clause, should not be used with any
    * <code>add*Join</code> methods
    * <p>
