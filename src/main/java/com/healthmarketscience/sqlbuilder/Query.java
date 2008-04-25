@@ -61,8 +61,9 @@ public abstract class Query extends SqlObject
   }
     
   /**
-   * Optionally verifies that any columns referenced in the query have their
-   * respective tables also referenced in the query.
+   * Collects the schemaobjects for this query and optionally verifies that
+   * any columns referenced in the query have their respective tables also
+   * referenced in the query.
    *
    * @param checkTables iff <code>true</code>, check tables against
    *                    referenced columns, otherwise, don't

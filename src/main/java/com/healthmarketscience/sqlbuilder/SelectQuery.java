@@ -552,13 +552,29 @@ public class SelectQuery extends Query
       // appendTo() method to mutate object state.
       // note, we use LinkedHashSet to preserve the order that the tables were
       // referenced (for lack of a better choice of ordering)
-      ValidationContext tmpContext = new ValidationContext(
-          new HashSet<Table>(), new LinkedHashSet<Column>());
-      collectSchemaObjects(tmpContext);
+      ValidationContext tmpVContext = new ValidationContext(
+          null, new LinkedHashSet<Column>());
+      collectSchemaObjects(tmpVContext);
         
-      Collection<Table> columnTables = tmpContext.getColumnTables(
+      Collection<Table> columnTables = tmpVContext.getColumnTables(
           new LinkedHashSet<Table>());
 
+      if(newContext.getParentContext() != null) {
+
+        // this query is nested.  some of the column refs may be from tables
+        // in the outer queries.  note, we do "local only" collection as we
+        // are going up the nesting chain and do not need to descend past the
+        // relevant local context
+        ValidationContext outerVContext = new ValidationContext(true);
+        SqlContext tmpContext = newContext;
+        while((tmpContext = tmpContext.getParentContext()) != null) {
+          tmpContext.getQuery().collectSchemaObjects(outerVContext);
+        }
+        
+        // remove any outer tables from the columnTables collection
+        columnTables.removeAll(outerVContext.getColumnTables());
+      }
+      
       for(Table table : columnTables) {
         joins.addObject(new TableDefObject(table));
       }

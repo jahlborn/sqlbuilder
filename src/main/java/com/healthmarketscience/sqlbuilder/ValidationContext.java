@@ -40,29 +40,41 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  */
 public class ValidationContext {
 
+  public static final boolean DEFAULT_LOCAL_ONLY = false;
+  
   private final ValidationContext _parent;
+
   private Collection<Column> _columns;
   private Collection<Table> _tables;
+  /** whether or not collection/validation should proceed into nested
+      subqueries */
+  private boolean _localOnly;
 
   public ValidationContext() {
-    this(null, null, null);
+    this(null, null, null, DEFAULT_LOCAL_ONLY);
   }
 
   public ValidationContext(ValidationContext parent) {
-    this(parent, null, null);
+    this(parent, null, null, DEFAULT_LOCAL_ONLY);
+  }
+  
+  public ValidationContext(boolean localOnly) {
+    this(null, null, null, localOnly);
   }
   
   public ValidationContext(Collection<Table> tables,
                            Collection<Column> columns) {
-    this(null, tables, columns);
+    this(null, tables, columns, DEFAULT_LOCAL_ONLY);
   }
   
   public ValidationContext(ValidationContext parent,
                            Collection<Table> tables,
-                           Collection<Column> columns) {
+                           Collection<Column> columns,
+                           boolean localOnly) {
     _parent = parent;
     _tables = ((tables != null) ? tables : new HashSet<Table>());
     _columns = ((columns != null) ? columns : new HashSet<Column>());
+    _localOnly = localOnly;
   }
 
   public ValidationContext getParent() {
@@ -93,6 +105,14 @@ public class ValidationContext {
     _columns.add(column);
   }
 
+  public boolean isLocalOnly() {
+    return _localOnly;
+  }
+
+  public void setLocalOnly(boolean newLocalOnly) {
+    _localOnly = newLocalOnly;
+  }
+  
   /**
    * Retrieves the tables referenced by the column objects.
    *
