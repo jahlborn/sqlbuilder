@@ -152,22 +152,17 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   }
   
   @Override
-  public CreateTableQuery validate()
+  public void validate(ValidationContext vContext)
     throws ValidationException
   {
     // validate super
-    super.validate();
+    super.validate(vContext);
 
     // we'd better have some columns
     if(_columns.isEmpty()) {
       throw new ValidationException("Table has no columns");
     }
-
-    return this;
   }
-
-  @Override
-  protected CreateTableQuery getThisType() { return this; }
   
   @Override
   protected void appendTo(AppendableExt app, SqlContext newContext)

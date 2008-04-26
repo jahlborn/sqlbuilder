@@ -40,7 +40,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  * @author James Ahlborn
  */
 public abstract class BaseGrantQuery<ThisType extends BaseGrantQuery>
-  extends Query
+  extends Query<ThisType>
 {
 
   /** grantee object which represents PUBLIC access */
@@ -164,17 +164,18 @@ public abstract class BaseGrantQuery<ThisType extends BaseGrantQuery>
   
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
     _grantees.collectSchemaObjects(vContext);
     _privileges.collectSchemaObjects(vContext);
     _targetObj.collectSchemaObjects(vContext);
   }
 
   @Override
-  public ThisType validate()
+  public void validate(ValidationContext vContext)
     throws ValidationException
   {
     // validate super class
-    super.validate();
+    super.validate(vContext);
 
     // must have privileges
     if(_privileges.isEmpty()) {
@@ -198,12 +199,7 @@ public abstract class BaseGrantQuery<ThisType extends BaseGrantQuery>
     if(hasAll && (_privileges.size() > 1)) {
       throw new ValidationException("May not have other privileges with ALL");
     }
-
-    return getThisType();
   }
-
-  /** @return the handle to this object as the subclass type */
-  protected abstract ThisType getThisType();
 
   /**
    * Encapsulation of a database privilege.

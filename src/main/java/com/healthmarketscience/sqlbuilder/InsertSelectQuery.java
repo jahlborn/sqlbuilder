@@ -40,7 +40,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  *
  * @author James Ahlborn
  */
-public class InsertSelectQuery extends BaseInsertQuery
+public class InsertSelectQuery extends BaseInsertQuery<InsertSelectQuery>
 {
   private SelectQuery _selectQuery;
 
@@ -82,13 +82,23 @@ public class InsertSelectQuery extends BaseInsertQuery
   public InsertSelectQuery addColumns(Column... columns) {
     return addCustomColumns((Object[])columns);
   }
+
+  @Override
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
+
+    if((_selectQuery != null) && !vContext.isLocalOnly()) {
+      // treat select query as a separate subquery
+      _selectQuery.collectSchemaObjects(new ValidationContext(vContext));
+    }
+  }
     
   @Override
-  public InsertSelectQuery validate()
+  public void validate(ValidationContext vContext)
     throws ValidationException
   {
     // check super
-    super.validate();
+    super.validate(vContext);
       
     if(_selectQuery == null) {
       throw new ValidationException("missing select query");
@@ -102,11 +112,6 @@ public class InsertSelectQuery extends BaseInsertQuery
       throw new ValidationException(
           "mismatched columns and select columns for insert");
     }
-
-    // next, validate the select query
-    _selectQuery.validate();
-      
-    return this;
   }
 
   @Override
@@ -118,4 +123,5 @@ public class InsertSelectQuery extends BaseInsertQuery
     appendPrefixTo(app);
     app.append(_selectQuery);
   }
+  
 }

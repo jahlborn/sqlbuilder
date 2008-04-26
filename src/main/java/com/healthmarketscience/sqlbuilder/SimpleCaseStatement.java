@@ -88,8 +88,5 @@ public class SimpleCaseStatement extends BaseCaseStatement<SimpleCaseStatement>
   public SimpleCaseStatement addWhen(String value, Object result) {
     return addCustomWhen(new ValueObject(value), result);
   }
-
-  @Override
-  protected SimpleCaseStatement getThisType() { return this; }
   
 }

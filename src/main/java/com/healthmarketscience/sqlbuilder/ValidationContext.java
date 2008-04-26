@@ -30,8 +30,10 @@ package com.healthmarketscience.sqlbuilder;
 import java.util.Collection;
 import java.util.HashSet;
 
+import com.healthmarketscience.common.util.Tuple2;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
+import java.util.ArrayList;
 
 /**
  * Object used to accummulate state during query validation.
@@ -49,6 +51,7 @@ public class ValidationContext {
   /** whether or not collection/validation should proceed into nested
       subqueries */
   private boolean _localOnly;
+  private Collection<Tuple2<ValidationContext,Verifiable>> _verifiables;
 
   public ValidationContext() {
     this(null, null, null, DEFAULT_LOCAL_ONLY);
@@ -75,6 +78,8 @@ public class ValidationContext {
     _tables = ((tables != null) ? tables : new HashSet<Table>());
     _columns = ((columns != null) ? columns : new HashSet<Column>());
     _localOnly = localOnly;
+    _verifiables = ((_parent != null) ? _parent._verifiables :
+                    new ArrayList<Tuple2<ValidationContext,Verifiable>>(2));
   }
 
   public ValidationContext getParent() {
@@ -112,6 +117,25 @@ public class ValidationContext {
   public void setLocalOnly(boolean newLocalOnly) {
     _localOnly = newLocalOnly;
   }
+
+  public void addVerifiable(ValidationContext vContext, Verifiable verifiable)
+  {
+    if((vContext == null) || (verifiable == null)) {
+      throw new IllegalArgumentException("context or verifiable was null");
+    }
+    _verifiables.add(Tuple2.create(vContext, verifiable));
+  }
+
+  public void validateAll() throws ValidationException {
+    for(Tuple2<ValidationContext,Verifiable> verifiable : _verifiables) {
+      try {
+        verifiable.get1().validate(verifiable.get0());
+      } catch(ValidationException e) {
+        e.setFailedVerifiable(verifiable);
+        throw e;
+      }
+    }
+  }
   
   /**
    * Retrieves the tables referenced by the column objects.
@@ -140,5 +164,5 @@ public class ValidationContext {
     }
     return columnTables;
   }
-  
+
 }

@@ -63,7 +63,4 @@ public class RevokeQuery extends BaseGrantQuery
     }
   }
 
-  @Override
-  protected RevokeQuery getThisType() { return this; }
-
 }

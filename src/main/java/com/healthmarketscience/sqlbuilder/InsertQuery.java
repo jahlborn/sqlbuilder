@@ -40,7 +40,7 @@ import java.util.Collection;
  *
  * @author James Ahlborn
  */
-public class InsertQuery extends BaseInsertQuery
+public class InsertQuery extends BaseInsertQuery<InsertQuery>
 {
   private SqlObjectList<SqlObject> _values = SqlObjectList.create();
     
@@ -138,17 +138,15 @@ public class InsertQuery extends BaseInsertQuery
    * number of columns and values.
    */
   @Override
-  public InsertQuery validate()
+  public void validate(ValidationContext vContext)
     throws ValidationException
   {
     // check super
-    super.validate();
+    super.validate(vContext);
       
     if(_columns.size() != _values.size()) {
       throw new ValidationException("mismatched columns and values for insert");
     }
-
-    return this;
   }
 
   @Override

@@ -32,7 +32,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 
@@ -45,44 +44,57 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  *
  * @author James Ahlborn
  */
-public abstract class Query extends SqlObject
+public abstract class Query<ThisType extends Query>
+  extends SqlObject implements Verifiable<ThisType>
 {
   protected Query() {}
+
+  public final ThisType validate()
+    throws ValidationException
+  {
+    doValidate();
+    return getThisType();
+  }
+
+  public void validate(ValidationContext vContext)
+    throws ValidationException
+  {
+    // by default, just validate that all the necessary tables exist for all
+    // the referenced columns
+    validateTables(vContext);
+  }
 
   /**
    * Verifies that any columns referenced in the query have their respective
    * tables also referenced in the query.
-   */
-  public Query validate()
-    throws ValidationException
-  {
-    validate(true, new ValidationContext());
-    return this;
-  }
-    
-  /**
-   * Collects the schemaobjects for this query and optionally verifies that
-   * any columns referenced in the query have their respective tables also
-   * referenced in the query.
    *
-   * @param checkTables iff <code>true</code>, check tables against
-   *                    referenced columns, otherwise, don't
    * @param vContext handle to the current validation context
    */
-  protected void validate(boolean checkTables, ValidationContext vContext)
+  protected void validateTables(ValidationContext vContext)
     throws ValidationException
-  {      
-    // collect the tables and columns
-    collectSchemaObjects(vContext);
+  {
+    Collection<Table> allTables = vContext.getTables();
+    if(vContext.getParent() != null) {
+      // tables could be defined in any outer contexts, so need to track back
+      allTables = new HashSet<Table>(allTables);
+      ValidationContext tmpVContext = vContext;
+      while((tmpVContext = tmpVContext.getParent()) != null) {
+        allTables.addAll(tmpVContext.getTables());
+      }
+    }
 
     // make sure all column tables are referenced by a table (if desired)
-    if(checkTables &&
-       !vContext.getTables().containsAll(
-           vContext.getColumnTables())) {
+    if(!allTables.containsAll(vContext.getColumnTables())) {
       throw new ValidationException("Columns used for unreferenced tables");
     }
   }
 
+  @Override
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    // always add this query to the list of things to verify
+    vContext.addVerifiable(vContext, this);
+  }
+  
   @Override
   public final void appendTo(AppendableExt app) throws IOException {
     SqlContext newContext = SqlContext.pushContext(app);
@@ -94,6 +106,12 @@ public abstract class Query extends SqlObject
     SqlContext.popContext(app, newContext);
   }
 
+  /** @return the handle to this object as the subclass type */
+  @SuppressWarnings("unchecked")
+  protected final ThisType getThisType() {
+    return (ThisType)this;
+  }
+  
   /**
    * Appends the sql query to the given AppendableExt within the given,
    * modifiable SqlContext.  This method is invoked by the

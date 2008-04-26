@@ -53,8 +53,5 @@ public class CaseStatement extends BaseCaseStatement<CaseStatement>
   public CaseStatement addWhen(Condition test, Object result) {
     return addCustomWhen(test, result);
   }
-
-  @Override
-  protected CaseStatement getThisType() { return this; }
   
 }

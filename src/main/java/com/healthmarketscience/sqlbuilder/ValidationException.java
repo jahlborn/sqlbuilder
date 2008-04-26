@@ -27,6 +27,9 @@ King of Prussia, PA 19406
 
 package com.healthmarketscience.sqlbuilder;
 
+import com.healthmarketscience.common.util.Tuple2;
+
+
 /**
  * Indicates that a sql builder query is not valid.  This is a runtime
  * exception because generally this exception indicates a programmer error,
@@ -37,6 +40,8 @@ package com.healthmarketscience.sqlbuilder;
 public class ValidationException extends RuntimeException
 {
   private static final long serialVersionUID = -2933877497839744427L;  
+
+  private transient Tuple2<ValidationContext,Verifiable> _failedVerifiable;
   
   public ValidationException(String message) {
     super(message);
@@ -49,6 +54,29 @@ public class ValidationException extends RuntimeException
   public ValidationException(Throwable cause) {
     super(cause);
   }
-  
+
+  public Tuple2<ValidationContext,Verifiable> getFailedVerifiable() {
+    return _failedVerifiable;
+  }
+
+  public void setFailedVerifiable(
+      Tuple2<ValidationContext,Verifiable> newFailedVerifiable) {
+    _failedVerifiable = newFailedVerifiable;
+  }
+
+  @Override
+  public String getMessage() {
+    String msg = super.getMessage();
+    if(getFailedVerifiable() != null) {
+      Verifiable verifiable = getFailedVerifiable().get1();
+      try {
+        msg = msg + " [Failed clause:" + verifiable + "]";
+      } catch(Exception e) {
+        msg = msg + " [Verifiable: " + verifiable.getClass().getName() + "@" +
+          Integer.toHexString(System.identityHashCode(verifiable)) + "]";
+      }
+    }
+    return msg;
+  }
   
 }

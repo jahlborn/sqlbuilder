@@ -37,7 +37,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  *  
  * @author James Ahlborn
  */
-public class DeleteQuery extends Query
+public class DeleteQuery extends Query<DeleteQuery>
 {
   private SqlObject _table;
   private ComboCondition _condition =
@@ -80,6 +80,7 @@ public class DeleteQuery extends Query
 
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
     _table.collectSchemaObjects(vContext);
     _condition.collectSchemaObjects(vContext);
   }

@@ -57,7 +57,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  *
  * @author James Ahlborn
  */
-public class SelectQuery extends Query
+public class SelectQuery extends Query<SelectQuery>
 {
   /**
    * Enum which defines the join types supported in a FROM clause.
@@ -401,6 +401,7 @@ public class SelectQuery extends Query
   
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
     _joins.collectSchemaObjects(vContext);
     _columns.collectSchemaObjects(vContext);
     _condition.collectSchemaObjects(vContext);
@@ -410,16 +411,17 @@ public class SelectQuery extends Query
   }
 
   @Override
-  public SelectQuery validate()
+  public void validate(ValidationContext vContext)
     throws ValidationException
-  {
+  { 
     // if we have joins, check the tables, otherwise, the join tables will
     // be auto generated during output (so don't bother checking them)
     boolean checkTables = !(_joins.isEmpty());
 
-    // validate super class
-    ValidationContext vContext = new ValidationContext();
-    super.validate(checkTables, vContext);
+    if(checkTables) {
+      // run default table validation
+      validateTables(vContext);
+    }
 
     // if we don't have any tables, but we don't have any Columns either,
     // that's a problem (because we can't infer the tables in this case)
@@ -482,8 +484,6 @@ public class SelectQuery extends Query
     }
     
     validateOrdering(_columns.size(), _ordering, hasAllColumns());
-    
-    return this;
   }
 
   /**
@@ -559,7 +559,7 @@ public class SelectQuery extends Query
       Collection<Table> columnTables = tmpVContext.getColumnTables(
           new LinkedHashSet<Table>());
 
-      if(newContext.getParentContext() != null) {
+      if(newContext.getParent() != null) {
 
         // this query is nested.  some of the column refs may be from tables
         // in the outer queries.  note, we do "local only" collection as we
@@ -567,7 +567,7 @@ public class SelectQuery extends Query
         // relevant local context
         ValidationContext outerVContext = new ValidationContext(true);
         SqlContext tmpContext = newContext;
-        while((tmpContext = tmpContext.getParentContext()) != null) {
+        while((tmpContext = tmpContext.getParent()) != null) {
           tmpContext.getQuery().collectSchemaObjects(outerVContext);
         }
         
@@ -606,7 +606,6 @@ public class SelectQuery extends Query
       app.append(" FOR UPDATE");
     }
   }
-  
   
   /**
    * Outputs the right side of a join clause

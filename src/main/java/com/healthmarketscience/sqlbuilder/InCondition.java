@@ -34,7 +34,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
+
 
 /**
  * Outputs an "IN" condition

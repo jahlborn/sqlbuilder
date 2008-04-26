@@ -27,8 +27,11 @@ King of Prussia, PA 19406
 
 package com.healthmarketscience.sqlbuilder;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
+import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.dbspec.RejoinTable;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbFunction;
@@ -39,7 +42,6 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 import junit.framework.TestCase;
-import java.util.Date;
 
 
 /**
@@ -403,16 +405,22 @@ public class SqlBuilderTest extends TestCase
 
   public void testExpression()
   {
-    String reallyComplicatedExpression = ComboExpression.add(
+    Expression expr = ComboExpression.add(
         37, _defTable2_col5,
         new NegateExpression(
             ComboExpression.multiply(_table1_col1, 4.7f)),
         ComboExpression.subtract(),
-        "PI", new CustomSql("8 - 3"))
-      .toString();
+        Expression.EMPTY,
+        "PI", new CustomSql("8 - 3"));
+    String reallyComplicatedExpression = expr.toString();
     checkResult(reallyComplicatedExpression,
                 "(37 + t2.col5 + (- (t0.col1 * 4.7)) + 'PI' + (8 - 3))");
 
+    String exprQuery = new SelectQuery()
+      .addCustomColumns(expr, _table1_col2)
+      .validate().toString();
+    checkResult(exprQuery, "SELECT (37 + t2.col5 + (- (t0.col1 * 4.7)) + 'PI' + (8 - 3)),t0.col2 FROM Table2 t2,Schema1.Table1 t0");
+    
     String concatExpression = ComboExpression.concatenate(
         "The answer is ", ComboExpression.add(40, 2), ".")
       .toString();
@@ -484,6 +492,7 @@ public class SqlBuilderTest extends TestCase
                                           new CustomSql("fooCol"),
                                           new ValueObject(37)),
                       new CustomCondition("bazzCol IS FUNKY")))
+      .addCondition(Condition.EMPTY)
       .validate().toString();
     checkResult(customStr1,
                 "SELECT t1.col_id,fooCol,BazzCol FROM Table1 t1, otherTable WHERE ((fooCol < '37') AND (bazzCol IS FUNKY))");
@@ -757,7 +766,42 @@ public class SqlBuilderTest extends TestCase
       .addCondition(new InCondition(_table1_col1, new Subquery(innerSelect)));
     outerSelect.validate();
     String queryStr3 = outerSelect.toString();
-    checkResult(queryStr3, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN ((SELECT t2.col4 FROM Table2 t2 WHERE (t0.col1 = t2.col_id))) )");    
+    checkResult(queryStr3, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN ((SELECT t2.col4 FROM Table2 t2 WHERE (t0.col1 = t2.col_id))) )");
+
+    innerSelect.addCustomColumns()
+      .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1, _table1_col1,
+               _defTable1_col_id);
+    try {
+      innerSelect.validate();
+      fail("ValidationException should have been thrown");
+    } catch(ValidationException e) {}      
+      
+    try {
+      outerSelect.validate();
+      fail("ValidationException should have been thrown");
+    } catch(ValidationException e) {}      
+
+    innerSelect = new SelectQuery()
+      .addCustomColumns(_defTable2_col4)
+      .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable2, _table1_col1,
+               _defTable2_col_id)
+      .addCondition(BinaryCondition.equalTo(_table1_col1, _defTable1_col_id));
+    String queryStr4 = innerSelect.toString();
+    checkResult(queryStr4, "SELECT t2.col4 FROM Schema1.Table1 t0 INNER JOIN Table2 t2 ON (t0.col1 = t2.col_id) WHERE (t0.col1 = t1.col_id)");
+
+    try {
+      innerSelect.validate();
+      fail("ValidationException should have been thrown");
+    } catch(ValidationException e) {}      
+
+    outerSelect = new SelectQuery()
+      .addCustomColumns(_table1_col1, _table1_col2)
+      .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1, _table1_col1,
+               _defTable1_col_id)
+      .addCondition(new InCondition(_table1_col1, new Subquery(innerSelect)));
+    outerSelect.validate();
+    String queryStr5 = outerSelect.toString();
+    checkResult(queryStr5, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN ((SELECT t2.col4 FROM Schema1.Table1 t0 INNER JOIN Table2 t2 ON (t0.col1 = t2.col_id) WHERE (t0.col1 = t1.col_id))) )");
   }
 
   public void testAlterTable()
@@ -819,6 +863,47 @@ public class SqlBuilderTest extends TestCase
                  BinaryCondition.escapeLikeLiteral(orig, '/'));
     assertEquals("/this\\%is\\_a ' literal/pattern",
                  BinaryCondition.escapeLikeLiteral(orig, '\\'));
+  }
+
+  public void testValidationException() {
+    SelectQuery select = new SelectQuery()
+      .addCustomColumns(_defTable1_col_id)
+      .addFromTable(_table1);
+
+    ValidationException ve = null;
+    try {
+      select.validate();
+    } catch(ValidationException tmp) {
+      ve = tmp;
+    }
+
+    assertNotNull(ve);
+    assertNotNull(ve.getFailedVerifiable());
+    assertSame(select, ve.getFailedVerifiable().get1());
+
+    String msg = ve.getMessage();
+    checkResult(msg, "Columns used for unreferenced tables [Failed clause:SELECT t1.col_id FROM Schema1.Table1 t0]");
+
+    
+    select.addCustomColumns(new SqlObject() {
+        @Override
+        public void appendTo(AppendableExt app) throws IOException {
+          throw new NullPointerException("BOO");
+        }
+        @Override
+        protected void collectSchemaObjects(ValidationContext vContext) {}
+      });
+    try {
+      select.validate();
+    } catch(ValidationException tmp) {
+      ve = tmp;
+    }
+
+    assertNotNull(ve);
+    
+    msg = ve.getMessage();
+    assertTrue(msg.matches("Columns used for unreferenced tables \\[Verifiable: com.healthmarketscience.sqlbuilder.SelectQuery@[0-9a-f]+\\]"));
+
   }
   
   private void checkResult(String result, String expected)

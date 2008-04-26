@@ -8,9 +8,8 @@
       <action dev="jahlborn" type="fix" issue="1943120">
         Change how state is maintained during query validation.  Use the
         ValidationContext instead of a few collections in order to enable more
-        complicated subquery handling.  For now, just separate subquery
-        objects from parent objects, in the future do more intelligent
-        validation of subqueries.
+        complicated subquery handling.  This change allows subqueries to be
+        validated correctly and opens the door for sub-clause validation.
       </action>
     </release>
     <release version="2.0.1" date="2008-04-07">

@@ -38,7 +38,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Index;
  * 
  * @author Tim McCune
  */
-public class DropQuery extends Query
+public class DropQuery extends Query<DropQuery>
 {
   /**
    * Enum representing he type of the object being dropped
@@ -98,6 +98,7 @@ public class DropQuery extends Query
 
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
     _obj.collectSchemaObjects(vContext);
   }
 
@@ -112,7 +113,6 @@ public class DropQuery extends Query
       app.append(_behavior);
     }
   }
-
   
   /**
    * @return a DropQuery for the given table.

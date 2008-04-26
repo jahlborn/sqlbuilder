@@ -38,7 +38,7 @@ import com.healthmarketscience.common.util.AppendableExt;
  *
  * @author James Ahlborn
  */
-public class AlterTableQuery extends Query
+public class AlterTableQuery extends Query<AlterTableQuery>
 {
 
   private SqlObject _table;
@@ -69,6 +69,7 @@ public class AlterTableQuery extends Query
 
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
     _table.collectSchemaObjects(vContext);
     _action.collectSchemaObjects(vContext);
   }
@@ -81,7 +82,7 @@ public class AlterTableQuery extends Query
     
     app.append("ALTER TABLE ").append(_table).append(_action);
   }
-
+  
   /**
    * "Action" for adding a unique constraint to a table.,
    * e.g. {@code "... ADD UNIQUE (<col1> ... [<coln>])}.

@@ -62,8 +62,5 @@ public class GrantQuery extends BaseGrantQuery
       app.append(" WITH GRANT OPTION");
     }
   }
-
-  @Override
-  protected GrantQuery getThisType() { return this; }
   
 }

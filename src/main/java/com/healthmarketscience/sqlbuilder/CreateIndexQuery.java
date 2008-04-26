@@ -105,17 +105,6 @@ public class CreateIndexQuery extends BaseCreateQuery<CreateIndexQuery>
   }
   
   @Override
-  public CreateIndexQuery validate()
-    throws ValidationException
-  {
-    super.validate();
-    return this;
-  }
-
-  @Override
-  protected CreateIndexQuery getThisType() { return this; }
-    
-  @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
     _table.collectSchemaObjects(vContext);

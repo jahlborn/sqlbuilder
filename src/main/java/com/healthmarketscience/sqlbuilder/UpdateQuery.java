@@ -40,7 +40,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  *
  * @author James Ahlborn
  */
-public class UpdateQuery extends Query
+public class UpdateQuery extends Query<UpdateQuery>
 {
   private SqlObject _table;
   private SqlObjectList<SetClauseObject> _sets = SqlObjectList.create();
@@ -106,6 +106,7 @@ public class UpdateQuery extends Query
 
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
     _table.collectSchemaObjects(vContext);
     _sets.collectSchemaObjects(vContext);
     _condition.collectSchemaObjects(vContext);

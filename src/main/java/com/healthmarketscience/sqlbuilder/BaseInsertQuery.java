@@ -37,7 +37,8 @@ import com.healthmarketscience.common.util.AppendableExt;
  *
  * @author James Ahlborn
  */
-abstract class BaseInsertQuery extends Query
+abstract class BaseInsertQuery<ThisType extends BaseInsertQuery>
+  extends Query<ThisType>
 {
   private SqlObject _table;
   protected SqlObjectList<SqlObject> _columns = SqlObjectList.create();
@@ -49,6 +50,7 @@ abstract class BaseInsertQuery extends Query
 
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
     _table.collectSchemaObjects(vContext);
     _columns.collectSchemaObjects(vContext);
   }

@@ -37,7 +37,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Column;
  * @author James Ahlborn
  */
 public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery>
-  extends Query
+  extends Query<ThisType>
 {
 
   protected SqlObject _object;
@@ -84,6 +84,7 @@ public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery>
 
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
     _object.collectSchemaObjects(vContext);
     _columns.collectSchemaObjects(vContext);
   }
@@ -97,9 +98,6 @@ public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery>
       app.append(" TABLESPACE " + _tableSpace);
     }
   }
-
-  /** @return the handle to this object as the subclass type */
-  protected abstract ThisType getThisType();
 
   /** Adds the given SqlObjects as column descriptions, according to the
       subclass type. */

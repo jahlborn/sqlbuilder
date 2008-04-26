@@ -38,7 +38,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Column;
  *
  * @author James Ahlborn
  */
-public class UnionQuery extends Query {
+public class UnionQuery extends Query<UnionQuery> {
 
   /** Enumeration representing the type of union to use */
   public enum Type
@@ -126,20 +126,17 @@ public class UnionQuery extends Query {
   }
 
   @Override
-  public UnionQuery validate()
+  public void validate(ValidationContext vContext)
     throws ValidationException
   {
     // check super
-    super.validate();
+    super.validate(vContext);
 
     // now, validate each of our sub-query's select queries, and check numbers
     // of args if possible
     int currentCount = -1;
     boolean ignoreColumnCount = false;
     for(SelectQuery selectQuery : _queries) {
-
-      // validate the internal consistency of the query 
-      selectQuery.validate();
 
       // check the column count against the other queries
       if(!ignoreColumnCount) {
@@ -175,14 +172,18 @@ public class UnionQuery extends Query {
     }
 
     SelectQuery.validateOrdering(currentCount, _ordering, ignoreColumnCount);
-
-    return this;
   }
 
   @Override
-  protected final void collectSchemaObjects(ValidationContext vContext) {
-    // we do not collect schema objects across the select subqueries.
-    // instead, each subquery is handled separately.
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
+
+    if(!vContext.isLocalOnly()) {
+      // treat each select query as a separate subquery
+      for(SelectQuery selectQuery : _queries) {
+        selectQuery.collectSchemaObjects(new ValidationContext(vContext));
+      }
+    }
   }
   
   @Override
@@ -200,7 +201,7 @@ public class UnionQuery extends Query {
       app.append(" ORDER BY ").append(_ordering);
     }
   }
-
+  
   /**
    * Convenience method to create a UNION query.
    */

@@ -117,7 +117,10 @@ public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement>
   }
 
   /** @return the handle to this object as the subclass type */
-  protected abstract ThisType getThisType();
+  @SuppressWarnings("unchecked")
+  protected final ThisType getThisType() {
+    return (ThisType)this;
+  }
 
   /**
    * Utility class to output the result part of a "WHEN" clause for a "CASE"
