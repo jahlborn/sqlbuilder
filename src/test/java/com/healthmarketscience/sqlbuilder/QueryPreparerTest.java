@@ -34,6 +34,8 @@ import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -53,6 +55,10 @@ public class QueryPreparerTest extends BaseSqlTestCase {
 
   private void doTestPreparer(int startIndex) throws Exception
   {
+    Object obj1 = new Object();
+    Object obj2 = new Object();
+    Object obj3 = new Object();
+    
     QueryPreparer prep = new QueryPreparer(startIndex);
     QueryPreparer.PlaceHolder ph1 = prep.getNewPlaceHolder();
     QueryPreparer.PlaceHolder ph2 = prep.getNewPlaceHolder();
@@ -62,9 +68,9 @@ public class QueryPreparerTest extends BaseSqlTestCase {
     QueryPreparer.PlaceHolder sph3 = prep.addStaticPlaceHolder(13L);
     QueryPreparer.PlaceHolder sph4 = prep.addStaticPlaceHolder(true);
     QueryPreparer.PlaceHolder sph5 = prep.addStaticPlaceHolder((Long)null);
-    QueryPreparer.PlaceHolder sph6 = prep.addStaticPlaceHolder(new Object());
+    QueryPreparer.PlaceHolder sph6 = prep.addStaticPlaceHolder(obj1);
     QueryPreparer.PlaceHolder sph7 = prep.addStaticPlaceHolder(
-        new Object(), Types.VARCHAR);
+        obj2, Types.VARCHAR);
     QueryPreparer.MultiPlaceHolder mph1 = prep.getNewMultiPlaceHolder();
 
     String queryStr = new SelectQuery()
@@ -112,19 +118,43 @@ public class QueryPreparerTest extends BaseSqlTestCase {
 
     prep.setStaticValues(stmt);
     ph1.setNull(Types.BLOB, stmt);
-    ph2.setObject(new Object(), stmt);
-    ph3.setObject(new Date(), Types.DATE, stmt);
+    ph2.setObject(obj3, stmt);
+    ph3.setObject(new Object(), Types.DATE, stmt);
     mph1.setString("foo", stmt);
+
+    @SuppressWarnings("unchecked")
+    List<List<Object>> expected = Arrays.asList(
+        Arrays.<Object>asList("setInt", (9 + startIndex), 42),
+        Arrays.<Object>asList("setString", (0 + startIndex), "place"),
+        Arrays.<Object>asList("setLong", (1 + startIndex), 13L),
+        Arrays.<Object>asList("setBoolean", (2 + startIndex), true),
+        Arrays.<Object>asList("setNull", (3 + startIndex), Types.BIGINT),
+        Arrays.<Object>asList("setObject", (4 + startIndex), obj1),
+        Arrays.<Object>asList("setObject", (5 + startIndex), obj2,
+                              Types.VARCHAR),
+        Arrays.<Object>asList("setNull", (6 + startIndex), Types.BLOB),
+        Arrays.<Object>asList("setObject", (8 + startIndex), obj3),
+        Arrays.<Object>asList("setString", (7 + startIndex), "foo"),
+        Arrays.<Object>asList("setString", (10 + startIndex), "foo"),
+        Arrays.<Object>asList("setString", (11 + startIndex), "foo")
+        );
+
+    assertEquals(expected, mockStmt._calls);
   }
 
   
   private static class MockPreparedStatement
     implements InvocationHandler
   {
+    private final List<List<Object>> _calls = new ArrayList<List<Object>>();
+    
     public Object invoke(Object proxy, Method method, Object[] args)
       throws Throwable
     {
-      // FIXME, write verification code
+      List<Object> call = new ArrayList<Object>();
+      call.add(method.getName());
+      call.addAll(Arrays.asList(args));
+      _calls.add(call);
       return null;
     }
   }
