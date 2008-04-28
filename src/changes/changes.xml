@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.0.2" date="TBD">
+    <release version="2.0.2" date="2008-04-28">
       <action dev="jahlborn" type="fix" issue="1943120">
         Change how state is maintained during query validation.  Use the
         ValidationContext instead of a few collections in order to enable more
