@@ -83,14 +83,18 @@ public class SqlBuilderTest extends BaseSqlTestCase
     } catch(ValidationException e) {}
   }
 
-  public void testCreateIndex()
+  public void testIndex()
   {
     DbIndex index = _schema1.addIndex("Index1", "Table1",
                                       "col1", "col2");
-    
-    String createStr1 = new CreateIndexQuery(index).validate().toString();
+    CreateIndexQuery query = new CreateIndexQuery(index);
+    String createStr1 = query.validate().toString();
     checkResult(createStr1,
                 "CREATE INDEX Schema1.Index1 ON Schema1.Table1 (col1,col2)");
+
+    String dropStr1 = query.getDropQuery().validate().toString();
+    checkResult(dropStr1,
+                "DROP INDEX Schema1.Index1");
   }
   
   public void testDropTable()
@@ -527,9 +531,9 @@ public class SqlBuilderTest extends BaseSqlTestCase
     q2 = new SelectQuery()
       .addColumns(_defTable2_col_id, _defTable2_col4, _defTable2_col5);
 
-    unionQuery = UnionQuery.unionAll(q1, q2);
-    unionQuery.addIndexedOrderings(1);
-    unionQuery.addOrderings(_table1_col1);
+    unionQuery = UnionQuery.unionAll(q1, q2)
+      .addIndexedOrderings(1)
+      .addOrderings(_table1_col1);
 
     String unionQuery2 = unionQuery.validate().toString();
     checkResult(unionQuery2,
@@ -541,6 +545,19 @@ public class SqlBuilderTest extends BaseSqlTestCase
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
 
+    q1 = new SelectQuery()
+      .addAllTableColumns(_table1);
+    q2 = new SelectQuery()
+      .addFromTable(_defTable2)
+      .addAllColumns();
+
+    unionQuery = UnionQuery.union(q1, q2)
+      .addIndexedOrdering(1, OrderObject.Dir.DESCENDING)
+      .addCustomOrdering(_table1_col1, OrderObject.Dir.ASCENDING);
+    
+    String unionQuery3 = unionQuery.validate().toString();
+    checkResult(unionQuery3,
+                "SELECT t0.* FROM Schema1.Table1 t0 UNION SELECT * FROM Table2 t2 ORDER BY 1 DESC,col1 ASC");
   }
 
   public void testSqlContext()
@@ -646,8 +663,8 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(queryStr2, "SELECT t2.col4 FROM Table2 t2,Schema1.Table1 t0 WHERE (t0.col1 = t2.col_id)");    
     SelectQuery outerSelect = new SelectQuery()
       .addCustomColumns(_table1_col1, _table1_col2)
-      .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1, _table1_col1,
-               _defTable1_col_id)
+      .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1,
+               BinaryCondition.equalTo(_table1_col1, _defTable1_col_id))
       .addCondition(new InCondition(_table1_col1, new Subquery(innerSelect)));
     outerSelect.validate();
     String queryStr3 = outerSelect.toString();

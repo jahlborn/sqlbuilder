@@ -198,6 +198,21 @@ public abstract class Converter<SrcType, DstType>
   }
   
   /**
+   * Converts a Table to a table definition SqlObject.
+   * <p>
+   * Conversions (in order):
+   * <ul>
+   * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Table} -&gt; {@link TableDefObject}</li>
+   * </ul>
+   * 
+   * @param table object to coerce to a table SqlObject
+   * @return a SqlObject for the given Table
+   */
+  public static SqlObject toTableDefSqlObject(Table table) {
+    return new TableDefObject(table);
+  }
+  
+  /**
    * Converts a Index to a SqlObject.
    * <p>
    * Conversions (in order):
@@ -495,7 +510,7 @@ public abstract class Converter<SrcType, DstType>
   public static SqlObject toCustomTableDefSqlObject(Object table)
   {
     if(table instanceof Table) {
-      return new TableDefObject((Table)table);
+      return toTableDefSqlObject((Table)table);
     }
     return toCustomSqlObject(table);
   }

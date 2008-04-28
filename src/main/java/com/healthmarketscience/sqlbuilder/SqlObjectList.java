@@ -52,8 +52,8 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
   /** the default delimiter used by a SqlObjectList */
   public static final String DEFAULT_DELIMITER = ",";
 
-  private String _delimiter;
-  private List<ObjType> _objects;
+  private final String _delimiter;
+  private final List<ObjType> _objects;
     
   public SqlObjectList() {
     this(DEFAULT_DELIMITER, new LinkedList<ObjType>());
@@ -90,10 +90,6 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
 
   public String getDelimiter() {
     return _delimiter;
-  }
-
-  public void setDelimiter(String newDelimiter) {
-    _delimiter = newDelimiter;
   }
 
   /**

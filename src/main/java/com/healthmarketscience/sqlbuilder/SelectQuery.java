@@ -237,8 +237,8 @@ public class SelectQuery extends Query<SelectQuery>
   public SelectQuery addJoin(JoinType joinType, Table fromTable,
                              Table toTable, Condition joinCond)
   {
-    return addCustomJoin(joinType, new TableDefObject(fromTable),
-                         new TableDefObject(toTable), joinCond);
+    return addCustomJoin(joinType, Converter.toTableDefSqlObject(fromTable),
+                         Converter.toTableDefSqlObject(toTable), joinCond);
   }
 
   /**
@@ -251,10 +251,11 @@ public class SelectQuery extends Query<SelectQuery>
                              Table toTable,
                              List<? extends Column> fromColumns,
                              List<? extends Column> toColumns) {
-    addJoinFromTable(new TableDefObject(fromTable));
+    addJoinFromTable(Converter.toTableDefSqlObject(fromTable));
     
     // add to table
-    _joins.addObject(new JoinTo(joinType, new TableDefObject(toTable),
+    _joins.addObject(new JoinTo(joinType,
+                                Converter.toTableDefSqlObject(toTable),
                                 fromColumns, toColumns));
     return this;
   }
@@ -576,7 +577,7 @@ public class SelectQuery extends Query<SelectQuery>
       }
       
       for(Table table : columnTables) {
-        joins.addObject(new TableDefObject(table));
+        joins.addObject(Converter.toTableDefSqlObject(table));
       }
     }
 
