@@ -72,7 +72,7 @@ public class SqlContext implements Cloneable
    * Sets the SqlContext which was in effect before this SqlContext was
    * "pushed" onto the context stack.  Used by {@link #pushContext}.
    */
-  private void setParentContext(SqlContext newParentContext) {
+  private void setParent(SqlContext newParentContext) {
     _parent = newParentContext;
   }
 
@@ -142,7 +142,7 @@ public class SqlContext implements Cloneable
     SqlContext context = null;
     if(parentContext != null) {
       context = parentContext.clone();
-      context.setParentContext(parentContext);
+      context.setParent(parentContext);
     } else {
       context = new SqlContext();
     }
