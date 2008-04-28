@@ -369,7 +369,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
         new NegateExpression(
             ComboExpression.multiply(_table1_col1, 4.7f)),
         ComboExpression.subtract(),
-        Expression.EMPTY,
+        new NegateExpression((Object)Expression.EMPTY),
         "PI", new CustomSql("8 - 3"));
     String reallyComplicatedExpression = expr.toString();
     checkResult(reallyComplicatedExpression,
@@ -451,7 +451,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                                           new CustomSql("fooCol"),
                                           new ValueObject(37)),
                       new CustomCondition("bazzCol IS FUNKY")))
-      .addCondition(Condition.EMPTY)
+      .addCondition(new NotCondition((Object)Condition.EMPTY))
       .validate().toString();
     checkResult(customStr1,
                 "SELECT t1.col_id,fooCol,BazzCol FROM Table1 t1, otherTable WHERE ((fooCol < '37') AND (bazzCol IS FUNKY))");
