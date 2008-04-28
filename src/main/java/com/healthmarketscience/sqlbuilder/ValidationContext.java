@@ -118,12 +118,12 @@ public class ValidationContext {
     _localOnly = newLocalOnly;
   }
 
-  public void addVerifiable(ValidationContext vContext, Verifiable verifiable)
+  public void addVerifiable(Verifiable verifiable)
   {
-    if((vContext == null) || (verifiable == null)) {
-      throw new IllegalArgumentException("context or verifiable was null");
+    if(verifiable == null) {
+      throw new IllegalArgumentException("verifiable was null");
     }
-    _verifiables.add(Tuple2.create(vContext, verifiable));
+    _verifiables.add(Tuple2.create(this, verifiable));
   }
 
   public void validateAll() throws ValidationException {

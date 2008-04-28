@@ -92,7 +92,7 @@ public abstract class Query<ThisType extends Query>
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     // always add this query to the list of things to verify
-    vContext.addVerifiable(vContext, this);
+    vContext.addVerifiable(this);
   }
   
   @Override

@@ -28,6 +28,7 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
+import java.util.ListIterator;
 
 import com.healthmarketscience.common.util.AppendableExt;
 
@@ -37,7 +38,7 @@ import com.healthmarketscience.common.util.AppendableExt;
  * @author James Ahlborn
  */
 public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement>
-  extends Expression
+  extends Expression implements Verifiable<ThisType>
 {
   /** SqlObject which can outputs "ELSE NULL" */
   private static final ElseObject NULL_ELSE = new ElseObject(null);
@@ -82,7 +83,6 @@ public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement>
    * @param result the result to output if no other "WHEN" clause is selected
    */
   public ThisType addElse(Object result) {
-    // FIXME, FUTURE: if we ever have validation of subclauses, this would be a great place for it (make sure at most one else clause added at the end of the list)!
     _whens.addObject(new ElseObject(result));
     return getThisType();
   }
@@ -97,8 +97,38 @@ public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement>
     return getThisType();
   }
   
+  public final ThisType validate()
+    throws ValidationException
+  {
+    doValidate();
+    return getThisType();
+  }
+
+  public void validate(ValidationContext vContext)
+    throws ValidationException
+  {
+    if(_whens.size() > 1) {
+      // make sure that at most one else clause exists and that it is at the
+      // end
+      int okayIdx = _whens.size() - 1;
+      for(ListIterator<BaseWhenObject> iter = _whens.listIterator();
+          iter.hasNext(); ) {
+        int idx = iter.nextIndex();
+        BaseWhenObject obj = iter.next();
+        if(obj instanceof ElseObject) {
+          if(idx != okayIdx) {
+            throw new ValidationException(
+                "Else clause at invalid index " + idx);
+          }
+        }
+      }
+      
+    }
+  }
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
+    vContext.addVerifiable(this);
     if(_operand != null) {
       _operand.collectSchemaObjects(vContext);
     }

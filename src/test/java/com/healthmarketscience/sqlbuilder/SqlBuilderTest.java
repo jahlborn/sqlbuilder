@@ -465,7 +465,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String caseClause1 = new SimpleCaseStatement(_table1_col1)
       .addNumericWhen(1, "one")
       .addNumericWhen(2, "two")
-      .addElse("three").toString();
+      .addElse("three").validate().toString();
 
     checkResult(caseClause1,
                 "(CASE t0.col1 WHEN 1 THEN 'one' WHEN 2 THEN 'two' ELSE 'three' END)");
@@ -473,14 +473,30 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String caseClause2 = new CaseStatement()
       .addWhen(BinaryCondition.equalTo(_table1_col2, "13"), _table1_col3)
       .addWhen(BinaryCondition.equalTo(_table1_col2, "14"), "14")
-      .addElseNull().toString();
+      .addElseNull().validate().toString();
     
     checkResult(caseClause2,
                 "(CASE WHEN (t0.col2 = '13') THEN t0.col3 WHEN (t0.col2 = '14') THEN '14' ELSE NULL END)");
 
-    String caseClause3 = new SimpleCaseStatement(_table1_col2)
+    String caseClause3 = new SimpleCaseStatement(_table1_col2).validate()
       .toString();
     checkResult(caseClause3, "");
+
+    try {
+      new SimpleCaseStatement(_table1_col1)
+        .addNumericWhen(1, "one")
+        .addNumericWhen(2, "two")
+        .addElse("three")
+        .addElseNull().validate();
+    } catch(ValidationException e) {}
+    
+    try {
+      new SimpleCaseStatement(_table1_col1)
+        .addNumericWhen(1, "one")
+        .addElse("three")
+        .addNumericWhen(2, "two").validate();
+    } catch(ValidationException e) {}
+    
   }
 
   public void testDelete()
