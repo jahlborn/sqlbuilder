@@ -11,6 +11,9 @@
         complicated subquery handling.  This change allows subqueries to be
         validated correctly and opens the door for sub-clause validation.
       </action>
+      <action dev="jahlborn" type="update">
+        Extend the unit test coverage.
+      </action>
     </release>
     <release version="2.0.1" date="2008-04-07">
       <action dev="jahlborn" type="update">

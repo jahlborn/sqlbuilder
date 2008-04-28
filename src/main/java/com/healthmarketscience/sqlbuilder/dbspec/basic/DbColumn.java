@@ -31,8 +31,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
- * Describe class DbColumn here.
- *
+ * Representation of a column in a database schema.
  *
  * @author James Ahlborn
  */

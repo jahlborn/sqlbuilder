@@ -38,58 +38,17 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbFunction;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbFunctionPackage;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbIndex;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
-import junit.framework.TestCase;
 
 
 /**
- * SqlBuilderTest.java
- *
- *
  * @author James Ahlborn
  */
-public class SqlBuilderTest extends TestCase
+public class SqlBuilderTest extends BaseSqlTestCase
 {
-  private DbSpec _spec;
-  private DbSchema _schema1;
-  private DbSchema _defSchema;
-  private DbTable _table1;
-  private DbColumn _table1_col1;
-  private DbColumn _table1_col2;
-  private DbColumn _table1_col3;
-  private DbTable _defTable1;
-  private DbColumn _defTable1_col_id;
-  private DbColumn _defTable1_col2;
-  private DbColumn _defTable1_col3;
-  private DbTable _defTable2;
-  private DbColumn _defTable2_col_id;
-  private DbColumn _defTable2_col4;
-  private DbColumn _defTable2_col5;
   
   public SqlBuilderTest(String name) {
     super(name);
-  }
-
-  @Override
-  protected void setUp() throws Exception
-  {
-    _spec = new DbSpec();
-    _schema1 = _spec.addSchema("Schema1");
-    _defSchema = _spec.addDefaultSchema();
-    _table1 = _schema1.addTable("Table1");
-    _table1_col1 = _table1.addColumn("col1", "VARCHAR", 213);
-    _table1_col2 = _table1.addColumn("col2", "NUMBER", 7);
-    _table1_col3 = _table1.addColumn("col3", "TIMESTAMP", null);
-    _defTable1 = _defSchema.addTable("Table1");
-    _defTable1_col_id = _defTable1.addColumn("col_id", "NUMBER", null);
-    _defTable1_col2 = _defTable1.addColumn("col2", "VARCHAR", 64);
-    _defTable1_col3 = _defTable1.addColumn("col3", "DATE", null);
-    _defTable2 = _defSchema.addTable("Table2");
-    _defTable2_col_id = _defTable2.addColumn("col_id");
-    _defTable2_col4 = _defTable2.addColumn("col4");
-    _defTable2_col5 = _defTable2.addColumn("col5");
   }
 
   public void testCreateTable()
@@ -498,80 +457,6 @@ public class SqlBuilderTest extends TestCase
                 "SELECT t1.col_id,fooCol,BazzCol FROM Table1 t1, otherTable WHERE ((fooCol < '37') AND (bazzCol IS FUNKY))");
   }
 
-  public void testPreparer()
-  {
-    doTestPreparer(1);
-    doTestPreparer(13);
-  }
-
-  private void doTestPreparer(int startIndex)
-  {
-    QueryPreparer prep = new QueryPreparer(startIndex);
-    QueryPreparer.PlaceHolder ph1 = prep.getNewPlaceHolder();
-    QueryPreparer.PlaceHolder ph2 = prep.getNewPlaceHolder();
-    QueryPreparer.PlaceHolder ph3 = prep.getNewPlaceHolder();
-    QueryPreparer.PlaceHolder sph1 = prep.addStaticPlaceHolder(42);
-    QueryPreparer.MultiPlaceHolder mph1 = prep.getNewMultiPlaceHolder();
-
-    String reallyComplicatedConditionStr = ComboCondition.and(
-      BinaryCondition.lessThan(_table1_col1, ph1, false),
-      BinaryCondition.lessThan(_table1_col2, mph1, true),
-      UnaryCondition.isNotNull(_defTable1_col_id),
-      new ComboCondition(ComboCondition.Op.OR,
-                         new CustomCondition("IM REALLY SNAZZY"),
-                         new NotCondition(
-                           BinaryCondition.like(_defTable2_col5,
-                                                ph2)),
-                         new BinaryCondition(BinaryCondition.Op.EQUAL_TO,
-                                             new CustomSql("YOU"),
-                                             sph1)),
-      ComboCondition.or(
-        new UnaryCondition(UnaryCondition.Op.IS_NULL,
-                           _table1_col2),
-        BinaryCondition.notEqualTo(mph1, mph1))).toString();
-    checkResult(reallyComplicatedConditionStr,
-                "((t0.col1 < ?) AND (t0.col2 <= ?) AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE ?)) OR (YOU = ?)) AND ((t0.col2 IS NULL) OR (? <> ?)))");
-
-    assertEquals((0 + startIndex), ph1.getIndex());
-    assertEquals((2 + startIndex), ph2.getIndex());
-    assertEquals(false, ph3.isInQuery());
-    assertEquals((3 + startIndex), sph1.getIndex());
-    assertEquals(3, mph1.getIndexes().size());
-    assertEquals(Arrays.asList((1 + startIndex), (4 + startIndex),
-                               (5 + startIndex)),
-                 mph1.getIndexes());
-  }
-
-  public void testReader() {
-    doTestReader(1);
-    doTestReader(13);
-  }
-
-  private void doTestReader(int startIndex)
-  {
-    QueryReader prep = new QueryReader(startIndex);
-    QueryReader.Column col1 = prep.getNewColumn();
-    QueryReader.Column col2 = prep.getNewColumn();
-    QueryReader.Column col3 = prep.getNewColumn();
-    QueryReader.Column col4 = prep.getNewColumn();
-
-    String selectStr = new SelectQuery()
-      .addCustomColumns(
-          col1.setColumnObject(_table1_col1),
-          col4.setColumnObject(_table1_col3),
-          col3.setCustomColumnObject(new CustomSql("foo")))
-      .validate().toString();
-
-    checkResult(selectStr,
-                "SELECT t0.col1,t0.col3,foo FROM Schema1.Table1 t0");
-    
-    assertEquals((0 + startIndex), col1.getIndex());
-    assertEquals((1 + startIndex), col4.getIndex());
-    assertEquals(false, col2.isInQuery());
-    assertEquals((2 + startIndex), col3.getIndex());
-    
-  }
-
   public void testCaseStatement() {
     String caseClause1 = new SimpleCaseStatement(_table1_col1)
       .addNumericWhen(1, "one")
@@ -906,9 +791,4 @@ public class SqlBuilderTest extends TestCase
 
   }
   
-  private void checkResult(String result, String expected)
-  {
-    assertEquals(expected, result);
-  }
-
 }

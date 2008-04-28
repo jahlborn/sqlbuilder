@@ -32,6 +32,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.List;
@@ -357,6 +358,10 @@ public class QueryPreparer
       return _index;
     }
 
+    public List<Integer> getIndexes() {
+      return Collections.singletonList(_index);
+    }
+    
     protected void addIndex(int index) {
       if(getIndex() == NO_INDEX) {
         setIndex(index);
@@ -561,6 +566,7 @@ public class QueryPreparer
       super(outer);
     }
 
+    @Override
     public List<Integer> getIndexes() { return _indexes; }
 
     @Override
