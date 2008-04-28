@@ -115,11 +115,8 @@ public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement>
           iter.hasNext(); ) {
         int idx = iter.nextIndex();
         BaseWhenObject obj = iter.next();
-        if(obj instanceof ElseObject) {
-          if(idx != okayIdx) {
-            throw new ValidationException(
-                "Else clause at invalid index " + idx);
-          }
+        if((obj instanceof ElseObject) && (idx != okayIdx)) {
+          throw new ValidationException("Else clause at invalid index " + idx);
         }
       }
       
