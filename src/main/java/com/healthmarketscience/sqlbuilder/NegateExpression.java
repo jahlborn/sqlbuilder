@@ -55,6 +55,11 @@ public class NegateExpression extends Expression
   }
     
   @Override
+  public boolean isEmpty() {
+    return _expression.isEmpty();
+  }
+    
+  @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     _expression.collectSchemaObjects(vContext);
   }
