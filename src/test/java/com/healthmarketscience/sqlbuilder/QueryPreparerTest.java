@@ -73,7 +73,7 @@ public class QueryPreparerTest extends BaseSqlTestCase {
         obj2, Types.VARCHAR);
     QueryPreparer.MultiPlaceHolder mph1 = prep.getNewMultiPlaceHolder();
 
-    String queryStr = new SelectQuery()
+    SelectQuery query = new SelectQuery()
       .addCustomColumns(sph2, sph3, sph4, sph5, sph6, sph7)
       .addCondition(
           ComboCondition.and(
@@ -91,7 +91,8 @@ public class QueryPreparerTest extends BaseSqlTestCase {
               ComboCondition.or(
                   new UnaryCondition(UnaryCondition.Op.IS_NULL,
                                      _table1_col2),
-                  BinaryCondition.notEqualTo(mph1, mph1)))).toString();
+                  BinaryCondition.notEqualTo(mph1, mph1))));
+    String queryStr = query.toString();
     checkResult(queryStr,
                 "SELECT ?,?,?,?,?,? FROM Schema1.Table1 t0,Table1 t1,Table2 t2 WHERE ((t0.col1 < ?) AND (t0.col2 <= ?) AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE ?)) OR (YOU = ?)) AND ((t0.col2 IS NULL) OR (? <> ?)))");
 
@@ -140,6 +141,12 @@ public class QueryPreparerTest extends BaseSqlTestCase {
         );
 
     assertEquals(expected, mockStmt._calls);
+
+    try {
+      query.toString();
+      fail("IllegalStateException should have been thrown");
+    } catch(IllegalStateException e) {}
+    
   }
 
   
