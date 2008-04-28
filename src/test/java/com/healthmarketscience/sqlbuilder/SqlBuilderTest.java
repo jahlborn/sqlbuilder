@@ -488,13 +488,25 @@ public class SqlBuilderTest extends BaseSqlTestCase
         .addNumericWhen(2, "two")
         .addElse("three")
         .addElseNull().validate();
+      fail("ValidationException should have been thrown");
+    } catch(ValidationException e) {}
+
+    
+    SimpleCaseStatement invalidCase = new SimpleCaseStatement(_table1_col1)
+      .addNumericWhen(1, "one")
+      .addElse("three")
+      .addNumericWhen(2, "two");
+    
+    try {
+      invalidCase.validate();
+      fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
     
     try {
-      new SimpleCaseStatement(_table1_col1)
-        .addNumericWhen(1, "one")
-        .addElse("three")
-        .addNumericWhen(2, "two").validate();
+      new SelectQuery()
+        .addCustomColumns(invalidCase)
+        .validate();
+      fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
     
   }
