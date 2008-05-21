@@ -99,7 +99,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   }
   
   /**
-   * Adds the given Objects as a column descriptions, should look like
+   * Adds the given Objects as column descriptions, should look like
    * <code>"&lt;column&gt; &lt;type&gt;"</code>.
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
@@ -175,13 +175,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     appendTableSpace(app);
   }
 
-  @Override
-  protected void appendTableSpace(AppendableExt app) throws IOException {
-    if (_tableSpace != null) {
-      app.append(" TABLESPACE " + _tableSpace);
-    }
-  }
-
+  
   /**
    * Wrapper around a column that adds a constraint specification.
    */

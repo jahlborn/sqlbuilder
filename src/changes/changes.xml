@@ -4,6 +4,12 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.0.3" date="TBD">
+      <action dev="jahlborn" type="add">
+        Added support view view creation (CreateViewQuery) and deletion
+        (DropQuery.Type.VIEW).
+      </action>
+    </release>
     <release version="2.0.2" date="2008-04-28">
       <action dev="jahlborn" type="fix" issue="1943120">
         Change how state is maintained during query validation.  Use the

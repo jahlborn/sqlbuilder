@@ -69,14 +69,14 @@ public class CreateIndexQuery extends BaseCreateQuery<CreateIndexQuery>
   }
 
   /**
-   * Sets the name of the table when is being indexed.
+   * Sets the name of the table which is being indexed.
    */
   public CreateIndexQuery setTableName(String nameName) {
     return setCustomTableName(nameName);
   }
 
   /**
-   * Sets the name of the table when is being indexed.
+   * Sets the name of the table which is being indexed.
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toCustomTableSqlObject(Object)}.

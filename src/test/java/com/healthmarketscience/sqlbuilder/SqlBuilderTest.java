@@ -835,5 +835,67 @@ public class SqlBuilderTest extends BaseSqlTestCase
     assertTrue(msg.matches("Columns used for unreferenced tables \\[Verifiable: com.healthmarketscience.sqlbuilder.SelectQuery@[0-9a-f]+\\]"));
 
   }
+
+  public void testCreateView()
+  {
+    SelectQuery query1 = new SelectQuery()
+      .addColumns(_defTable1_col_id, _defTable1_col2)
+      .addCondition(UnaryCondition.isNotNull(_defTable1_col_id));
+    SelectQuery query2 = new SelectQuery().addAllTableColumns(_defTable2);
+    
+    String createStr1 = new CreateViewQuery(_table1)
+      .setSelectQuery(query1)
+      .validate().toString();
+    checkResult(createStr1,
+                "CREATE VIEW Schema1.Table1 AS SELECT t1.col_id,t1.col2 FROM Table1 t1 WHERE (t1.col_id IS NOT NULL)");
+
+    
+    String createStr2 = new CreateViewQuery(_table1)
+      .addColumns(_table1_col1, _table1_col3)
+      .setSelectQuery(query1)
+      .validate().toString();
+    checkResult(createStr2,
+                "CREATE VIEW Schema1.Table1 (col1,col3) AS SELECT t1.col_id,t1.col2 FROM Table1 t1 WHERE (t1.col_id IS NOT NULL)");
+
+    String createStr3 = new CreateViewQuery(_table1)
+      .addCustomColumns(_table1_col1, _table1_col3)
+      .setSelectQuery(query2)
+                    .validate().toString();
+    checkResult(createStr3,
+                "CREATE VIEW Schema1.Table1 (col1,col3) AS SELECT t2.* FROM Table2 t2");
+
+    CreateViewQuery viewQuery = new CreateViewQuery(_table1)
+      .setSelectQuery(query2);
+    
+    String createStr4 = viewQuery.validate().toString();
+    checkResult(createStr4,
+                "CREATE VIEW Schema1.Table1 AS SELECT t2.* FROM Table2 t2");
+
+    String dropStr1 = viewQuery.getDropQuery().validate().toString();
+    checkResult(dropStr1,
+                "DROP VIEW Schema1.Table1");
+    
+    try {
+      new CreateViewQuery(_table1).validate();
+      fail("ValidationException should have been thrown");
+    } catch(ValidationException e) {}
+    
+    try {
+      new CreateViewQuery(_table1)
+        .addColumns(_table1_col1)
+        .setSelectQuery(query1)
+        .validate();
+      fail("ValidationException should have been thrown");
+    } catch(ValidationException e) {}
+    
+    try {
+      new CreateViewQuery(_table1)
+        .addCustomColumns(SqlObject.ALL_SYMBOL)
+        .setSelectQuery(query2)
+        .validate();
+      fail("ValidationException should have been thrown");
+    } catch(ValidationException e) {}
+
+  }
   
 }

@@ -42,7 +42,7 @@ public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery>
 
   protected SqlObject _object;
   protected SqlObjectList<SqlObject> _columns = SqlObjectList.create();
-  protected String _tableSpace;
+  private String _tableSpace;
 
   protected BaseCreateQuery(SqlObject objectStr) {
     _object = objectStr;
@@ -89,6 +89,19 @@ public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery>
     _columns.collectSchemaObjects(vContext);
   }
 
+  @Override
+  public void validate(ValidationContext vContext)
+    throws ValidationException
+  {
+    // validate super
+    super.validate(vContext);
+
+    // can not have a "*" in the column list
+    if(SelectQuery.hasAllColumns(_columns)) {
+      throw new ValidationException("Cannot use the '*' syntax in this query");
+    }
+  }
+  
   /**
    * Appends a "TABLESPACE ..." clause to the given AppendableExt if a
    * tableSpace has been specified.

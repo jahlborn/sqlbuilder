@@ -46,7 +46,8 @@ public class DropQuery extends Query<DropQuery>
   public enum Type
   {
     TABLE(" TABLE "),
-    INDEX(" INDEX ");
+    INDEX(" INDEX "),
+    VIEW(" VIEW ");
 
     private String _typeStr;
 
@@ -148,6 +149,24 @@ public class DropQuery extends Query<DropQuery>
   public static DropQuery dropIndex(Object indexStr) {
     return new DropQuery(Type.INDEX,
                          Converter.toCustomIndexSqlObject(indexStr));
+  }
+  
+  /**
+   * @return a DropQuery for the given view.
+   */
+  public static DropQuery dropView(Table table) {
+    return dropView((Object)table);
+  }
+  
+  /**
+   * @return a DropQuery for the given view.
+   *
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toCustomTableSqlObject(Object)}.
+   */
+  public static DropQuery dropView(Object tableStr) {
+    return new DropQuery(Type.VIEW,
+                         Converter.toCustomTableSqlObject(tableStr));
   }
   
 }

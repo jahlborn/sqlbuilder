@@ -113,12 +113,7 @@ public class SelectQuery extends Query<SelectQuery>
    */
   boolean hasAllColumns()
   {
-    for(SqlObject sqlObj : _columns) {
-      if((sqlObj instanceof AllTableColumns) || (sqlObj == ALL_SYMBOL)) {
-        return true;
-      }
-    }
-    return false;
+    return hasAllColumns(_columns);
   }
 
   /**
@@ -606,6 +601,22 @@ public class SelectQuery extends Query<SelectQuery>
     if(_forUpdate) {
       app.append(" FOR UPDATE");
     }
+  }
+
+  /**
+   * Returns <code>true</code> iff the given column list contains some sort of
+   * "*" syntax as a column placeholder.
+   * <p>
+   * Note, this method is package scoped because it should not be used
+   * externally, just by some related query classes for internal validation.
+   */
+  static boolean hasAllColumns(SqlObjectList<? extends SqlObject> columns) {
+    for(SqlObject sqlObj : columns) {
+      if((sqlObj instanceof AllTableColumns) || (sqlObj == ALL_SYMBOL)) {
+        return true;
+      }
+    }
+    return false;
   }
   
   /**
