@@ -105,6 +105,24 @@
           </tr>
           <tr>
             <td>
+              <a href="apidocs/com/healthmarketscience/sqlbuilder/CreateViewQuery.html">CreateViewQuery</a>
+              <ul>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CreateViewQuery.html#CreateViewQuery(com.healthmarketscience.sqlbuilder.dbspec.Table)">&lt;viewName&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/BaseCreateQuery.html#addColumns(com.healthmarketscience.sqlbuilder.dbspec.Column...)">&lt;column&gt;</a></li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CreateViewQuery.html#setSelectQuery(com.healthmarketscience.sqlbuilder.SelectQuery)">&lt;selectQuery&gt;</a> (see <a href="#SelectQuery">SelectQuery</a> above)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/CreateViewQuery.html#setWithCheckOption(boolean)">WITH CHECK OPTION</a></li>
+              </ul>
+            </td>
+            <td>
+              <source>
+  CREATE VIEW [ &lt;viewName&gt; (&lt;column&gt;, ...) ]
+  AS &lt;selectQuery&gt;
+  [ WITH CHECK OPTION ]
+</source>
+            </td>
+          </tr>
+          <tr>
+            <td>
               <a href="apidocs/com/healthmarketscience/sqlbuilder/AlterTableQuery.html">AlterTableQuery</a>
               <ul>
                 <li><a href="apidocs/com/healthmarketscience/sqlbuilder/AlterTableQuery.html#AlterTableQuery(com.healthmarketscience.sqlbuilder.dbspec.Table)">&lt;table&gt;</a></li>
@@ -121,7 +139,7 @@
             <td>
               <a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.html">DropQuery</a>
               <ul>
-                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.html#DropQuery(com.healthmarketscience.sqlbuilder.DropQuery.Type,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;objType&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.Type.html">INDEX, TABLE</a>)</li>
+                <li><a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.html#DropQuery(com.healthmarketscience.sqlbuilder.DropQuery.Type,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;objType&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.Type.html">INDEX, TABLE, VIEW</a>)</li>
                 <li><a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.html#DropQuery(com.healthmarketscience.sqlbuilder.DropQuery.Type,%20com.healthmarketscience.sqlbuilder.SqlObject)">&lt;objName&gt;</a></li>
                 <li><a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.html#setBehavior(com.healthmarketscience.sqlbuilder.DropQuery.Behavior)">&lt;behavior&gt;</a> (<a href="apidocs/com/healthmarketscience/sqlbuilder/DropQuery.Behavior.html">CASCADE, RESTRICT</a>)</li>
               </ul>

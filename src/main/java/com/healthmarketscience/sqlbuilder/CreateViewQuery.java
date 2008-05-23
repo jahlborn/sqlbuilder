@@ -93,6 +93,14 @@ public class CreateViewQuery extends BaseCreateQuery<CreateViewQuery>
     _withCheckOption = withCheckOption;
     return this;
   }
+
+  /**
+   * @throws UnsupportedOperationException
+   */
+  @Override
+  public final CreateViewQuery setTableSpace(String tableSpace) {
+    throw new UnsupportedOperationException();
+  }
   
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {

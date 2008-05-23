@@ -6,7 +6,7 @@
   <body>
     <release version="2.0.3" date="TBD">
       <action dev="jahlborn" type="add">
-        Added support view view creation (CreateViewQuery) and deletion
+        Added support for view creation (CreateViewQuery) and deletion
         (DropQuery.Type.VIEW).
       </action>
     </release>
