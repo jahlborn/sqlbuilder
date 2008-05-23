@@ -40,6 +40,7 @@ import com.healthmarketscience.common.util.AppendableExt;
 public class CreateViewQuery extends BaseCreateQuery<CreateViewQuery>
 {
   private SelectQuery _selectQuery;
+  private boolean _withCheckOption;
   
   /**
    * @param table the view to create
@@ -81,6 +82,15 @@ public class CreateViewQuery extends BaseCreateQuery<CreateViewQuery>
   /** Sets the SELECT query which will generate the data in the view */
   public CreateViewQuery setSelectQuery(SelectQuery selectQuery) {
     _selectQuery = selectQuery;
+    return this;
+  }
+
+  /**
+   * Sets whether or not inserts/updates to the view are required to affect
+   * rows with are in fact visible to the view.
+   */
+  public CreateViewQuery setWithCheckOption(boolean withCheckOption) {
+    _withCheckOption = withCheckOption;
     return this;
   }
   
@@ -128,6 +138,9 @@ public class CreateViewQuery extends BaseCreateQuery<CreateViewQuery>
       app.append(" (").append(_columns).append(")");
     }
     app.append(" AS ").append(_selectQuery);
+    if(_withCheckOption) {
+      app.append(" WITH CHECK OPTION");
+    }
   }
   
 }

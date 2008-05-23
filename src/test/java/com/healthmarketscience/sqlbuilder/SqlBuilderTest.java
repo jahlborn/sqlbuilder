@@ -853,9 +853,10 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String createStr2 = new CreateViewQuery(_table1)
       .addColumns(_table1_col1, _table1_col3)
       .setSelectQuery(query1)
+      .setWithCheckOption(true)
       .validate().toString();
     checkResult(createStr2,
-                "CREATE VIEW Schema1.Table1 (col1,col3) AS SELECT t1.col_id,t1.col2 FROM Table1 t1 WHERE (t1.col_id IS NOT NULL)");
+                "CREATE VIEW Schema1.Table1 (col1,col3) AS SELECT t1.col_id,t1.col2 FROM Table1 t1 WHERE (t1.col_id IS NOT NULL) WITH CHECK OPTION");
 
     String createStr3 = new CreateViewQuery(_table1)
       .addCustomColumns(_table1_col1, _table1_col3)
