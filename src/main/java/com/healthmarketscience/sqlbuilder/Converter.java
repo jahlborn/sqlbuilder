@@ -249,6 +249,7 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
@@ -271,6 +272,7 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
@@ -295,6 +297,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
@@ -317,6 +320,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
@@ -337,6 +341,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Table} -&gt; {@link TableObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
@@ -359,6 +364,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Index} -&gt; {@link IndexObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
@@ -381,6 +387,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Function} -&gt; {@link FunctionObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
@@ -401,6 +408,7 @@ public abstract class Converter<SrcType, DstType>
    * Conversions (in order):
    * <ul>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
@@ -412,6 +420,8 @@ public abstract class Converter<SrcType, DstType>
   public static SqlObject toValueSqlObject(Object obj) {
     if(obj == null) {
       return SqlObject.NULL_VALUE;
+    } else if(obj instanceof Boolean) {
+      return new BooleanValueObject((Boolean)obj);
     } else if(obj instanceof Number) {
       return new NumberValueObject((Number)obj);
     } else if(obj instanceof SqlObject) {
@@ -426,6 +436,7 @@ public abstract class Converter<SrcType, DstType>
    * Conversions (in order):
    * <ul>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
@@ -449,6 +460,7 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
@@ -462,6 +474,8 @@ public abstract class Converter<SrcType, DstType>
       rtnObj = SqlObject.NULL_VALUE;
     } else if(obj instanceof SqlObject) {
       rtnObj = (SqlObject)obj;
+    } else if(obj instanceof Boolean) {
+      return new BooleanValueObject((Boolean)obj);
     } else if(obj instanceof Number) {
       rtnObj = new NumberValueObject((Number)obj);
     } else {
@@ -477,6 +491,7 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
@@ -500,6 +515,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Table} -&gt; {@link TableDefObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
@@ -522,6 +538,7 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@code Expression} -&gt; {@code Expression}</li>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * <li>Result of the conversions below wrapped as a {@link CustomExpression}</li>
@@ -555,6 +572,7 @@ public abstract class Converter<SrcType, DstType>
    *   <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
    *   <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    *   <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   *   <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    *   <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    *   <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    *   </ul>

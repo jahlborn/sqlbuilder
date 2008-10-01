@@ -119,11 +119,11 @@ public class SqlBuilderTest extends BaseSqlTestCase
   public void testInsert()
   {
     String insertStr1 = new InsertQuery(_table1)
-      .addColumns(new DbColumn[]{_table1_col1, _table1_col3},
-                  new Object[]{13, "feed me seymor"})
+      .addColumns(new DbColumn[]{_table1_col1, _table1_col3, _table1_col2},
+                  new Object[]{13, "feed me seymor", true})
       .validate().toString();
     checkResult(insertStr1,
-                "INSERT INTO Schema1.Table1 (col1,col3) VALUES (13,'feed me seymor')");
+                "INSERT INTO Schema1.Table1 (col1,col3,col2) VALUES (13,'feed me seymor',1)");
     
     String insertStr2 = new InsertQuery(_table1)
       .addColumns(new DbColumn[]{_table1_col1},

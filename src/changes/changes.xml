@@ -4,6 +4,12 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.0.4" date="TBD">
+      <action dev="jahlborn" type="fix" issue="2138885">
+        Fixed handling of boolean values (handle them as numbers because Sql92
+        has no notion of a real boolean type), implemented BooleanValueObject.
+      </action>
+    </release>
     <release version="2.0.3" date="2008-06-05">
       <action dev="jahlborn" type="add">
         Added support for view creation (CreateViewQuery) and deletion
