@@ -29,6 +29,7 @@ package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import com.healthmarketscience.common.util.AppendableExt;
 
@@ -60,7 +61,14 @@ public class NumberValueObject extends Expression
    */
   boolean isFloatingPoint()
   {
-    return((new BigDecimal(_value.doubleValue())).scale() > 0);
+    if(_value instanceof BigInteger) {
+      return false;
+    }
+
+    BigDecimal dec = ((_value instanceof BigDecimal) ? 
+                      (BigDecimal)_value : new BigDecimal(_value.doubleValue()));
+
+    return(dec.scale() > 0);
   }
 
   @Override

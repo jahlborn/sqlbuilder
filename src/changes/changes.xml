@@ -5,6 +5,10 @@
   </properties>
   <body>
     <release version="2.0.4" date="TBD">
+      <action dev="jahlborn" type="fix">
+        Handle BigDecimal/BigInteger instances better in
+        NumberValueObject.isFloatingPoint.
+      </action>
       <action dev="jahlborn" type="fix" issue="2138885">
         Fixed handling of boolean values (handle them as numbers because Sql92
         has no notion of a real boolean type), implemented BooleanValueObject.
