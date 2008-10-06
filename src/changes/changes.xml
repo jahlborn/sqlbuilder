@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.0.4" date="TBD">
+    <release version="2.0.4" date="2008-10-05">
       <action dev="jahlborn" type="fix">
         Handle BigDecimal/BigInteger instances better in
         NumberValueObject.isFloatingPoint.
