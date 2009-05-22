@@ -56,7 +56,7 @@ public class Subquery extends Expression
 
   @Override
   public boolean isEmpty() {
-    return _query != null;
+    return _query == null;
   }
   
   @Override
