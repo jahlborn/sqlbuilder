@@ -29,17 +29,17 @@ package com.healthmarketscience.sqlbuilder;
 
 
 /**
- * Query which generates a series of SELECT queries joined by UNION clauses.
+ * Query which generates a series of SELECT queries joined by EXCEPT clauses.
  *
  * @author James Ahlborn
  */
-public class UnionQuery extends SetOperationQuery<UnionQuery> {
+public class ExceptQuery extends SetOperationQuery<ExceptQuery> {
   
-  public UnionQuery(Type type) {
+  public ExceptQuery(Type type) {
     this(type, (SelectQuery[])null);
   }
 
-  public UnionQuery(Type type, SelectQuery... queries) {
+  public ExceptQuery(Type type, SelectQuery... queries) {
     super(type, queries);
   }
 

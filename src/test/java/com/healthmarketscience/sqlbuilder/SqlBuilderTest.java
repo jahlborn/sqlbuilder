@@ -588,6 +588,26 @@ public class SqlBuilderTest extends BaseSqlTestCase
                 "SELECT t0.* FROM Schema1.Table1 t0 UNION SELECT * FROM Table2 t2 ORDER BY 1 DESC,col1 ASC");
   }
 
+  public void testSetOperationQueries()
+  {
+    SelectQuery q1 = new SelectQuery()
+      .addAllTableColumns(_table1);
+    SelectQuery q2 = new SelectQuery()
+      .addFromTable(_defTable2)
+      .addAllColumns();
+    SelectQuery q3 = new SelectQuery()
+      .addFromTable(_defTable1)
+      .addAllColumns();
+    
+    SetOperationQuery<?> setOpQuery = SetOperationQuery.except(q1, q2)
+      .addQueries(SetOperationQuery.Type.INTERSECT_ALL, q3);
+
+    String setOpQueryStr = setOpQuery.validate().toString();
+    checkResult(setOpQueryStr,
+                "SELECT t0.* FROM Schema1.Table1 t0 EXCEPT SELECT * FROM Table2 t2 INTERSECT ALL SELECT * FROM Table1 t1");
+
+  }
+
   public void testSqlContext()
   {
     SqlContext context = new SqlContext();

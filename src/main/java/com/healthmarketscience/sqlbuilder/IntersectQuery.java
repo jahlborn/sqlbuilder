@@ -29,17 +29,17 @@ package com.healthmarketscience.sqlbuilder;
 
 
 /**
- * Query which generates a series of SELECT queries joined by UNION clauses.
+ * Query which generates a series of SELECT queries joined by INTERSECT clauses.
  *
  * @author James Ahlborn
  */
-public class UnionQuery extends SetOperationQuery<UnionQuery> {
+public class IntersectQuery extends SetOperationQuery<IntersectQuery> {
   
-  public UnionQuery(Type type) {
+  public IntersectQuery(Type type) {
     this(type, (SelectQuery[])null);
   }
 
-  public UnionQuery(Type type, SelectQuery... queries) {
+  public IntersectQuery(Type type, SelectQuery... queries) {
     super(type, queries);
   }
 
