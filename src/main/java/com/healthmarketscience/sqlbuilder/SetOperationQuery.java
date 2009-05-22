@@ -208,8 +208,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
     if(!vContext.isLocalOnly()) {
       // treat each select query as a separate subquery
       for(RelateTo relateTo : _queries) {
-        SelectQuery selectQuery = relateTo._query;
-        selectQuery.collectSchemaObjects(new ValidationContext(vContext));
+        relateTo.collectSchemaObjects(new ValidationContext(vContext));
       }
     }
   }

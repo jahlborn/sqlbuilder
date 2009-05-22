@@ -48,19 +48,37 @@ public class UnaryCondition extends Condition
    */
   public enum Op
   {
-    IS_NULL(" IS NULL", false),
-    IS_NOT_NULL(" IS NOT NULL", false);
+    /** {@code Object} -&gt; {@code SqlObject} conversions handled by
+        {@link Converter#COLUMN_VALUE_TO_OBJ}. */
+    IS_NULL(" IS NULL", false, Converter.COLUMN_VALUE_TO_OBJ),
+    /** {@code Object} -&gt; {@code SqlObject} conversions handled by
+        {@link Converter#COLUMN_VALUE_TO_OBJ}. */
+    IS_NOT_NULL(" IS NOT NULL", false, Converter.COLUMN_VALUE_TO_OBJ),
+    /** {@code Object} -&gt; {@code SqlObject} conversions handled by
+        {@link Converter#CUSTOM_TO_SUBQUERY}. */
+    EXISTS("EXISTS ", true, Converter.CUSTOM_TO_SUBQUERY),
+    /** {@code Object} -&gt; {@code SqlObject} conversions handled by
+        {@link Converter#CUSTOM_TO_SUBQUERY}. */
+    UNIQUE("UNIQUE ", true, Converter.CUSTOM_TO_SUBQUERY);
 
     private String _opStr;
     private boolean _isPrefixOp;
+    private Converter<Object,? extends SqlObject> _converter;
 
-    private Op(String opStr, boolean isPrefixOp) {
+    private Op(String opStr, boolean isPrefixOp, 
+               Converter<Object,? extends SqlObject> converter) {
       _opStr = opStr;
       _isPrefixOp = isPrefixOp;
+      _converter = converter;
+      
     }
 
     public boolean isPrefixOp() { return _isPrefixOp; }
     
+    public Converter<Object,? extends SqlObject> getConverter() {
+      return _converter; 
+    }
+
     @Override
     public String toString() { return _opStr; }
   }
@@ -69,19 +87,19 @@ public class UnaryCondition extends Condition
   private Op _unaryOp;
   private SqlObject _value;
 
-  /**
-   * {@code Object} -&gt; {@code SqlObject} conversions handled by
-   * {@link Converter#toColumnSqlObject(Object)}.
-   */
-  public UnaryCondition(Op unaryOp, Object obj)
+  public UnaryCondition(Op unaryOp, SqlObject obj)
   {
-    this(unaryOp, Converter.toColumnSqlObject(obj));
+    this(unaryOp, (Object)obj);
   }
     
-  public UnaryCondition(Op unaryOp, SqlObject value)
+  /**
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Op#getConverter}.
+   */
+  public UnaryCondition(Op unaryOp, Object value)
   {
     _unaryOp = unaryOp;
-    _value = value;
+    _value = _unaryOp.getConverter().convert(value);
   }
         
   @Override
@@ -106,7 +124,7 @@ public class UnaryCondition extends Condition
    * is {@code NULL}.
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
-   * {@link Converter#toColumnSqlObject(Object)}.
+   * {@link Converter#COLUMN_VALUE_TO_OBJ}.
    */
   public static UnaryCondition isNull(Object value) {
     return new UnaryCondition(Op.IS_NULL, value);
@@ -117,10 +135,32 @@ public class UnaryCondition extends Condition
    * is not {@code NULL}.
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
-   * {@link Converter#toColumnSqlObject(Object)}.
+   * {@link Converter#COLUMN_VALUE_TO_OBJ}.
    */
   public static UnaryCondition isNotNull(Object value) {
     return new UnaryCondition(Op.IS_NOT_NULL, value);
+  }
+    
+  /**
+   * Convenience method for generating a Condition for testing whether a
+   * subquery returns any rows.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#CUSTOM_TO_SUBQUERY}.
+   */
+  public static UnaryCondition exists(Object value) {
+    return new UnaryCondition(Op.EXISTS, value);
+  }
+    
+  /**
+   * Convenience method for generating a Condition for testing whether a
+   * subquery returns exactly one row.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#CUSTOM_TO_SUBQUERY}.
+   */
+  public static UnaryCondition unique(Object value) {
+    return new UnaryCondition(Op.UNIQUE, value);
   }
     
 }

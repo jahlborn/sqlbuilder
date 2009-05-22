@@ -564,7 +564,10 @@ public class SelectQuery extends Query<SelectQuery>
         ValidationContext outerVContext = new ValidationContext(true);
         SqlContext tmpContext = newContext;
         while((tmpContext = tmpContext.getParent()) != null) {
-          tmpContext.getQuery().collectSchemaObjects(outerVContext);
+          Query<?> parentQuery = tmpContext.getQuery();
+          if(parentQuery != null) {
+            parentQuery.collectSchemaObjects(outerVContext);
+          }
         }
         
         // remove any outer tables from the columnTables collection

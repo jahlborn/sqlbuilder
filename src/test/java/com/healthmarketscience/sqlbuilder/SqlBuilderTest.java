@@ -336,6 +336,8 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
   public void testCondition()
   {
+    SelectQuery sq = new SelectQuery().addColumns(_table1_col1);
+
     String reallyComplicatedConditionStr = ComboCondition.and(
       BinaryCondition.lessThan(_table1_col1, "FOO", false),
       ComboCondition.or(),
@@ -355,10 +357,11 @@ public class SqlBuilderTest extends BaseSqlTestCase
                       "this string",
                       new NumberValueObject(37))
       .addObject(new NumberValueObject(42)),
-      BinaryCondition.notLike(_table1_col2, "\\_%").setLikeEscapeChar('\\'))
+      BinaryCondition.notLike(_table1_col2, "\\_%").setLikeEscapeChar('\\'),
+      UnaryCondition.exists(sq))
       .toString();
     checkResult(reallyComplicatedConditionStr,
-                "((t0.col1 < 'FOO') AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE 'BUZ%')) OR (YOU = 'ME')) AND (t0.col2 IS NULL) AND (t2.col4 IN ('this string',37,42) ) AND (t0.col2 NOT LIKE '\\_%' ESCAPE '\\'))");
+                "((t0.col1 < 'FOO') AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE 'BUZ%')) OR (YOU = 'ME')) AND (t0.col2 IS NULL) AND (t2.col4 IN ('this string',37,42) ) AND (t0.col2 NOT LIKE '\\_%' ESCAPE '\\') AND (EXISTS (SELECT t0.col1 FROM Schema1.Table1 t0)))");
 
     try {
       BinaryCondition.equalTo(_table1_col2, "\\37").setLikeEscapeChar('\\');
