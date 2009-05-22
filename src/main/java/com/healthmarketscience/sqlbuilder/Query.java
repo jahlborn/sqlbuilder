@@ -44,7 +44,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  *
  * @author James Ahlborn
  */
-public abstract class Query<ThisType extends Query>
+public abstract class Query<ThisType extends Query<ThisType>>
   extends SqlObject implements Verifiable<ThisType>
 {
   protected Query() {}

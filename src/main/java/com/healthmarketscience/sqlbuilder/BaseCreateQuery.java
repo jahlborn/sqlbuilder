@@ -36,7 +36,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Column;
  *
  * @author James Ahlborn
  */
-public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery>
+public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery<ThisType>>
   extends Query<ThisType>
 {
 

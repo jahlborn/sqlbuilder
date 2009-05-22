@@ -37,7 +37,7 @@ import com.healthmarketscience.common.util.AppendableExt;
  *
  * @author James Ahlborn
  */
-abstract class BaseInsertQuery<ThisType extends BaseInsertQuery>
+abstract class BaseInsertQuery<ThisType extends BaseInsertQuery<ThisType>>
   extends Query<ThisType>
 {
   private SqlObject _table;

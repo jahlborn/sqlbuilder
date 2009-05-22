@@ -35,7 +35,7 @@ package com.healthmarketscience.sqlbuilder;
  *
  * @author James Ahlborn
  */
-public interface Verifiable<ThisType extends Verifiable> {
+public interface Verifiable<ThisType extends Verifiable<ThisType>> {
 
   /**
    * Runs validation on this verifiable object.

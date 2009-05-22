@@ -39,7 +39,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  *
  * @author James Ahlborn
  */
-public abstract class BaseGrantQuery<ThisType extends BaseGrantQuery>
+public abstract class BaseGrantQuery<ThisType extends BaseGrantQuery<ThisType>>
   extends Query<ThisType>
 {
 
