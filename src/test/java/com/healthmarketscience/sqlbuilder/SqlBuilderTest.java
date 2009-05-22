@@ -701,7 +701,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                             .addColumns(_defTable1_col3)
                             .validate())))
       .validate().toString();
-    checkResult(queryStr1, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 WHERE (t0.col1 IN ((SELECT t1.col3 FROM Table1 t1)) )");
+    checkResult(queryStr1, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 WHERE (t0.col1 IN (SELECT t1.col3 FROM Table1 t1) )");
 
     SelectQuery innerSelect = new SelectQuery()
       .addCustomColumns(_defTable2_col4)
@@ -716,7 +716,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addCondition(new InCondition(_table1_col1, new Subquery(innerSelect)));
     outerSelect.validate();
     String queryStr3 = outerSelect.toString();
-    checkResult(queryStr3, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN ((SELECT t2.col4 FROM Table2 t2 WHERE (t0.col1 = t2.col_id))) )");
+    checkResult(queryStr3, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN (SELECT t2.col4 FROM Table2 t2 WHERE (t0.col1 = t2.col_id)) )");
 
     innerSelect.addCustomColumns()
       .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1, _table1_col1,
@@ -751,7 +751,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addCondition(new InCondition(_table1_col1, new Subquery(innerSelect)));
     outerSelect.validate();
     String queryStr5 = outerSelect.toString();
-    checkResult(queryStr5, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN ((SELECT t2.col4 FROM Schema1.Table1 t0 INNER JOIN Table2 t2 ON (t0.col1 = t2.col_id) WHERE (t0.col1 = t1.col_id))) )");
+    checkResult(queryStr5, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN (SELECT t2.col4 FROM Schema1.Table1 t0 INNER JOIN Table2 t2 ON (t0.col1 = t2.col_id) WHERE (t0.col1 = t1.col_id)) )");
   }
 
   public void testAlterTable()

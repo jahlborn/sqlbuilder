@@ -109,6 +109,11 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
   public void clear() { _objects.clear(); }
 
   /**
+   * Returns the object at the specified index.
+   */
+  public ObjType get(int index) { return _objects.get(index); }
+
+  /**
    * @return a mutable Iterator over the objects in the list
    */
   public Iterator<ObjType> iterator() { return _objects.iterator(); }

@@ -12,6 +12,12 @@
       <action dev="jahlborn" type="update">
         Minor cleanups for some of the generic types.
       </action>
+      <action dev="jahlborn" type="fix">
+        Fix isEmpty implementation for Subquery.
+      </action>
+      <action dev="jahlborn" type="update">
+        Don't put double parens around IN condition with subexpression.
+      </action>
     </release>
     <release version="2.0.4" date="2008-10-05">
       <action dev="jahlborn" type="fix">
