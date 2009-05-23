@@ -49,7 +49,7 @@ public class DropQuery extends Query<DropQuery>
     INDEX(" INDEX "),
     VIEW(" VIEW ");
 
-    private String _typeStr;
+    private final String _typeStr;
 
     private Type(String typeStr) {
       _typeStr = typeStr;
@@ -68,7 +68,7 @@ public class DropQuery extends Query<DropQuery>
     CASCADE(" CASCADE"),
     RESTRICT(" RESTRICT");
 
-    private String _bvrStr;
+    private final String _bvrStr;
 
     private Behavior(String bvrStr) {
       _bvrStr = bvrStr;

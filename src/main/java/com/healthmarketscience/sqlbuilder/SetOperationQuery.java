@@ -54,7 +54,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
     INTERSECT(" INTERSECT "),
     INTERSECT_ALL(" INTERSECT ALL ");
 
-    private String _typeStr;
+    private final String _typeStr;
 
     private Type(String typeStr) {
       _typeStr = typeStr;

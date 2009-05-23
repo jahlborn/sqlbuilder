@@ -69,7 +69,7 @@ public class SelectQuery extends Query<SelectQuery>
     RIGHT_OUTER(" RIGHT OUTER JOIN "),
     FULL_OUTER(" FULL OUTER JOIN ");
 
-    private String _joinClause;
+    private final String _joinClause;
 
     private JoinType(String joinClause) {
       _joinClause = joinClause;

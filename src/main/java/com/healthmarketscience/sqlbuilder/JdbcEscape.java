@@ -55,7 +55,7 @@ public class JdbcEscape extends Expression
     STORED_PROCEDURE_WITH_RETURN("?= call "),
     ESCAPE("escape ");
 
-    private String _prefixStr;
+    private final String _prefixStr;
 
     private Type(String prefixStr) {
       _prefixStr = prefixStr;

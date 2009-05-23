@@ -61,9 +61,9 @@ public class UnaryCondition extends Condition
         {@link Converter#CUSTOM_TO_SUBQUERY}. */
     UNIQUE("UNIQUE ", true, Converter.CUSTOM_TO_SUBQUERY);
 
-    private String _opStr;
-    private boolean _isPrefixOp;
-    private Converter<Object,? extends SqlObject> _converter;
+    private final String _opStr;
+    private final boolean _isPrefixOp;
+    private final Converter<Object,? extends SqlObject> _converter;
 
     private Op(String opStr, boolean isPrefixOp, 
                Converter<Object,? extends SqlObject> converter) {

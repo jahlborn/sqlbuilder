@@ -49,7 +49,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     UNIQUE(" UNIQUE"),
     PRIMARY_KEY(" PRIMARY KEY");
 
-    private String _constraintClause;
+    private final String _constraintClause;
 
     private ColumnConstraint(String constraintClause) {
       _constraintClause = constraintClause;
