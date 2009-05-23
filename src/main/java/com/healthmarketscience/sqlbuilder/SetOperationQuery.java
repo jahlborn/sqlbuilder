@@ -69,21 +69,25 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
   private SqlObjectList<SqlObject> _ordering = SqlObjectList.create();
   
   public SetOperationQuery(Type type) {
-    this(type, (SelectQuery[])null);
+    this(type, (Object[])null);
   }
 
   public SetOperationQuery(Type type, SelectQuery... queries) {
+    this(type, (Object[])queries);
+  }
+
+  public SetOperationQuery(Type type, Object... queries) {
     _defaultType = type;
     addQueriesImpl(_defaultType, queries);
   }
 
   /** Actual implementation which adds the given queries to the list of
       queries with the given type. */
-  private void addQueriesImpl(final Type type, SelectQuery[] queries)
+  private void addQueriesImpl(final Type type, Object[] queries)
   {
-    _queries.addObjects(new Converter<SelectQuery,RelateTo>() {
+    _queries.addObjects(new Converter<Object,RelateTo>() {
                           @Override
-                          public RelateTo convert(SelectQuery src) {
+                          public RelateTo convert(Object src) {
                             return (_queries.isEmpty() ?
                                     new RelateTo(null, src) :
                                     new RelateTo(type, src));
@@ -93,11 +97,21 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
   
   /** Adds the given queries to the list of queries. */
   public ThisType addQueries(SelectQuery... queries) {
-    return addQueries(_defaultType, queries);
+    return addQueries((Object[])queries);
   }
 
   /** Adds the given queries to the list of queries with the given type. */
   public ThisType addQueries(Type type, SelectQuery... queries) {
+    return addQueries(type, (Object[])queries);
+  }
+
+  /** Adds the given queries to the list of queries. */
+  public ThisType addQueries(Object... queries) {
+    return addQueries(_defaultType, queries);
+  }
+
+  /** Adds the given queries to the list of queries with the given type. */
+  public ThisType addQueries(Type type, Object... queries) {
     addQueriesImpl(type, queries);
     return getThisType();
   }
@@ -111,7 +125,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
    * {@link Converter#toCustomColumnSqlObject(Object)}.
    */
   public ThisType addCustomOrdering(Object columnStr,
-                                      OrderObject.Dir dir) {
+                                    OrderObject.Dir dir) {
     return addCustomOrderings(
         new OrderObject(dir, Converter.toCustomColumnSqlObject(columnStr)));
   }
@@ -163,7 +177,11 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
     boolean ignoreColumnCount = false;
     for(RelateTo relateTo : _queries) {
 
-      SelectQuery selectQuery = relateTo._query;
+      Object queryObj = relateTo.getQuery();
+      if(!(queryObj instanceof SelectQuery)) {
+        continue;
+      }
+      SelectQuery selectQuery = (SelectQuery)queryObj;
 
       // check the column count against the other queries
       if(!ignoreColumnCount) {
@@ -205,12 +223,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
 
-    if(!vContext.isLocalOnly()) {
-      // treat each select query as a separate subquery
-      for(RelateTo relateTo : _queries) {
-        relateTo.collectSchemaObjects(new ValidationContext(vContext));
-      }
-    }
+    _queries.collectSchemaObjects(vContext);
   }
   
   @Override
@@ -317,20 +330,18 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
    * Outputs the set operator type (if non-{@code null}) and the query
    * <code>"&lt;type&gt; &lt;query&gt;"</code>.
    */
-  private static class RelateTo extends SqlObject
+  private static class RelateTo extends Subquery
   {
     private Type _type;
-    private SelectQuery _query;
 
-    private RelateTo(Type type, SelectQuery query)
+    private RelateTo(Type type, Object query)
     {
+      super(query);
       _type = type;
-      _query = query;
     }
 
-    @Override
-    protected void collectSchemaObjects(ValidationContext vContext) {
-      _query.collectSchemaObjects(vContext);
+    private Object getQuery() {
+      return _query;
     }
 
     @Override
@@ -339,7 +350,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
       if(_type != null) {
         app.append(_type);
       }
-      app.append(_query);
+      app.append(getQuery());
     }    
   }
 

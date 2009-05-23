@@ -43,7 +43,7 @@ import com.healthmarketscience.common.util.AppendableExt;
 public class Subquery extends Expression
 {
 
-  private SqlObject _query;
+  protected SqlObject _query;
 
   /**
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
