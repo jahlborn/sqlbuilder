@@ -148,8 +148,8 @@ public class UnaryCondition extends Condition
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#CUSTOM_TO_SUBQUERY}.
    */
-  public static UnaryCondition exists(Object value) {
-    return new UnaryCondition(Op.EXISTS, value);
+  public static UnaryCondition exists(Object query) {
+    return new UnaryCondition(Op.EXISTS, query);
   }
     
   /**
@@ -159,8 +159,8 @@ public class UnaryCondition extends Condition
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#CUSTOM_TO_SUBQUERY}.
    */
-  public static UnaryCondition unique(Object value) {
-    return new UnaryCondition(Op.UNIQUE, value);
+  public static UnaryCondition unique(Object query) {
+    return new UnaryCondition(Op.UNIQUE, query);
   }
     
 }

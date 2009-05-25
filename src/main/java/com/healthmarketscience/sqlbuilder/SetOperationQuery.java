@@ -72,10 +72,6 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
     this(type, (Object[])null);
   }
 
-  public SetOperationQuery(Type type, SelectQuery... queries) {
-    this(type, (Object[])queries);
-  }
-
   public SetOperationQuery(Type type, Object... queries) {
     _defaultType = type;
     addQueriesImpl(_defaultType, queries);
@@ -95,22 +91,26 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
                         }, queries);
   }
   
-  /** Adds the given queries to the list of queries. */
+  /** Adds the given queries to the list of queries with the default set
+      operation type (the one configured in the constructor). */
   public ThisType addQueries(SelectQuery... queries) {
     return addQueries((Object[])queries);
   }
 
-  /** Adds the given queries to the list of queries with the given type. */
+  /** Adds the given queries to the list of queries with the given set
+      operation type. */
   public ThisType addQueries(Type type, SelectQuery... queries) {
     return addQueries(type, (Object[])queries);
   }
 
-  /** Adds the given queries to the list of queries. */
+  /** Adds the given queries to the list of queries with the default set
+      operation type (the one configured in the constructor). */
   public ThisType addQueries(Object... queries) {
     return addQueries(_defaultType, queries);
   }
 
-  /** Adds the given queries to the list of queries with the given type. */
+  /** Adds the given queries to the list of queries with the given set
+      operation type. */
   public ThisType addQueries(Type type, Object... queries) {
     addQueriesImpl(type, queries);
     return getThisType();
