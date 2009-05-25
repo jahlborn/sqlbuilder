@@ -10,6 +10,9 @@
         and add support for mixed usage of said operators.
       </action>
       <action dev="jahlborn" type="update">
+        Add UnaryCondition EXISTS and UNIQUE operators.
+      </action>
+      <action dev="jahlborn" type="update">
         Minor cleanups for some of the generic types.
       </action>
       <action dev="jahlborn" type="fix">
