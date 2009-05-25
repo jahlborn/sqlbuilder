@@ -124,7 +124,7 @@ public abstract class Converter<SrcType, DstType>
   
   
   /** Converter which converts a Column to a TypedColumnObject or a value
-      object to a SqlObject using {@link #toCustomSqlObject} */
+      object to a SqlObject using {@link #toCustomSqlObject(Object)} */
   protected static final Converter<Object, SqlObject> TYPED_COLUMN_TO_OBJ =
     new Converter<Object, SqlObject>() {
     @Override
@@ -133,6 +133,17 @@ public abstract class Converter<SrcType, DstType>
           return new TypedColumnObject((Column)value);
         }
         return toCustomSqlObject(value);
+      }
+    };
+
+
+  /** Converter which converts an Object to a Subquery using
+      {@link #toSubquery} */
+  protected static final Converter<Object, Subquery> CUSTOM_TO_SUBQUERY =
+    new Converter<Object, Subquery>() {
+    @Override
+      public Subquery convert(Object value) {
+        return toSubquery(value);
       }
     };
 
@@ -587,5 +598,22 @@ public abstract class Converter<SrcType, DstType>
     }
     return new CustomCondition(toCustomColumnSqlObject(obj));
   }
+
+  /**
+   * Converts an Object to a Subquery.
+   * <p>
+   * Conversions (in order):
+   * <ul>
+   * <li>{@link Subquery} -&gt; {@link Subquery}</li>
+   * <li>{@link java.lang.Object} -&gt; {@link Subquery}</li>
+   * </ul>
+   * 
+   * @param obj object to coerce to a Subquery
+   * @return a Subquery for the given Object.
+   */
+  public static Subquery toSubquery(Object obj) {
+    return ((obj instanceof Subquery) ? (Subquery)obj : new Subquery(obj));
+  }
+
 
 }

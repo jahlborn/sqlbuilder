@@ -39,7 +39,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  *
  * @author James Ahlborn
  */
-public abstract class BaseGrantQuery<ThisType extends BaseGrantQuery>
+public abstract class BaseGrantQuery<ThisType extends BaseGrantQuery<ThisType>>
   extends Query<ThisType>
 {
 
@@ -216,8 +216,8 @@ public abstract class BaseGrantQuery<ThisType extends BaseGrantQuery>
       REFERENCES("REFERENCES", true),
       USAGE("USAGE", false);
 
-      private String _typeStr;
-      private boolean _maySpecifyColumns;
+      private final String _typeStr;
+      private final boolean _maySpecifyColumns;
 
       private Type(String typeStr, boolean maySpecifyColumns) {
         _typeStr = typeStr;
@@ -289,7 +289,7 @@ public abstract class BaseGrantQuery<ThisType extends BaseGrantQuery>
       CHARACTER_SET("CHARACTER SET "),
       TRANSLATION("TRANSLATION ");
 
-      private String _typeStr;
+      private final String _typeStr;
 
       private Type(String typeStr) {
         _typeStr = typeStr;

@@ -30,6 +30,9 @@ package com.healthmarketscience.sqlbuilder;
 
 /**
  * Query which generates a series of SELECT queries joined by UNION clauses.
+ * <p>
+ * Note, any of the SetOperationQuery types (UNION [ALL], EXCEPT [ALL],
+ * INTERSECT [ALL]) may be used with this Query, despite the name.
  *
  * @author James Ahlborn
  */
@@ -40,7 +43,7 @@ public class UnionQuery extends SetOperationQuery<UnionQuery> {
   }
 
   public UnionQuery(Type type, SelectQuery... queries) {
-    super(type, queries);
+    super(type, (Object[])queries);
   }
 
 }

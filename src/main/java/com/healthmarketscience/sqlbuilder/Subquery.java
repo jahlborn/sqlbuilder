@@ -43,7 +43,7 @@ import com.healthmarketscience.common.util.AppendableExt;
 public class Subquery extends Expression
 {
 
-  private SqlObject _query;
+  protected SqlObject _query;
 
   /**
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
@@ -56,7 +56,7 @@ public class Subquery extends Expression
 
   @Override
   public boolean isEmpty() {
-    return _query != null;
+    return _query == null;
   }
   
   @Override

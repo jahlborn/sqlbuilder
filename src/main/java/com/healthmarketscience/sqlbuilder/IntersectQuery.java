@@ -29,7 +29,11 @@ package com.healthmarketscience.sqlbuilder;
 
 
 /**
- * Query which generates a series of SELECT queries joined by INTERSECT clauses.
+ * Query which generates a series of SELECT queries joined by INTERSECT
+ * clauses.
+ * <p>
+ * Note, any of the SetOperationQuery types (UNION [ALL], EXCEPT [ALL],
+ * INTERSECT [ALL]) may be used with this Query, despite the name.
  *
  * @author James Ahlborn
  */
@@ -40,7 +44,7 @@ public class IntersectQuery extends SetOperationQuery<IntersectQuery> {
   }
 
   public IntersectQuery(Type type, SelectQuery... queries) {
-    super(type, queries);
+    super(type, (Object[])queries);
   }
 
 }

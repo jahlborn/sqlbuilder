@@ -52,7 +52,7 @@ public class ComboExpression extends Expression
     DIVIDE(" / "),
     CONCATENATE(" || ");
 
-    private String _opStr;
+    private final String _opStr;
 
     private Op(String opStr) {
       _opStr = opStr;

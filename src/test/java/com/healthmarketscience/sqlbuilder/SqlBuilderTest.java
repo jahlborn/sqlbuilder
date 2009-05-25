@@ -336,6 +336,8 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
   public void testCondition()
   {
+    SelectQuery sq = new SelectQuery().addColumns(_table1_col1);
+
     String reallyComplicatedConditionStr = ComboCondition.and(
       BinaryCondition.lessThan(_table1_col1, "FOO", false),
       ComboCondition.or(),
@@ -355,10 +357,11 @@ public class SqlBuilderTest extends BaseSqlTestCase
                       "this string",
                       new NumberValueObject(37))
       .addObject(new NumberValueObject(42)),
-      BinaryCondition.notLike(_table1_col2, "\\_%").setLikeEscapeChar('\\'))
+      BinaryCondition.notLike(_table1_col2, "\\_%").setLikeEscapeChar('\\'),
+      UnaryCondition.exists(sq))
       .toString();
     checkResult(reallyComplicatedConditionStr,
-                "((t0.col1 < 'FOO') AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE 'BUZ%')) OR (YOU = 'ME')) AND (t0.col2 IS NULL) AND (t2.col4 IN ('this string',37,42) ) AND (t0.col2 NOT LIKE '\\_%' ESCAPE '\\'))");
+                "((t0.col1 < 'FOO') AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE 'BUZ%')) OR (YOU = 'ME')) AND (t0.col2 IS NULL) AND (t2.col4 IN ('this string',37,42) ) AND (t0.col2 NOT LIKE '\\_%' ESCAPE '\\') AND (EXISTS (SELECT t0.col1 FROM Schema1.Table1 t0)))");
 
     try {
       BinaryCondition.equalTo(_table1_col2, "\\37").setLikeEscapeChar('\\');
@@ -701,7 +704,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                             .addColumns(_defTable1_col3)
                             .validate())))
       .validate().toString();
-    checkResult(queryStr1, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 WHERE (t0.col1 IN ((SELECT t1.col3 FROM Table1 t1)) )");
+    checkResult(queryStr1, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 WHERE (t0.col1 IN (SELECT t1.col3 FROM Table1 t1) )");
 
     SelectQuery innerSelect = new SelectQuery()
       .addCustomColumns(_defTable2_col4)
@@ -716,7 +719,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addCondition(new InCondition(_table1_col1, new Subquery(innerSelect)));
     outerSelect.validate();
     String queryStr3 = outerSelect.toString();
-    checkResult(queryStr3, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN ((SELECT t2.col4 FROM Table2 t2 WHERE (t0.col1 = t2.col_id))) )");
+    checkResult(queryStr3, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN (SELECT t2.col4 FROM Table2 t2 WHERE (t0.col1 = t2.col_id)) )");
 
     innerSelect.addCustomColumns()
       .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1, _table1_col1,
@@ -751,7 +754,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addCondition(new InCondition(_table1_col1, new Subquery(innerSelect)));
     outerSelect.validate();
     String queryStr5 = outerSelect.toString();
-    checkResult(queryStr5, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN ((SELECT t2.col4 FROM Schema1.Table1 t0 INNER JOIN Table2 t2 ON (t0.col1 = t2.col_id) WHERE (t0.col1 = t1.col_id))) )");
+    checkResult(queryStr5, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN (SELECT t2.col4 FROM Schema1.Table1 t0 INNER JOIN Table2 t2 ON (t0.col1 = t2.col_id) WHERE (t0.col1 = t1.col_id)) )");
   }
 
   public void testAlterTable()

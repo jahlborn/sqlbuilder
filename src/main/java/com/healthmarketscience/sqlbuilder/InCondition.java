@@ -112,13 +112,31 @@ public class InCondition extends Condition {
     _rightValues.collectSchemaObjects(vContext);
   }
 
+  /**
+   * Returns true if the entire contents of the tested values is a single,
+   * non-empty Expression.
+   */
+  private boolean isSingleExpression()
+  {
+    Object singleValue = ((_rightValues.size() == 1) ? _rightValues.get(0) : null);
+    return((singleValue instanceof Expression) && !((Expression)singleValue).isEmpty());
+  }
+
   @Override
   public void appendTo(AppendableExt app) throws IOException {
     if(!isEmpty()) {
       // ( x in (y1,y2,y3) )
       app.append("(").append(_leftValue)
-        .append(_negate ? " NOT IN (" : " IN (")
-        .append(_rightValues).append(") )");
+        .append(_negate ? " NOT IN " : " IN ");
+
+      // expressions will have their own "()"
+      if(isSingleExpression()) {
+        app.append(_rightValues);
+      } else {
+        app.append("(").append(_rightValues).append(")");
+      }
+
+      app.append(" )");
     }
   }
 }

@@ -45,7 +45,7 @@ public class OrderObject extends SqlObject
     ASCENDING(" ASC"),
     DESCENDING(" DESC");
 
-    private String _dirStr;
+    private final String _dirStr;
 
     private Dir(String dirStr) {
       _dirStr = dirStr;

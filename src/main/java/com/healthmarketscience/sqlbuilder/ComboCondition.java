@@ -49,7 +49,7 @@ public class ComboCondition extends Condition
     AND(" AND "),
     OR(" OR ");
 
-    private String _opStr;
+    private final String _opStr;
 
     private Op(String opStr) {
       _opStr = opStr;

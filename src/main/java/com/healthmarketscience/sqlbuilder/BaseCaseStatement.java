@@ -37,7 +37,7 @@ import com.healthmarketscience.common.util.AppendableExt;
  *
  * @author James Ahlborn
  */
-public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement>
+public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement<ThisType>>
   extends Expression implements Verifiable<ThisType>
 {
   /** SqlObject which can outputs "ELSE NULL" */
