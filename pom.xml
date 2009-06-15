@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.healthmarketscience</groupId>
     <artifactId>openhms-parent</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
   </parent>
   <groupId>com.healthmarketscience.sqlbuilder</groupId>
   <artifactId>sqlbuilder</artifactId>
