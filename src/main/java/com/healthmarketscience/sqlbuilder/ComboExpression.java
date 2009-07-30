@@ -87,6 +87,11 @@ public class ComboExpression extends Expression
   public boolean isEmpty() {
     return areEmpty(_expressions);
   }
+
+  @Override
+  public boolean hasParens() {
+    return hasParens(_expressions);
+  }
   
   /**
    * Adds the given expression to the list of expression (wrapped

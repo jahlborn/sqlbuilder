@@ -55,6 +55,9 @@ public class BooleanValueObject extends Expression
   }
 
   @Override
+  public boolean hasParens() { return false; }
+
+  @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
   }
   

@@ -74,6 +74,9 @@ public class JdbcEscape extends Expression
   }
 
   @Override
+  public boolean hasParens() { return false; }
+
+  @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     _val.collectSchemaObjects(vContext);
   }

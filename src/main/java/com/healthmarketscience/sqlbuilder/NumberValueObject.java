@@ -51,6 +51,9 @@ public class NumberValueObject extends Expression
     _value = value;
   }
 
+  @Override
+  public boolean hasParens() { return false; }
+
   /** @return the number value held by this NumberValueObject */
   Number getValue() {
     return _value;

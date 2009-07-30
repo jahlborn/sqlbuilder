@@ -113,13 +113,13 @@ public class InCondition extends Condition {
   }
 
   /**
-   * Returns true if the entire contents of the tested values is a single,
-   * non-empty Expression.
+   * Returns {@code true} if the entire contents of the tested values is a single
+   * Expression with parens.
    */
   private boolean isSingleExpression()
   {
     Object singleValue = ((_rightValues.size() == 1) ? _rightValues.get(0) : null);
-    return((singleValue instanceof Expression) && !((Expression)singleValue).isEmpty());
+    return((singleValue instanceof Expression) && ((Expression)singleValue).hasParens());
   }
 
   @Override

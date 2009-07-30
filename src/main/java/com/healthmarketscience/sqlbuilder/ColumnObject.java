@@ -49,6 +49,9 @@ class ColumnObject extends Expression
   }
 
   @Override
+  public boolean hasParens() { return false; }
+
+  @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     vContext.addColumn(_column);
   }

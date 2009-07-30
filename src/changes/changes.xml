@@ -4,6 +4,13 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.0.6" date="TBD">
+      <action dev="jahlborn" type="fix" issue="2817484">
+        Add hasParens() method to NestableClause so that InCondition can
+        accurately determine if the values need to be wrapped in parens or
+        not.
+      </action>
+    </release>
     <release version="2.0.5" date="2009-05-24">
       <action dev="jahlborn" type="update" issue="2794171">
         Add support for additional query "set operators" (EXCEPT, INTERSECT),

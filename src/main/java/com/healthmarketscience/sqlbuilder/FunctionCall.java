@@ -57,6 +57,9 @@ public class FunctionCall extends Expression
     _functionName = Converter.toCustomFunctionSqlObject(functionNameStr);
   }
 
+  @Override
+  public boolean hasParens() { return false; }
+
   /** Iff isDistinct is <code>true</code>, adds the DISTINCT keyword to the
       parameter clause */
   public FunctionCall setIsDistinct(boolean isDistinct) {

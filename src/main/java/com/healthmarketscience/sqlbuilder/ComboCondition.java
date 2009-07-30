@@ -91,6 +91,11 @@ public class ComboCondition extends Condition
     return areEmpty(_conditions);
   }
 
+  @Override
+  public boolean hasParens() {
+    return hasParens(_conditions);
+  }
+
   /** Adds the given condition to the list of conditions. */
   public ComboCondition addCondition(Condition condition) {
     return addCustomConditions(condition);

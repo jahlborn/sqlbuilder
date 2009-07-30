@@ -363,6 +363,10 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(reallyComplicatedConditionStr,
                 "((t0.col1 < 'FOO') AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE 'BUZ%')) OR (YOU = 'ME')) AND (t0.col2 IS NULL) AND (t2.col4 IN ('this string',37,42) ) AND (t0.col2 NOT LIKE '\\_%' ESCAPE '\\') AND (EXISTS (SELECT t0.col1 FROM Schema1.Table1 t0)))");
 
+    checkResult(new InCondition(_defTable2_col4,
+                                new NumberValueObject(37)).toString(),
+                "(t2.col4 IN (37) )");
+
     try {
       BinaryCondition.equalTo(_table1_col2, "\\37").setLikeEscapeChar('\\');
       fail("IllegalArgumentException should have been thrown");

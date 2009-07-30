@@ -54,6 +54,13 @@ abstract class NestableClause extends SqlObject
    */
   public boolean isEmpty() { return false; }
 
+  /**
+   * Returns {@code true} iff the output of this instance would include
+   * surrounding parenthesis, {@code false} otherwise.
+   * <p>
+   * Default implementation returns {@code !isEmpty()}.
+   */
+  public boolean hasParens() { return !isEmpty(); }
 
   /**
    * Determines if any of the given clauses are non-empty.
@@ -72,6 +79,34 @@ abstract class NestableClause extends SqlObject
       
     // we're empty!
     return true;
+  }
+
+  /**
+   * Determines if any of the given clauses are non-empty.
+   * @return {@code false} if at least one clause is non-empty, {@code true}
+   *         otherwise
+   */
+  protected static boolean hasParens(
+      SqlObjectList<? extends NestableClause> nestedClauses)
+  {
+    int nonEmptyClauses = 0;
+    for(NestableClause nc : nestedClauses) {
+      if(nc.hasParens()) {
+        // we contain a clause with parens, there will be parens
+        return true;
+      }
+      if(!nc.isEmpty()) {
+        ++nonEmptyClauses;
+      }
+    }
+
+    // we contain more than one non-empty clause, there will be parens
+    if(nonEmptyClauses > 1) {
+      return true;
+    }
+      
+    // no parens
+    return false;
   }
 
   /**
