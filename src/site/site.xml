@@ -1,14 +1,8 @@
 <?xml version="1.0"?>
 <project name="SqlBuilder">
-  <bannerLeft>
-    <name>Health Market Science</name>
-    <src>http://www.healthmarketscience.com/images/HMS_logo.gif</src>
-    <href>http://www.healthmarketscience.com/</href>
-  </bannerLeft>
   <body>
     <menu name="SqlBuilder">
       <item name="About" href="index.html"/>
-      <item name="OpenHMS" href="http://openhms.sourceforge.net/"/>
       <item name="Downloads" href="http://sourceforge.net/project/showfiles.php?group_id=185339&amp;package_id=269188"/>
       <item name="SourceForge Project" href="http://sourceforge.net/projects/openhms/"/>
       <item name="Examples" href="example.html"/>
@@ -20,12 +14,4 @@
 
   </body>
 
-  <poweredBy>
-    <logo name="Works on Linux" img="../images/worksonlinux.png"
-          href="http://www.linux.org"/>
-    <logo name="Hosted by SourceForge" img="http://sflogo.sourceforge.net/sflogo.php?group_id=185339&amp;type=1" href="http://sourceforge.net"/>
-    <logo name="Built by Maven" img="./images/logos/maven-feather.png"
-          href="http://maven.apache.org/"/>
-  </poweredBy>
-  
 </project>

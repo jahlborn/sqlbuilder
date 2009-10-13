@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.0.6" date="TBD">
+    <release version="2.0.6" date="2009-10-12">
       <action dev="jahlborn" type="fix" issue="2817484">
         Add hasParens() method to NestableClause so that InCondition can
         accurately determine if the values need to be wrapped in parens or
