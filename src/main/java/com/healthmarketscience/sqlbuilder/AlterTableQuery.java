@@ -211,7 +211,7 @@ public class AlterTableQuery extends Query<AlterTableQuery>
      * {@link Converter#CUSTOM_COLUMN_TO_OBJ}.
      */
     public AddForeignConstraintAction addCustomPrimaryKeyReference(Object col){
-      return addCustomReference((Object)col, null);
+      return addCustomReference(col, null);
     }
 
     /**
@@ -220,7 +220,7 @@ public class AlterTableQuery extends Query<AlterTableQuery>
      */
     public AddForeignConstraintAction addReference(
         Column col, Column referencedCol) {
-      return addCustomReference((Object)col, (Object)referencedCol);
+      return addCustomReference(col, referencedCol);
     }
 
     /**
