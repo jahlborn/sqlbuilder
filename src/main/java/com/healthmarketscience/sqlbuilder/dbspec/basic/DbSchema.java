@@ -81,6 +81,15 @@ public class DbSchema extends DbObject<DbObject<?>> {
   }
 
   /**
+   * @param name name of the index to find
+   * @return the index previously added to this schema with the given name, or
+   *         {@code null} if none.
+   */
+  public DbIndex findIndex(String name) {
+    return findObject(_indexes, name);
+  }
+
+  /**
    * Creates and adds a index with the given parameters to this schema.
    * <p>
    * Note, no effort is made to make sure the given name is unique.
