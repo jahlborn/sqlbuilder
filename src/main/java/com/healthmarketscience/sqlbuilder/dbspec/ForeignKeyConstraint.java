@@ -6,6 +6,8 @@ import java.util.List;
 
 
 /**
+ * Maintains information about a database (table or column) foreign key
+ * constraint for use with the sqlbuilder utilities.
  *
  * @author James Ahlborn
  */
