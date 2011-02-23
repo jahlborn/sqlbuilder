@@ -30,6 +30,7 @@ package com.healthmarketscience.sqlbuilder.dbspec.basic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
@@ -41,8 +42,10 @@ public class DbTable extends DbObject<DbSchema> implements Table {
 
   /** alias to use for this table in queries (should be unique) */
   private String _alias;
-  /** columns currently created for this db spec */
+  /** columns currently created for this table */
   private List<DbColumn> _columns = new ArrayList<DbColumn>();
+  /** constraints currently defined for this table */
+  private List<DbConstraint> _constraints = new ArrayList<DbConstraint>();
 
   public DbTable(DbSchema parent, String name) {
     super(parent, name);
@@ -59,6 +62,10 @@ public class DbTable extends DbObject<DbSchema> implements Table {
 
   public List<DbColumn> getColumns() {
     return _columns;
+  }
+
+  public List<DbConstraint> getConstraints() {
+    return _constraints;
   }
     
   /**
@@ -95,6 +102,57 @@ public class DbTable extends DbObject<DbSchema> implements Table {
     _columns.add(column);
     return column;
   }    
+
+  /**
+   * Creates and adds unique constraint with the given parameters to this
+   * table.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new constraint
+   * @param colNames the name of the constrained columns
+   */
+  public DbConstraint unique(String name, String... colNames) {
+    DbConstraint constraint = new DbConstraint(
+        this, name, Constraint.Type.UNIQUE, colNames);
+    _constraints.add(constraint);
+    return constraint;
+  }
+
+  /**
+   * Creates and adds primary key constraint with the given parameters to this
+   * table.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new constraint
+   * @param colNames the name of the constrained columns
+   */
+  public DbConstraint primaryKey(String name, String... colNames) {
+    DbConstraint constraint = new DbConstraint(
+        this, name, Constraint.Type.PRIMARY_KEY, colNames);
+    _constraints.add(constraint);
+    return constraint;
+  }
+
+  /**
+   * Creates and adds foreign key constraint with the given parameters to this
+   * table.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new constraint
+   * @param colNames the name of the constrained columns
+   * @param referencedTableName the name of the referenced table
+   * @param referencedColNames the names of the referenced columns
+   */
+  public DbForeignKeyConstraint foreignKey(String name, String[] colNames, 
+                                           String referencedTableName,
+                                           String[] referencedColNames)
+  {
+    DbTable referencedTable = getParent().findTable(referencedTableName);
+    DbForeignKeyConstraint fkConstraint = new DbForeignKeyConstraint(
+        this, name, referencedTable, colNames, referencedColNames);
+    _constraints.add(fkConstraint);
+    return fkConstraint;
+  }
 
   @Override
   public String toString() {

@@ -65,6 +65,8 @@ public class RejoinTable implements Table
 
   public List<RejoinColumn> getColumns() { return _columns; }
 
+  public List<? extends Constraint> getConstraints() { return _table.getConstraints(); }
+
   @Override
   public String toString() {
     return "Rejoin: " + getOriginalTable().toString() + "(" + getAlias() + ")";
@@ -93,6 +95,8 @@ public class RejoinTable implements Table
     public String getTypeNameSQL() { return _column.getTypeNameSQL(); }
 
     public Integer getTypeLength() { return _column.getTypeLength(); }
+
+    public List<? extends Constraint> getConstraints() { return _column.getConstraints(); }
 
     @Override
     public String toString() {

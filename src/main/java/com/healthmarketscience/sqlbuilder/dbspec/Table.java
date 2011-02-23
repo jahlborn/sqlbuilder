@@ -48,4 +48,6 @@ public interface Table {
   /** @return the columns in this table */
   public List<? extends Column> getColumns();
   
+  /** @return any constraints for this table */
+  public List<? extends Constraint> getConstraints();
 }

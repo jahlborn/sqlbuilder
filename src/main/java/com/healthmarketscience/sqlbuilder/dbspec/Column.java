@@ -27,6 +27,8 @@ King of Prussia, PA 19406
 
 package com.healthmarketscience.sqlbuilder.dbspec;
 
+import java.util.List;
+
 /**
  * Maintains information about a database column for use with the sqlbuilder
  * utilities.
@@ -48,4 +50,6 @@ public interface Column {
       <code>null</code> */
   public Integer getTypeLength();
 
+  /** @return any constraints for this column */
+  public List<? extends Constraint> getConstraints();
 }

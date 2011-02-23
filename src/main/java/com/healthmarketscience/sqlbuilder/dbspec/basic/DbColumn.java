@@ -27,8 +27,11 @@ King of Prussia, PA 19406
 
 package com.healthmarketscience.sqlbuilder.dbspec.basic;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
  * Representation of a column in a database schema.
@@ -40,6 +43,7 @@ public class DbColumn extends DbObject<DbTable>
 {
   private final String _typeName;
   private final Integer _typeLength;
+  private List<DbConstraint> _constraints = new ArrayList<DbConstraint>();
 
   public DbColumn(DbTable parent, String name,
                   String typeName, Integer typeLength) {
@@ -48,7 +52,7 @@ public class DbColumn extends DbObject<DbTable>
     _typeLength = typeLength;
   }
 
-  public Table getTable() {
+  public DbTable getTable() {
     return getParent();
   }
     
@@ -63,5 +67,124 @@ public class DbColumn extends DbObject<DbTable>
   public Integer getTypeLength() {
     return _typeLength;
   }
-    
+
+  public List<DbConstraint> getConstraints() {
+    return _constraints;
+  }
+
+  /**
+   * Creates and adds not null constraint with the given parameters to this
+   * column.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   */
+  public DbConstraint notNull() {
+    return notNull(null);
+  }
+
+  /**
+   * Creates and adds not null constraint with the given parameters to this
+   * column.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new constraint
+   */
+  public DbConstraint notNull(String name) {
+    DbConstraint constraint = new DbConstraint(
+        this, name, Constraint.Type.NOT_NULL);
+    _constraints.add(constraint);
+    return constraint;
+  }
+
+  /**
+   * Creates and adds unique constraint with the given parameters to this
+   * column.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   */
+  public DbConstraint unique() {
+    return unique(null);
+  }
+
+  /**
+   * Creates and adds unique constraint with the given parameters to this
+   * column.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new constraint
+   */
+  public DbConstraint unique(String name) {
+    DbConstraint constraint = new DbConstraint(
+        this, name, Constraint.Type.UNIQUE);
+    _constraints.add(constraint);
+    return constraint;
+  }
+
+  /**
+   * Creates and adds primary key constraint with the given parameters to this
+   * column.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   */
+  public DbConstraint primaryKey() {
+    return primaryKey(null);
+  }
+
+  /**
+   * Creates and adds primary key constraint with the given parameters to this
+   * column.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new constraint
+   */
+  public DbConstraint primaryKey(String name) {
+    DbConstraint constraint = new DbConstraint(
+        this, name, Constraint.Type.PRIMARY_KEY);
+    _constraints.add(constraint);
+    return constraint;
+  }
+
+  /**
+   * Creates and adds foreign key constraint with the given parameters to this
+   * column.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param referencedTableName the name of the referenced table
+   */
+  public DbForeignKeyConstraint references(String referencedTableName) {
+    return references(null, referencedTableName);
+  }
+
+  /**
+   * Creates and adds foreign key constraint with the given parameters to this
+   * column.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new constraint
+   * @param referencedTableName the name of the referenced table
+   */
+  public DbForeignKeyConstraint references(String name, 
+                                           String referencedTableName) {
+    return references(name, referencedTableName, null);
+  }
+
+  /**
+   * Creates and adds foreign key constraint with the given parameters to this
+   * column.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new constraint
+   * @param referencedTableName the name of the referenced table
+   * @param referencedColName the names of the referenced column
+   */
+  public DbForeignKeyConstraint references(String name, 
+                                           String referencedTableName, 
+                                           String referencedColName) {
+    DbTable table = getTable().getParent().findTable(referencedTableName);
+    DbForeignKeyConstraint fkConstraint = new DbForeignKeyConstraint(
+        this, name, table, referencedColName);
+    _constraints.add(fkConstraint);
+    return fkConstraint;
+  }
+
 }

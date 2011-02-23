@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.healthmarketscience.sqlbuilder.dbspec.Join;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
  * Representation of a join between two database tables.
@@ -70,11 +69,11 @@ public class DbJoin extends DbObject<DbObject<?>> implements Join {
     return _spec;
   }
 
-  public Table getFromTable() {
+  public DbTable getFromTable() {
     return _fromTable;
   }
     
-  public Table getToTable() {
+  public DbTable getToTable() {
     return _toTable;
   }
 

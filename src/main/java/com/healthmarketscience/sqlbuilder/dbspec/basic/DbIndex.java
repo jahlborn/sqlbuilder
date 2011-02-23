@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.healthmarketscience.sqlbuilder.dbspec.Index;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
  * Representation of an index in a database schema.
@@ -62,7 +61,7 @@ public class DbIndex extends DbObject<DbSchema> implements Index {
     return getAbsoluteName();
   }
 
-  public Table getTable() {
+  public DbTable getTable() {
     return _table;
   }
 
