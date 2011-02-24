@@ -28,6 +28,7 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
+import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
 import com.healthmarketscience.sqlbuilder.dbspec.Function;
 import com.healthmarketscience.sqlbuilder.dbspec.Index;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
@@ -147,6 +148,16 @@ public abstract class Converter<SrcType, DstType>
       }
     };
 
+  /** Converter which converts an Object to a SqlObject using
+      {@link #toCustomConstraintSqlObject} */
+  protected static final Converter<Object, SqlObject> CUSTOM_TO_CONSTRAINTCLAUSE =
+    new Converter<Object, SqlObject>() {
+    @Override
+      public SqlObject convert(Object value) {
+        return toCustomConstraintClause(value);
+      }
+    };
+
 
   /**
    * Converts the given src object to a SqlObject of the expected type.
@@ -206,6 +217,21 @@ public abstract class Converter<SrcType, DstType>
    */
   public static SqlObject toTableSqlObject(Table table) {
     return new TableObject(table);
+  }
+  
+  /**
+   * Converts a Constraint to a SqlObject.
+   * <p>
+   * Conversions (in order):
+   * <ul>
+   * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Constraint} -&gt; {@link ConstraintObject}</li>
+   * </ul>
+   * 
+   * @param constraint object to coerce to a constraint SqlObject
+   * @return a SqlObject for the given Constraint
+   */
+  public static SqlObject toConstraintSqlObject(Constraint constraint) {
+    return new ConstraintObject(constraint);
   }
   
   /**
@@ -365,6 +391,38 @@ public abstract class Converter<SrcType, DstType>
       return toTableSqlObject((Table)obj);
     }
     return toCustomSqlObject(obj);
+  }
+  
+  /**
+   * Converts a constraint Object to a SqlObject for use in a constraint
+   * clause..
+   * <p>
+   * Conversions (in order):
+   * <ul>
+   * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Constraint} -&gt; {@link ConstraintObject}</li>
+   * <li>{@code null} -&gt; {@code null}</li>
+   * </ul>
+   * If none of the previous conversions are applied, the following
+   * conversions are tried in order, then wrapped in a
+   * {@link ConstraintClause.Prefix}.
+   * <ul>
+   * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
+   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
+   * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
+   * </ul>
+   * 
+   * @param obj object to coerce to a custom constraint SqlObject
+   * @return a SqlObject for the given Object.
+   */
+  public static SqlObject toCustomConstraintSqlObject(Object obj) {
+    if(obj instanceof Constraint) {
+      return toConstraintSqlObject((Constraint)obj);
+    }
+    if(obj == null) {
+      return null;
+    }
+    return new ConstraintClause.Prefix(toCustomSqlObject(obj));
   }
   
   /**
@@ -615,5 +673,27 @@ public abstract class Converter<SrcType, DstType>
     return ((obj instanceof Subquery) ? (Subquery)obj : new Subquery(obj));
   }
 
+  /**
+   * Converts an constraint clause Object to a SqlObject.
+   * <p>
+   * Conversions (in order):
+   * <ul>
+   * <li>{@link Constraint} -&gt; {@link ConstraintClause}</li>
+   * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
+   * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
+   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
+   * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
+   * </ul>
+   * 
+   * @param obj object to coerce to a constraint clause SqlObject
+   * @return a SqlObject for the given Object.
+   */
+  public static SqlObject toCustomConstraintClause(Object obj) {
+    if(obj instanceof Constraint) {
+      return ConstraintClause.from((Constraint)obj);
+    }
+    return toCustomSqlObject(obj);
+  }
 
 }

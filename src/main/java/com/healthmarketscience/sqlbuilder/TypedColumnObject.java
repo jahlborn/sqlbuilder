@@ -33,18 +33,39 @@ import com.healthmarketscience.sqlbuilder.dbspec.Column;
 
 
 /**
- * Outputs the name of a column and its type information
- * <code>"&lt;column&gt; &lt;type&gt;"</code> (for CREATE statements).
+ * Outputs the name of a column, its type information and any constraints
+ * <code>"&lt;column&gt; &lt;type&gt; [ &lt;constraint&gt; ... ]"</code> (for
+ * CREATE statements).
  *
  * @author James Ahlborn
  */
 class TypedColumnObject extends ColumnObject
 {
+  private SqlObjectList<SqlObject> _constraints = SqlObjectList.create(" ");
 
   TypedColumnObject(Column column) {
     super(column);
+
+    _constraints.addObjects(Converter.CUSTOM_TO_CONSTRAINTCLAUSE,
+                            column.getConstraints());
   }
-    
+
+  /**
+   * Adds the given object as a column constraint.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} constraint conversions handled by
+   * {@link Converter#toCustomConstraintClause}.
+   */
+  void addConstraint(Object obj) {
+    _constraints.addObject(Converter.toCustomConstraintClause(obj));
+  }
+   
+  @Override
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
+    _constraints.collectSchemaObjects(vContext);
+  }
+ 
   @Override
   public void appendTo(AppendableExt app) throws IOException {
     app.append(_column.getColumnNameSQL()).append(" ")
@@ -53,6 +74,18 @@ class TypedColumnObject extends ColumnObject
     if(colFieldLength != null) {
       app.append("(").append(colFieldLength).append(")");
     }
+
+    if(!_constraints.isEmpty()) {
+
+      SqlContext context = SqlContext.pushContext(app);
+      // generate constraint clauses in their "column" format
+      context.setUseTableConstraints(false);
+    
+      app.append(" ").append(_constraints);
+
+      SqlContext.popContext(app, context);
+    }
+
   }
   
 }

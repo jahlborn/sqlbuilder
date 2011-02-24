@@ -29,9 +29,10 @@ package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
 
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 import com.healthmarketscience.common.util.AppendableExt;
+import com.healthmarketscience.sqlbuilder.dbspec.Column;
+import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
+import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
  * Query which generates an {@code ALTER TABLE} statement.
@@ -40,7 +41,6 @@ import com.healthmarketscience.common.util.AppendableExt;
  */
 public class AlterTableQuery extends Query<AlterTableQuery>
 {
-
   private SqlObject _table;
   private SqlObject _action;
   
@@ -67,6 +67,23 @@ public class AlterTableQuery extends Query<AlterTableQuery>
     return this;
   }
 
+  /**
+   * Sets the alter table action to add the given constraint.
+   */
+  public AlterTableQuery setAddConstraint(Constraint constraint) {
+    return setAddCustomConstraint(constraint);
+  }
+
+  /**
+   * Sets the alter table action to add the given constraint.
+     * <p>
+     * {@code Object} -&gt; {@code SqlObject} conversions handled by
+     * {@link Converter#toCustomConstraintClause}.
+   */
+  public AlterTableQuery setAddCustomConstraint(Object constraint) {
+    return setAction(new AddConstraintAction(constraint));
+  }
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
@@ -85,11 +102,43 @@ public class AlterTableQuery extends Query<AlterTableQuery>
   
   /**
    * "Action" for adding a unique constraint to a table.,
-   * e.g. {@code "... ADD UNIQUE (<col1> ... [<coln>])}.
+   * e.g. {@code "... ADD <constraint_clause>}.
    */
-  public static class AddUniqueConstraintAction extends SqlObject
+  public static class AddConstraintAction extends SqlObject
   {
-    private SqlObjectList<SqlObject> _columns = SqlObjectList.create();
+    protected SqlObject _constraint;
+
+    public AddConstraintAction(Object constraint) {
+      _constraint = Converter.toCustomConstraintClause(constraint);
+    }
+
+    protected ConstraintClause getConstraint() {
+      return (ConstraintClause)_constraint;
+    }
+
+    @Override
+    protected void collectSchemaObjects(ValidationContext vContext) {
+      _constraint.collectSchemaObjects(vContext);
+    }
+
+    @Override
+    public void appendTo(AppendableExt app) throws IOException {
+      app.append(" ADD ").append(_constraint);
+    }
+  }
+  
+
+  /**
+   * "Action" for adding a unique constraint to a table.,
+   * e.g. {@code "... ADD UNIQUE (<col1> ... [<coln>])}.
+   * @deprecated use AddConstraintAction instead
+   */
+  @Deprecated
+  public static class AddUniqueConstraintAction extends AddConstraintAction
+  {
+    public AddUniqueConstraintAction() {
+      super(ConstraintClause.unique());
+    }
 
     /**
      * Adds a column to the unique constraint definition.
@@ -105,29 +154,23 @@ public class AlterTableQuery extends Query<AlterTableQuery>
      * {@link Converter#CUSTOM_COLUMN_TO_OBJ}.
      */
     public AddUniqueConstraintAction addCustomColumns(Object... columnStrs) {
-      _columns.addObjects(Converter.CUSTOM_COLUMN_TO_OBJ, columnStrs);
+      getConstraint().addCustomColumns(columnStrs);
       return this;
-    }
-
-    @Override
-    protected void collectSchemaObjects(ValidationContext vContext) {
-      _columns.collectSchemaObjects(vContext);
-    }
-
-    @Override
-    public void appendTo(AppendableExt app) throws IOException {
-      app.append(" ADD UNIQUE ").append("(").append(_columns).append(")");
     }
   }
   
   /**
    * "Action" for adding a primary key constraint to a table,
    * e.g. {@code "... ADD PRIMARY KEY (<col1> ... [<coln>])}.
+   * @deprecated use AddConstraintAction instead
    */
-  public static class AddPrimaryConstraintAction extends SqlObject
+  @Deprecated
+  public static class AddPrimaryConstraintAction extends AddConstraintAction
   {
-    private SqlObjectList<SqlObject> _columns = SqlObjectList.create();
-    
+    public AddPrimaryConstraintAction() {
+      super(ConstraintClause.primaryKey());
+    }
+
     /**
      * Adds a column to the primary key constraint definition.
      */
@@ -142,18 +185,8 @@ public class AlterTableQuery extends Query<AlterTableQuery>
      * {@link Converter#CUSTOM_COLUMN_TO_OBJ}.
      */
     public AddPrimaryConstraintAction addCustomColumns(Object... columnStrs) {
-      _columns.addObjects(Converter.CUSTOM_COLUMN_TO_OBJ, columnStrs);
+      getConstraint().addCustomColumns(columnStrs);
       return this;
-    }
-
-    @Override
-    protected void collectSchemaObjects(ValidationContext vContext) {
-      _columns.collectSchemaObjects(vContext);
-    }
-
-    @Override
-    public void appendTo(AppendableExt app) throws IOException {
-      app.append(" ADD PRIMARY KEY ").append("(").append(_columns).append(")");
     }
   }
 
@@ -162,20 +195,11 @@ public class AlterTableQuery extends Query<AlterTableQuery>
    * "Action" for adding a foreign key constraint to a table,
    * e.g. 
    * {@code "... ADD FOREIGN KEY (<c1>...[<cn>]) REFERENCES t2 [(<c1>...<cn>)]}.
+   * @deprecated use AddConstraintAction instead
    */
-  public static class AddForeignConstraintAction extends SqlObject
+  @Deprecated
+  public static class AddForeignConstraintAction extends AddConstraintAction
   {
-
-    /** The table referenced by this constraint */
-    private SqlObject _referencedTable;
-
-    /** Columns in the referencing table */
-    private SqlObjectList<SqlObject> _columns = SqlObjectList.create();
-    
-    /** Columns in the referenced table */    
-    private SqlObjectList<SqlObject> _referencedColumns =
-      SqlObjectList.create();
-
     /** 
      * Creates a new {@link AddForeignConstraintAction} which references
      * the given {@link Table}.
@@ -191,8 +215,13 @@ public class AlterTableQuery extends Query<AlterTableQuery>
      * {@code Object} -&gt; {@code SqlObject} conversions handled by
      * {@link Converter#toCustomTableSqlObject(Object)}.
      */
-    public AddForeignConstraintAction(Object object) {
-      _referencedTable = Converter.toCustomTableSqlObject(object);
+    public AddForeignConstraintAction(Object table) {
+      super(ConstraintClause.foreignKey(table));
+    }
+
+    @Override
+    protected ForeignKeyConstraintClause getConstraint() {
+      return (ForeignKeyConstraintClause)super.getConstraint();
     }
 
     /** 
@@ -233,30 +262,11 @@ public class AlterTableQuery extends Query<AlterTableQuery>
      */
     public AddForeignConstraintAction addCustomReference(
         Object col, Object referencedCol) {
-      _columns.addObjects(Converter.CUSTOM_COLUMN_TO_OBJ, col);
+      getConstraint().addCustomColumns(col);
       if (referencedCol != null) {
-        _referencedColumns.addObjects(Converter.CUSTOM_COLUMN_TO_OBJ,
-                                      referencedCol);
+        getConstraint().addCustomRefColumns(referencedCol);
       }
       return this;
-    }
-
-    @Override
-    protected void collectSchemaObjects(ValidationContext vContext) {
-      _columns.collectSchemaObjects(vContext);
-      _referencedColumns.collectSchemaObjects(vContext);
-      _referencedTable.collectSchemaObjects(vContext);
-    }
-
-    @Override
-    public void appendTo(AppendableExt app) throws IOException {
-      app.append(" ADD FOREIGN KEY ")
-        .append("(").append(_columns).append(") ")
-        .append("REFERENCES ")
-        .append(_referencedTable);
-      if (!_referencedColumns.isEmpty()) {
-        app.append(" (").append(_referencedColumns).append(")");
-      }
     }
   }
   

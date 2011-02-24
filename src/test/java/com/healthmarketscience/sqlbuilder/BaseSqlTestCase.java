@@ -73,9 +73,13 @@ public abstract class BaseSqlTestCase extends TestCase
     _defTable1_col2 = _defTable1.addColumn("col2", "VARCHAR", 64);
     _defTable1_col3 = _defTable1.addColumn("col3", "DATE", null);
     _defTable2 = _defSchema.addTable("Table2");
-    _defTable2_col_id = _defTable2.addColumn("col_id");
-    _defTable2_col4 = _defTable2.addColumn("col4");
-    _defTable2_col5 = _defTable2.addColumn("col5");
+    _defTable2_col_id = _defTable2.addColumn("col_id", "NUMBER", null);
+    _defTable2_col_id.notNull();
+    _defTable2_col_id.primaryKey("col_id_pk");
+    _defTable2_col4 = _defTable2.addColumn("col4", "VARCHAR", 64);
+    _defTable2_col5 = _defTable2.addColumn("col5", "DATE", null);
+    _defTable2.foreignKey("t2_fk", new String[]{"col4","col5"},
+                          null, "Table1", new String[]{"col2", "col3"});
   }
 
   protected static void checkResult(String result, String expected)

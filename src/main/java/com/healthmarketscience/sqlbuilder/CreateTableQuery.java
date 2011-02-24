@@ -30,9 +30,10 @@ package com.healthmarketscience.sqlbuilder;
 import java.io.IOException;
 import java.util.ListIterator;
 
-import com.healthmarketscience.sqlbuilder.dbspec.Column;
-import com.healthmarketscience.sqlbuilder.dbspec.Table;
 import com.healthmarketscience.common.util.AppendableExt;
+import com.healthmarketscience.sqlbuilder.dbspec.Column;
+import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
+import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
  * Query which generates a CREATE TABLE statement.
@@ -42,12 +43,15 @@ import com.healthmarketscience.common.util.AppendableExt;
 public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
 {
 
-  /** column level constraints */
+  /** column level constraints
+   * @deprecated use {@link ConstraintClause} instead
+   */
+  @Deprecated
   public enum ColumnConstraint
   {
-    NOT_NULL(" NOT NULL"),
-    UNIQUE(" UNIQUE"),
-    PRIMARY_KEY(" PRIMARY KEY");
+    NOT_NULL("NOT NULL"),
+    UNIQUE("UNIQUE"),
+    PRIMARY_KEY("PRIMARY KEY");
 
     private final String _constraintClause;
 
@@ -59,6 +63,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     public String toString() { return _constraintClause; }
   }
 
+  protected SqlObjectList<SqlObject> _constraints = SqlObjectList.create();
   
   public CreateTableQuery(Table table) {
     this(table, false);
@@ -69,8 +74,9 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
    * {@link Converter#TYPED_COLUMN_TO_OBJ}.
    * 
    * @param table the table to create
-   * @param includeColumns iff <code>true</code>, all the columns of this
-   *                       table will be added to the column list
+   * @param includeColumns iff <code>true</code>, all the columns and
+   *                       constraints of this table will be added to the
+   *                       query
    */
   public CreateTableQuery(Table table, boolean includeColumns) {
     this((Object)table);
@@ -78,6 +84,9 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     if(includeColumns) {
       // add all the columns for this table
       _columns.addObjects(Converter.TYPED_COLUMN_TO_OBJ, table.getColumns());
+      // add all the constraints for this table
+      _constraints.addObjects(Converter.CUSTOM_TO_CONSTRAINTCLAUSE,
+                              table.getConstraints());
     }
   }
 
@@ -100,7 +109,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   
   /**
    * Adds the given Objects as column descriptions, should look like
-   * <code>"&lt;column&gt; &lt;type&gt;"</code>.
+   * <code>"&lt;column&gt; &lt;type&gt; [&lt;constraint&gt; ... ]"</code>.
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#TYPED_COLUMN_TO_OBJ}.
@@ -111,8 +120,12 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     return this;
   }
 
-  /** Adds column description for the given Column along with the given column
-      constraint. */
+  /**
+   * Adds column description for the given Column along with the given column
+   * constraint.
+   * @deprecated use {@link ConstraintClause} instead of ColumnConstraint
+   */
+  @Deprecated
   public CreateTableQuery addColumn(Column column, ColumnConstraint constraint)
   {
     return addCustomColumn(column, constraint);
@@ -124,19 +137,39 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#TYPED_COLUMN_TO_OBJ}.
+   * @deprecated use {@link ConstraintClause} instead of ColumnConstraint
    */
+  @Deprecated
   public CreateTableQuery addCustomColumn(Object columnStr,
                                           ColumnConstraint constraint)
   {
-    _columns.addObject(
-        new ConstrainedColumn(Converter.TYPED_COLUMN_TO_OBJ.convert(columnStr),
-                              constraint));
+    SqlObject column = Converter.TYPED_COLUMN_TO_OBJ.convert(columnStr);
+    if(column instanceof TypedColumnObject) {
+      ((TypedColumnObject)column).addConstraint(constraint);
+    } else {
+      column = new ConstrainedColumn(column, constraint);
+    }
+    _columns.addObject(column);
     return this;
   }
 
-  /** Sets the constraint on a previously added column */
+  /** Sets the constraint on a previously added column 
+   * @deprecated use {@link ConstraintClause} instead of ColumnConstraint
+   */
+  @Deprecated
   public CreateTableQuery setColumnConstraint(Column column,
                                               ColumnConstraint constraint)
+  {
+    return addColumnConstraint(column, (Object)constraint);
+  }
+  
+  /**
+   * Adds the constraint on a previously added column
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} constraint conversions handled by
+   * {@link Converter#toCustomConstraintClause}.
+   */
+  public CreateTableQuery addColumnConstraint(Column column, Object constraint)
   {
     for(ListIterator<SqlObject> iter = _columns.listIterator();
         iter.hasNext(); ) {
@@ -144,13 +177,39 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
       if((tmpCol instanceof TypedColumnObject) &&
          (((TypedColumnObject)tmpCol)._column == column)) {
         // add constraint
-        iter.set(new ConstrainedColumn(tmpCol, constraint));
+        ((TypedColumnObject)tmpCol).addConstraint(constraint);
         break;
       }
     }
     return this;
   }
-  
+
+  /**
+   * Adds the given Constraints as table constraints.
+   */
+  public CreateTableQuery addConstraints(Constraint... constraints) {
+    return addCustomConstraints((Object[])constraints);
+  }
+
+  /**
+   * Adds the given Objects as table constraints, should look like
+   * <code>"&lt;constraint&gt;"</code>.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#CUSTOM_TO_CONSTRAINTCLAUSE}.
+   */
+  public CreateTableQuery addCustomConstraints(Object... constraintStrs) {
+    _constraints.addObjects(Converter.CUSTOM_TO_CONSTRAINTCLAUSE, 
+                            constraintStrs);
+    return this;
+  }
+
+  @Override
+  protected void collectSchemaObjects(ValidationContext vContext) {
+    super.collectSchemaObjects(vContext);
+    _constraints.collectSchemaObjects(vContext);
+  }
+
   @Override
   public void validate(ValidationContext vContext)
     throws ValidationException
@@ -171,10 +230,13 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     newContext.setUseTableAliases(false);
     
     app.append("CREATE TABLE ").append(_object)
-      .append(" (").append(_columns).append(")");
+      .append(" (").append(_columns);
+    if(!_constraints.isEmpty()) {
+      app.append(",").append(_constraints);
+    }
+    app.append(")");
     appendTableSpace(app);
   }
-
   
   /**
    * Wrapper around a column that adds a constraint specification.
@@ -184,7 +246,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     private SqlObject _column;
     private Object _constraint;
   
-    protected ConstrainedColumn(SqlObject column, Object constraint) {
+    private ConstrainedColumn(SqlObject column, Object constraint) {
       _column = column;
       _constraint = constraint;
     }
@@ -196,8 +258,8 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
 
     @Override
     public void appendTo(AppendableExt app) throws IOException {
-      app.append(_column).append(_constraint);
+      app.append(_column).append(" ").append(_constraint);
     }
   }
-  
+
 }

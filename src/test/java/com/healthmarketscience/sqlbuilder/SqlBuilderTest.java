@@ -68,14 +68,36 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(createStr3,
                 "CREATE TABLE Table1 (col_id NUMBER,col2 VARCHAR(64),col3 DATE)");
 
+    @SuppressWarnings("deprecation")
     String createStr4 = new CreateTableQuery(_defTable1, true)
       .setColumnConstraint(_defTable1_col_id,
                            CreateTableQuery.ColumnConstraint.PRIMARY_KEY)
       .setColumnConstraint(_defTable1_col3,
                            CreateTableQuery.ColumnConstraint.NOT_NULL)
+      .addColumnConstraint(_defTable1_col3, 
+                           ConstraintClause.foreignKey("col3_fk", _table1)
+                           .addRefColumns(_table1_col3))
       .validate().toString();
     checkResult(createStr4,
-                "CREATE TABLE Table1 (col_id NUMBER PRIMARY KEY,col2 VARCHAR(64),col3 DATE NOT NULL)");
+                "CREATE TABLE Table1 (col_id NUMBER PRIMARY KEY,col2 VARCHAR(64),col3 DATE NOT NULL CONSTRAINT col3_fk REFERENCES Schema1.Table1 (col3))");
+
+    String createStr5 = new CreateTableQuery(_defTable1, true)
+      .addColumnConstraint(_defTable1_col_id,
+                           ConstraintClause.notNull())
+      .addColumnConstraint(_defTable1_col_id,
+                           ConstraintClause.primaryKey("id_pk"))
+      .addColumnConstraint(_defTable1_col3,
+                           ConstraintClause.notNull())
+      .addCustomConstraints(ConstraintClause.unique() 
+                            .addColumns(_defTable1_col2, _defTable1_col3))
+      .validate().toString();
+    checkResult(createStr5,
+                "CREATE TABLE Table1 (col_id NUMBER NOT NULL CONSTRAINT id_pk PRIMARY KEY,col2 VARCHAR(64),col3 DATE NOT NULL,UNIQUE (col2,col3))");
+
+    String createStr6 = new CreateTableQuery(_defTable2, true)
+      .validate().toString();
+    checkResult(createStr6,
+                "CREATE TABLE Table2 (col_id NUMBER NOT NULL CONSTRAINT col_id_pk PRIMARY KEY,col4 VARCHAR(64),col5 DATE,CONSTRAINT t2_fk FOREIGN KEY (col4,col5) REFERENCES Table1 (col2,col3))");
 
     try {
       new CreateTableQuery(_table1).validate();
@@ -763,6 +785,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
   public void testAlterTable()
   {
+    @SuppressWarnings("deprecation")
     String queryStr1 =
       new AlterTableQuery(_table1)
       .setAction(new AlterTableQuery.AddUniqueConstraintAction()
@@ -770,6 +793,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(queryStr1, "ALTER TABLE Schema1.Table1 ADD UNIQUE (col2)");
 
+    @SuppressWarnings("deprecation")
     String queryStr2 =
       new AlterTableQuery(_defTable1)
       .setAction(new AlterTableQuery.AddPrimaryConstraintAction()
@@ -777,6 +801,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(queryStr2, "ALTER TABLE Table1 ADD PRIMARY KEY (col_id)");
 
+    @SuppressWarnings("deprecation")
     String queryStr3 =
       new AlterTableQuery(_defTable1)
       .setAction(new AlterTableQuery.AddForeignConstraintAction(_defTable2)
@@ -785,6 +810,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(queryStr3, 
                 "ALTER TABLE Table1 ADD FOREIGN KEY (col_id) REFERENCES Table2");
 
+    @SuppressWarnings("deprecation")
     String queryStr4 =
       new AlterTableQuery(_defTable1)
       .setAction(new AlterTableQuery.AddForeignConstraintAction(_defTable2)
@@ -794,6 +820,13 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(queryStr4, 
                 "ALTER TABLE Table1 ADD FOREIGN KEY (col_id,col2) " +
                 "REFERENCES Table2 (col4,col5)");
+
+    String queryStr5 =
+      new AlterTableQuery(_defTable2)
+      .setAddConstraint(_defTable2.getConstraints().get(0))
+      .validate().toString();
+    checkResult(queryStr5, 
+                "ALTER TABLE Table2 ADD CONSTRAINT t2_fk FOREIGN KEY (col4,col5) REFERENCES Table1 (col2,col3)");
 
   }
 

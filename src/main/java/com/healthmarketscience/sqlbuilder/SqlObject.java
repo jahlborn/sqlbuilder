@@ -39,8 +39,8 @@ import com.healthmarketscience.common.util.StringAppendableExt;
  * Base object which all classes in this facility extend.  It is an
  * AppendeeObject so that the statement building can happen efficiently
  * using the {@link #appendTo} calls.  Additionally, there is a
- * {@link #collectSchemaObjects} method which is used for validation (more details
- * in the method comment).
+ * {@link #collectSchemaObjects} method which is used for validation (more
+ * details in the method comment).
  *
  * @author James Ahlborn
  */

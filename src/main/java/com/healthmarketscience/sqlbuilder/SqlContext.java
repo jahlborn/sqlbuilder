@@ -54,6 +54,9 @@ public class SqlContext implements Cloneable
       current SQL generation context */
   private boolean _useTableAliases = true;
 
+  /** flag indicating whether constraints apply to a column or a table */
+  private boolean _useTableConstraints = true;
+
   /** handle to the immediate wrapping query */
   private Query<?> _query;
   
@@ -90,6 +93,22 @@ public class SqlContext implements Cloneable
    */
   public void setUseTableAliases(boolean newUseTableAliases) {
     _useTableAliases = newUseTableAliases;
+  }
+
+  /**
+   * @return the flag indicating whether or not table constraints should be
+   *         used in the current SQL generation context.
+   */
+  public boolean getUseTableConstraints() {
+    return _useTableConstraints;
+  }
+
+  /**
+   * Sets flag indicating whether or not table constraints should be used in
+   * the current SQL generation context.
+   */
+  public void setUseTableConstraints(boolean newUseTableConstraints) {
+    _useTableConstraints = newUseTableConstraints;
   }
 
   /**

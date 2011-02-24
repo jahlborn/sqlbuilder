@@ -4,6 +4,14 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.0.7" date="TBD">
+      <action dev="jahlborn" type="update">
+        Make Constraints first class citizens of the dbspec model.  Add
+        ConstraintClause and enhance various constructs to use improved
+        constraint implementations.  Deprecated simplified constraint support
+        in CreateTableQuery and AlterTableQuery.
+      </action>
+    </release>
     <release version="2.0.6" date="2009-10-12">
       <action dev="jahlborn" type="fix" issue="2817484">
         Add hasParens() method to NestableClause so that InCondition can
