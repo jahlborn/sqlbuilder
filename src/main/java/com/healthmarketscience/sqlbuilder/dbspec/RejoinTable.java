@@ -67,6 +67,15 @@ public class RejoinTable implements Table
 
   public List<? extends Constraint> getConstraints() { return _table.getConstraints(); }
 
+  public RejoinColumn findColumnByName(String name) {
+    for(RejoinColumn col : getColumns()) {
+      if(name.equals(col.getColumnNameSQL())) {
+        return col;
+      }
+    }
+    return null;
+  }
+
   @Override
   public String toString() {
     return "Rejoin: " + getOriginalTable().toString() + "(" + getAlias() + ")";
