@@ -140,14 +140,17 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    * Note, no effort is made to make sure the given name is unique.
    * @param name the name of the new constraint
    * @param colNames the name of the constrained columns
+   * @param referencedSchemaName the name of the referenced schema
    * @param referencedTableName the name of the referenced table
    * @param referencedColNames the names of the referenced columns
    */
   public DbForeignKeyConstraint foreignKey(String name, String[] colNames, 
+                                           String referencedSchemaName,
                                            String referencedTableName,
                                            String[] referencedColNames)
   {
-    DbTable referencedTable = getParent().findTable(referencedTableName);
+    DbTable referencedTable = getSpec().findSchema(referencedSchemaName)
+      .findTable(referencedTableName);
     DbForeignKeyConstraint fkConstraint = new DbForeignKeyConstraint(
         this, name, referencedTable, colNames, referencedColNames);
     _constraints.add(fkConstraint);
