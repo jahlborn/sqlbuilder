@@ -69,7 +69,8 @@ public class RejoinTable implements Table
 
   public RejoinColumn findColumnByName(String name) {
     for(RejoinColumn col : getColumns()) {
-      if(name.equals(col.getColumnNameSQL())) {
+      if((name == col.getColumnNameSQL()) ||
+         ((name != null) && name.equals(col.getColumnNameSQL()))) {
         return col;
       }
     }
