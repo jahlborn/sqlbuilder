@@ -27,7 +27,6 @@ King of Prussia, PA 19406
 
 package com.healthmarketscience.sqlbuilder.dbspec.basic;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
