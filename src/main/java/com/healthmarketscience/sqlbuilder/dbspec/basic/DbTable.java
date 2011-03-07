@@ -104,6 +104,19 @@ public class DbTable extends DbObject<DbSchema> implements Table {
   }    
 
   /**
+   * Creates and adds an typed column with the given parameters to this table.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new column
+   * @param type type for the column (one of {@link java.sql.Types})
+   * @param typeLength optional length specification for the column
+   * @return the freshly created column
+   */
+  public DbColumn addColumn(String name, int type, Integer typeLength) {
+    return addColumn(name, DbColumn.getTypeName(type), typeLength);
+  }    
+
+  /**
    * Creates and adds unique constraint with the given parameters to this
    * table.
    * <p>

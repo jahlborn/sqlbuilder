@@ -27,11 +27,15 @@ King of Prussia, PA 19406
 
 package com.healthmarketscience.sqlbuilder.dbspec.basic;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
+import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
+import java.sql.Types;
 
 /**
  * Representation of a column in a database schema.
@@ -41,6 +45,25 @@ import com.healthmarketscience.sqlbuilder.dbspec.Column;
 public class DbColumn extends DbObject<DbTable>
   implements Column
 {
+  private static final Map<Integer,String> _typeNameMap = new HashMap<Integer,String>();
+  static {
+    try {
+      // create a type -> type name map using the name of the constant field
+      for(java.lang.reflect.Field typeField : Types.class.getFields()) {
+        int mods = typeField.getModifiers();
+        if(java.lang.reflect.Modifier.isPublic(mods) &&
+           java.lang.reflect.Modifier.isStatic(mods) &&
+           (typeField.getType() == int.class)) {
+          Integer val = (Integer)typeField.get(null);
+          _typeNameMap.put(val, typeField.getName());
+        }
+      }
+    } catch(Exception e) {
+      // should never happen
+      throw new Error("<clinit> cannot access jdbc type constants", e);
+    }
+  }
+    
   private final String _typeName;
   private final Integer _typeLength;
   private List<DbConstraint> _constraints = new ArrayList<DbConstraint>();
@@ -187,4 +210,15 @@ public class DbColumn extends DbObject<DbTable>
     return fkConstraint;
   }
 
+  /**
+   * Returns the standard jdbc type name for the give type value (one of {@link java.sql.Types}).
+   */
+  public static String getTypeName(int type)
+  {
+    String name = _typeNameMap.get(type);
+    if(name == null) {
+      throw new IllegalArgumentException("Type " + type + " is not a valid sql type");
+    }
+    return name;
+  }
 }
