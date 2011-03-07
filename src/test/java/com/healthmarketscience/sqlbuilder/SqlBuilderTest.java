@@ -69,17 +69,19 @@ public class SqlBuilderTest extends BaseSqlTestCase
                 "CREATE TABLE Table1 (col_id NUMBER,col2 VARCHAR(64),col3 DATE)");
 
     @SuppressWarnings("deprecation")
-    String createStr4 = new CreateTableQuery(_defTable1, true)
+    String createStr4 = new CreateTableQuery(_defTable1, false)
+      .addColumns(_defTable1_col_id, _defTable1_col2)
       .setColumnConstraint(_defTable1_col_id,
                            CreateTableQuery.ColumnConstraint.PRIMARY_KEY)
-      .setColumnConstraint(_defTable1_col3,
-                           CreateTableQuery.ColumnConstraint.NOT_NULL)
+      .addColumn(_defTable1_col3, CreateTableQuery.ColumnConstraint.NOT_NULL)
       .addColumnConstraint(_defTable1_col3, 
                            ConstraintClause.foreignKey("col3_fk", _table1)
                            .addRefColumns(_table1_col3))
+      .addCustomColumn("col4 NUMBER", CreateTableQuery.ColumnConstraint.NOT_NULL)
+      .addColumnConstraint(_table1_col1, CreateTableQuery.ColumnConstraint.UNIQUE)
       .validate().toString();
     checkResult(createStr4,
-                "CREATE TABLE Table1 (col_id NUMBER PRIMARY KEY,col2 VARCHAR(64),col3 DATE NOT NULL CONSTRAINT col3_fk REFERENCES Schema1.Table1 (col3))");
+                "CREATE TABLE Table1 (col_id NUMBER PRIMARY KEY,col2 VARCHAR(64),col3 DATE NOT NULL CONSTRAINT col3_fk REFERENCES Schema1.Table1 (col3),col4 NUMBER NOT NULL)");
 
     String createStr5 = new CreateTableQuery(_defTable1, true)
       .addColumnConstraint(_defTable1_col_id,
@@ -661,6 +663,15 @@ public class SqlBuilderTest extends BaseSqlTestCase
     assertSame(_table1, rejoinTable1.getOriginalTable());
     assertSame(_table1_col1,
                rejoinTable1.getColumns().get(0).getOriginalColumn());
+    assertSame(_table1.getConstraints(), rejoinTable1.getConstraints());
+    assertNull(rejoinTable1.findColumnByName("bogus"));
+
+    RejoinTable.RejoinColumn rejoinCol2 = rejoinTable1.findColumnByName("col2");
+    assertSame(_table1_col2, rejoinCol2.getOriginalColumn());
+    assertSame(_table1_col2.getTypeNameSQL(), rejoinCol2.getTypeNameSQL());
+    assertSame(_table1_col2.getTypeLength(), rejoinCol2.getTypeLength());
+    assertSame(_table1_col2.getConstraints(), rejoinCol2.getConstraints());
+    
     String rejoinQuery = (new SelectQuery())
       .addFromTable(_table1)
       .addColumns(_table1_col1, _table1_col2)

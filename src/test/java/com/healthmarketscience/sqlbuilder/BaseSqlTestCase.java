@@ -32,6 +32,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 import junit.framework.TestCase;
+import java.sql.Types;
 
 /**
  * @author james
@@ -67,11 +68,11 @@ public abstract class BaseSqlTestCase extends TestCase
     _table1 = _schema1.addTable("Table1");
     _table1_col1 = _table1.addColumn("col1", "VARCHAR", 213);
     _table1_col2 = _table1.addColumn("col2", "NUMBER", 7);
-    _table1_col3 = _table1.addColumn("col3", "TIMESTAMP", null);
+    _table1_col3 = _table1.addColumn("col3", Types.TIMESTAMP, null);
     _defTable1 = _defSchema.addTable("Table1");
     _defTable1_col_id = _defTable1.addColumn("col_id", "NUMBER", null);
-    _defTable1_col2 = _defTable1.addColumn("col2", "VARCHAR", 64);
-    _defTable1_col3 = _defTable1.addColumn("col3", "DATE", null);
+    _defTable1_col2 = _defTable1.addColumn("col2", Types.VARCHAR, 64);
+    _defTable1_col3 = _defTable1.addColumn("col3", Types.DATE, null);
     _defTable2 = _defSchema.addTable("Table2");
     _defTable2_col_id = _defTable2.addColumn("col_id", "NUMBER", null);
     _defTable2_col_id.notNull();
