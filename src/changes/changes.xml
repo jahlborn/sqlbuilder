@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.0.7" date="TBD">
+    <release version="2.0.7" date="2011-03-07">
       <action dev="jahlborn" type="update">
         Make Constraints first class citizens of the dbspec model.  Add
         ConstraintClause and enhance various constructs to use improved
