@@ -28,6 +28,7 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -695,11 +696,14 @@ public class SqlBuilderTest extends BaseSqlTestCase
     
     Date d = new Date(1204909500692L);
     String dateStr = JdbcEscape.date(d).toString();
-    checkResult(dateStr, "{d '2008-03-07'}");
+    String date = new SimpleDateFormat("yyyy-MM-dd").format(d);
+    checkResult(dateStr, "{d '"+date+"'}");
     String timeStr = JdbcEscape.time(d).toString();
-    checkResult(timeStr, "{t '12:05:00'}");
+    String time = new SimpleDateFormat("HH:mm:ss").format(d);
+    checkResult(timeStr, "{t '"+time+"'}");
     String timestampStr = JdbcEscape.timestamp(d).toString();
-    checkResult(timestampStr, "{ts '2008-03-07 12:05:00.692'}");
+    String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(d);
+    checkResult(timestampStr, "{ts '"+timestamp+"'}");
   }
   
   public void testGrantRevoke()
