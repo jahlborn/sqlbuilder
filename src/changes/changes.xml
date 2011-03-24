@@ -10,7 +10,7 @@
       </action>
     </release>
     <release version="2.0.7" date="2011-03-07">
-      <action dev="jahlborn" type="update">
+      <action dev="jahlborn" type="update" issue="3125765">
         Make Constraints first class citizens of the dbspec model.  Add
         ConstraintClause and enhance various constructs to use improved
         constraint implementations.  Deprecated simplified constraint support
