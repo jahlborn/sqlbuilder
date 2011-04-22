@@ -33,6 +33,7 @@ import java.lang.reflect.Proxy;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -108,29 +109,59 @@ public class QueryReaderTest extends BaseSqlTestCase {
       query.toString();
       fail("IllegalStateException should have been thrown");
     } catch(IllegalStateException e) {}
-    
+
+    col1.updateString("bar", rs);
+    col2.updateObject("buzzard", rs);
+    col3.updateObject(obj1, rs);
+    col4.updateInt(52, rs);
+    col5.updateLong(500L, rs);
+    col6.updateBoolean(false, rs);
+
+    assertEquals(Arrays.asList("bar", 52, obj1, 500L, false),
+                 mockRs._updateResults);
   }
 
   
   private static class MockResultSet
     implements InvocationHandler
   {
-    private int _startIndex;
-    private List<Object> _results = new ArrayList<Object>();
+    public int _startIndex;
+    public List<Object> _results = new ArrayList<Object>();
+    public List<Object> _updateResults = new ArrayList<Object>();
     
     public Object invoke(Object proxy, Method method, Object[] args)
       throws Throwable
     {
-      if(args.length != 1) {
-        throw new IllegalArgumentException("expecting 1 arg");
+      if(method.getName().startsWith("get")) {
+        if(args.length != 1) {
+          throw new IllegalArgumentException("expecting 1 arg");
+        }
+
+        int colIdx = (Integer)args[0];
+        int idx = colIdx - _startIndex;
+        if((idx < 0) || (idx >= _results.size())) {
+          throw new SQLException("invalid column index " + colIdx);
+        }
+        return _results.get(idx);
       }
 
-      int colIdx = (Integer)args[0];
-      int idx = colIdx - _startIndex;
-      if((idx < 0) || (idx >= _results.size())) {
-        throw new SQLException("invalid column index " + colIdx);
+      if(method.getName().startsWith("update")) {
+        if(args.length != 2) {
+          throw new IllegalArgumentException("expecting 1 arg");
+        }
+
+        int colIdx = (Integer)args[0];
+        int idx = colIdx - _startIndex;
+        if(idx < 0) {
+          throw new SQLException("invalid column index " + colIdx);
+        }
+        while(_updateResults.size() < (idx + 1)) {
+          _updateResults.add(null);
+        }
+        return _updateResults.set(idx, args[1]);
       }
-      return _results.get(idx);
+
+      throw new UnsupportedOperationException();
     }
   }
   

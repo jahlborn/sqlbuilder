@@ -259,7 +259,132 @@ public class QueryReader {
       }
       return null;
     }
+
+    /**
+     * Calls updateNull on the given ResultSet with the given sql type
+     * for the position of this PlaceHolder.
+     */
+    public void updateNull(ResultSet rs)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        rs.updateNull(getIndex());
+      }
+    }
     
+    /**
+     * Calls updateInt on the given ResultSet with the given value
+     * for the position of this PlaceHolder.
+     */
+    public void updateInt(int value, ResultSet rs)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        rs.updateInt(getIndex(), value);
+      }
+    }
+    
+    /**
+     * Calls updateInt on the given ResultSet with the given value for
+     * the position of this PlaceHolder.  If given value is <code>null</code>,
+     * calls updateNull with the sql type <code>INTEGER</code>.
+     */
+    public void updateInt(Integer value, ResultSet rs)
+      throws SQLException
+    {
+      if(value != null) {
+        updateInt((int)value, rs);
+      } else {
+        updateNull(rs);
+      }
+    }
+    
+    /**
+     * Calls updateLong on the given ResultSet with the given value
+     * for the position of this PlaceHolder.
+     */
+    public void updateLong(long value, ResultSet rs)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        rs.updateLong(getIndex(), value);
+      }
+    }
+    
+    /**
+     * Calls updateLong on the given ResultSet with the given value for
+     * the position of this PlaceHolder.  If given value is <code>null</code>,
+     * calls updateNull with the sql type <code>BIGINT</code>.
+     */
+    public void updateLong(Long value, ResultSet rs)
+      throws SQLException
+    {
+      if(value != null) {
+        updateLong((long)value, rs);
+      } else {
+        updateNull(rs);
+      }
+    }
+    
+    /**
+     * Calls updateBoolean on the given ResultSet with the given value
+     * for the position of this PlaceHolder.
+     */
+    public void updateBoolean(boolean value, ResultSet rs)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        rs.updateBoolean(getIndex(), value);
+      }
+    }
+    
+    /**
+     * Calls updateBoolean on the given ResultSet with the given value for
+     * the position of this PlaceHolder.  If given value is <code>null</code>,
+     * calls updateNull with the sql type <code>BOOLEAN</code>.
+     */
+    public void updateBoolean(Boolean value, ResultSet rs)
+      throws SQLException
+    {
+      if(value != null) {
+        updateBoolean((boolean)value, rs);
+      } else {
+        updateNull(rs);
+      }
+    }
+
+    /**
+     * Calls updateString on the given ResultSet with the given value
+     * for the position of this PlaceHolder.
+     */
+    public void updateString(String value, ResultSet rs)
+      throws SQLException
+    {
+      if(value != null) {
+        if(isInQuery()) {
+          rs.updateString(getIndex(), value);
+        }
+      } else {
+        updateNull(rs);
+      }
+    }
+    
+    /**
+     * Calls updateObject on the given ResultSet with the given value for the
+     * position of this PlaceHolder.
+     */
+    public void updateObject(Object value, ResultSet rs)
+      throws SQLException
+    {
+      if(value != null) {
+        if(isInQuery()) {
+          rs.updateObject(getIndex(), value);
+        }
+      } else {
+        updateNull(rs);
+      }
+    }
+        
     @Override
     protected void collectSchemaObjects(ValidationContext vContext)
     {
