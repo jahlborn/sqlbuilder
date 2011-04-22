@@ -4,9 +4,12 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.0.8" date="TBD">
+    <release version="2.0.8" date="2011-04-22">
       <action dev="jahlborn" type="fix" issue="3237822">
         Fix date tests so that they are TimeZone agnostic.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add support for updatable ResultSets to QueryReader.
       </action>
     </release>
     <release version="2.0.7" date="2011-03-07">
