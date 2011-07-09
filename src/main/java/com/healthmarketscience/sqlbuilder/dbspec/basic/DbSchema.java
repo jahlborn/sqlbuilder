@@ -75,7 +75,7 @@ public class DbSchema extends DbObject<DbObject<?>> {
    * @return the freshly created table
    */
   public DbTable addTable(String name) {
-    DbTable table = new DbTable(this, name);
+    DbTable table = getSpec().createTable(this, name);
     _tables.add(table);
     return table;
   }
@@ -100,7 +100,7 @@ public class DbSchema extends DbObject<DbObject<?>> {
    */
   public DbIndex addIndex(String name, String tableName,
                           String... colNames) {
-    DbIndex index = new DbIndex(findTable(tableName), name, colNames);
+    DbIndex index = getSpec().createIndex(findTable(tableName), name, colNames);
     _indexes.add(index);
     return index;
   }
@@ -141,7 +141,8 @@ public class DbSchema extends DbObject<DbObject<?>> {
    * @return the freshly created package
    */
   public DbFunctionPackage addFunctionPackage(String name) {
-    DbFunctionPackage functionPackage = new DbFunctionPackage(this, name);
+    DbFunctionPackage functionPackage =
+      getSpec().createFunctionPackage(this, name);
     _functionPackages.add(functionPackage);
     return functionPackage;
   }    

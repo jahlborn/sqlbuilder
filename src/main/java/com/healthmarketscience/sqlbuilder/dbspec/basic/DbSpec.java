@@ -36,6 +36,12 @@ import java.util.List;
  * <p>
  * Note, you generally do not want to mix objects from different specs because
  * they may have conflicting aliases.
+ * <p>
+ * The DbSpec also acts as the "factory" for creating other DbObject instances
+ * (via the various {@code create*()} methods).  All the other DbObject types
+ * delegate object creation to the referenced DbSpec.  Thus, custom model
+ * classes can easily be plugged in by creating a subclass of this class which
+ * overrides the relevant creation methods.
  *
  * @author James Ahlborn
  */
@@ -94,7 +100,7 @@ public class DbSpec {
    * @return the freshly created schema
    */
   public DbSchema addSchema(String name) {
-    DbSchema schema = new DbSchema(this, name);
+    DbSchema schema = createSchema(name);
     _schemas.add(schema);
     return schema;
   }
@@ -134,12 +140,138 @@ public class DbSpec {
                         String schemaTo, String tableTo,
                         String[] fromColNames, String[] toColNames)
   {
-    DbJoin join = new DbJoin(this,
-                             findSchema(schemaFrom).findTable(tableFrom),
+    DbJoin join = createJoin(findSchema(schemaFrom).findTable(tableFrom),
                              findSchema(schemaTo).findTable(tableTo),
                              fromColNames, toColNames);
     _joins.add(join);
     return join;
   }
 
+  /**
+   * Creates and returns a new {@link DbSchema} with the given parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbSchema createSchema(String name)
+  {
+    return new DbSchema(this, name);
+  }
+  
+  /**
+   * Creates and returns a new {@link DbTable} with the given parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbTable createTable(DbSchema parent, String name)
+  {
+    return new DbTable(parent, name);
+  }
+  
+  /**
+   * Creates and returns a new {@link DbColumn} with the given parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbColumn createColumn(DbTable parent, String name,
+                               String typeName, Integer typeLength)
+  {
+    return new DbColumn(parent, name, typeName, typeLength);
+  }
+  
+  /**
+   * Creates and returns a new {@link DbJoin} with the given parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbJoin createJoin(DbTable fromTable, DbTable toTable,
+                           String[] fromColNames, String[] toColNames)
+  {
+    return new DbJoin(this, fromTable, toTable, fromColNames, toColNames);
+  }
+
+  /**
+   * Creates and returns a new {@link DbIndex} with the given parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbIndex createIndex(DbTable table, String name, String... colNames)
+  {
+    return new DbIndex(table, name, colNames);
+  }
+  
+  /**
+   * Creates and returns a new {@link DbFunctionPackage} with the given
+   * parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbFunctionPackage createFunctionPackage(DbSchema parent, String name)
+  {
+    return new DbFunctionPackage(parent, name);
+  }
+
+  /**
+   * Creates and returns a new {@link DbFunction} with the given parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbFunction createFunction(DbFunctionPackage parent, String name)
+  {
+    return new DbFunction(parent, name);
+  }
+  
+  /**
+   * Creates and returns a new column {@link DbConstraint} with the given
+   * parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbConstraint createColumnConstraint(
+      DbColumn parent, String name,
+      com.healthmarketscience.sqlbuilder.dbspec.Constraint.Type type)
+  {
+    return new DbConstraint(parent, name, type);
+  }
+
+  /**
+   * Creates and returns a new table {@link DbConstraint} with the given
+   * parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbConstraint createTableConstraint(
+      DbTable parent, String name,
+      com.healthmarketscience.sqlbuilder.dbspec.Constraint.Type type, 
+      String... colNames)
+  {
+    return new DbConstraint(parent, name, type, colNames);
+  }
+  
+  /**
+   * Creates and returns a new column {@link DbForeignKeyConstraint} with the
+   * given parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbForeignKeyConstraint createColumnForeignKeyConstraint(
+      DbColumn parent, String name, DbTable referencedTable, String refColName)
+  {
+    return new DbForeignKeyConstraint(parent, name, referencedTable,
+                                      refColName);
+  }
+
+  /**
+   * Creates and returns a new table {@link DbForeignKeyConstraint} with the
+   * given parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbForeignKeyConstraint createTableForeignKeyConstraint(
+      DbTable parent, String name, DbTable referencedTable,
+      String[] colNames, String[] refColNames)
+  {
+    return new DbForeignKeyConstraint(parent, name, referencedTable,
+                                      colNames, refColNames);
+  }
+  
 }

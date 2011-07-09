@@ -68,7 +68,7 @@ public class DbFunctionPackage extends DbObject<DbSchema> {
    * @return the freshly created function
    */
   public DbFunction addFunction(String name) {
-    DbFunction function = new DbFunction(this, name);
+    DbFunction function = getSpec().createFunction(this, name);
     _functions.add(function);
     return function;
   }    

@@ -4,6 +4,11 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.0.9" date="TBD">
+      <action dev="jahlborn" type="update">
+        Make DbSpec the factory for all other DbObject classes.
+      </action>
+    </release>
     <release version="2.0.8" date="2011-04-22">
       <action dev="jahlborn" type="fix" issue="3237822">
         Fix date tests so that they are TimeZone agnostic.

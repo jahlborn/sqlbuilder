@@ -112,7 +112,7 @@ public class DbColumn extends DbObject<DbTable>
    * @param name the name of the new constraint
    */
   public DbConstraint notNull(String name) {
-    DbConstraint constraint = new DbConstraint(
+    DbConstraint constraint = getSpec().createColumnConstraint(
         this, name, Constraint.Type.NOT_NULL);
     _constraints.add(constraint);
     return constraint;
@@ -136,7 +136,7 @@ public class DbColumn extends DbObject<DbTable>
    * @param name the name of the new constraint
    */
   public DbConstraint unique(String name) {
-    DbConstraint constraint = new DbConstraint(
+    DbConstraint constraint = getSpec().createColumnConstraint(
         this, name, Constraint.Type.UNIQUE);
     _constraints.add(constraint);
     return constraint;
@@ -160,7 +160,7 @@ public class DbColumn extends DbObject<DbTable>
    * @param name the name of the new constraint
    */
   public DbConstraint primaryKey(String name) {
-    DbConstraint constraint = new DbConstraint(
+    DbConstraint constraint = getSpec().createColumnConstraint(
         this, name, Constraint.Type.PRIMARY_KEY);
     _constraints.add(constraint);
     return constraint;
@@ -203,7 +203,8 @@ public class DbColumn extends DbObject<DbTable>
                                            String referencedTableName, 
                                            String referencedColName) {
     DbTable table = getTable().getParent().findTable(referencedTableName);
-    DbForeignKeyConstraint fkConstraint = new DbForeignKeyConstraint(
+    DbForeignKeyConstraint fkConstraint =
+      getSpec().createColumnForeignKeyConstraint(
         this, name, table, referencedColName);
     _constraints.add(fkConstraint);
     return fkConstraint;
