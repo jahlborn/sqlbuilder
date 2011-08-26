@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.healthmarketscience</groupId>
     <artifactId>openhms-parent</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
   </parent>
   <groupId>com.healthmarketscience.sqlbuilder</groupId>
   <artifactId>sqlbuilder</artifactId>
@@ -99,7 +99,7 @@
           <minmemory>128m</minmemory>
           <maxmemory>512</maxmemory>
           <links>
-            <list>http://java.sun.com/j2se/1.5.0/docs/api</list>
+            <list>http://download.oracle.com/javase/1.5.0/docs/api</list>
             <list>http://openhms.sourceforge.net/common-util/apidocs</list>
           </links>
           <source>1.5</source>
