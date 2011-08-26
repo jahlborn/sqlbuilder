@@ -78,6 +78,22 @@ public class DbTable extends DbObject<DbSchema> implements Table {
   }
 
   /**
+   * @param names name(s) of the column(s) to find
+   * @return the column(s) previously added to this table with the given
+   *         name(s), or {@code null} if none.
+   */
+  public DbColumn[] findColumns(String... names) {
+    if(names == null) {
+      return null;
+    }
+    DbColumn[] cols = new DbColumn[names.length];
+    for(int i = 0; i < names.length; ++i) {
+      cols[i] = findObject(_columns, names[i]);
+    }
+    return cols;
+  }
+
+  /**
    * Creates and adds an untyped column with the given name to this table.
    * <p>
    * Note, no effort is made to make sure the given name is unique.
@@ -99,8 +115,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    */
   public DbColumn addColumn(String name, String typeName, Integer typeLength) {
     DbColumn column = getSpec().createColumn(this, name, typeName, typeLength);
-    _columns.add(column);
-    return column;
+    return addColumn(column);
   }    
 
   /**
@@ -117,6 +132,18 @@ public class DbTable extends DbObject<DbSchema> implements Table {
   }    
 
   /**
+   * Adds the given column to this table.
+   * <p>
+   * Note, no effort is made to make sure the column is unique.
+   * @param column the column to be added
+   * @return the given column
+   */
+  public <T extends DbColumn> T addColumn(T column) {
+    _columns.add(checkOwnership(column));
+    return column;
+  }
+    
+  /**
    * Creates and adds unique constraint with the given parameters to this
    * table.
    * <p>
@@ -127,8 +154,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
   public DbConstraint unique(String name, String... colNames) {
     DbConstraint constraint = getSpec().createTableConstraint(
         this, name, Constraint.Type.UNIQUE, colNames);
-    _constraints.add(constraint);
-    return constraint;
+    return addConstraint(constraint);
   }
 
   /**
@@ -142,8 +168,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
   public DbConstraint primaryKey(String name, String... colNames) {
     DbConstraint constraint = getSpec().createTableConstraint(
         this, name, Constraint.Type.PRIMARY_KEY, colNames);
-    _constraints.add(constraint);
-    return constraint;
+    return addConstraint(constraint);
   }
 
   /**
@@ -167,10 +192,22 @@ public class DbTable extends DbObject<DbSchema> implements Table {
     DbForeignKeyConstraint fkConstraint =
       getSpec().createTableForeignKeyConstraint(
         this, name, referencedTable, colNames, referencedColNames);
-    _constraints.add(fkConstraint);
-    return fkConstraint;
+    return addConstraint(fkConstraint);
   }
 
+
+  /**
+   * Adds the given constraint to this table.
+   * <p>
+   * Note, no effort is made to make sure the given constraint is unique.
+   * @param constraint the constraint to be added
+   * @return the given constraint
+   */
+  public <T extends DbConstraint> T addConstraint(T constraint) {
+    _constraints.add(checkOwnership(constraint));
+    return constraint;
+  }
+  
   @Override
   public String toString() {
     return super.toString() + "(" + getAlias() + ")";

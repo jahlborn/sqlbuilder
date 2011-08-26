@@ -428,7 +428,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     // add some functions to play with
     DbFunctionPackage funcPack1 = _schema1.addFunctionPackage("fpkg");
     DbFunction func1 = funcPack1.addFunction("func1");
-    DbFunctionPackage funcPack2 = _schema1.addFunctionPackage(null);
+    DbFunctionPackage funcPack2 = _schema1.addFunctionPackage((String)null);
     DbFunction func2 = funcPack2.addFunction("Func2");
     DbFunctionPackage funcPack3 = _defSchema.addDefaultFunctionPackage();
     DbFunction func3 = funcPack3.addFunction("func3");

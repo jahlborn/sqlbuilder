@@ -27,6 +27,7 @@ King of Prussia, PA 19406
 
 package com.healthmarketscience.sqlbuilder.dbspec.basic;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -79,6 +80,30 @@ public class DbObject<ParentType extends DbObject>
   }
 
   /**
+   * @throws IllegalArgumentException if the parent of the given object is not
+   *         this object
+   */
+  protected <T extends DbObject<?>> T checkOwnership(T obj) {
+    if(obj.getParent() != this) {
+      throw new IllegalArgumentException(
+          "Given " + obj.getClass().getSimpleName() + " is not owned by this " +
+          getClass().getSimpleName());
+    }
+    return obj;
+  }
+  
+  /**
+   * @throws IllegalArgumentException if the parent of the given object is not
+   *         this object
+   */
+  protected <T extends DbObject<?>> T[] checkOwnership(T... objs) {
+    for(DbObject<?> obj : objs) {
+      checkOwnership(obj);
+    }
+    return objs;
+  }
+  
+  /**
    * @param objects collection to search
    * @param name name of the object to find
    * @return the DbObject with the given name from the given collection, if
@@ -94,7 +119,23 @@ public class DbObject<ParentType extends DbObject>
     }
     return null;
   }
-
+  
+  /**
+   * Adds the given objects to the given collection after verifying that they
+   * are owned by the given parent.
+   *
+   * @param objs the collection to add the objects
+   * @param parent the expected owner of the objects
+   * @param objArr the objects to be added, may be {@code null}
+   */
+  protected static <T extends DbObject<?>> void addObjects(
+      Collection<T> objs, DbObject<?> parent, T... objArr)
+  {
+    if(objArr != null) {
+      objs.addAll(Arrays.asList(parent.checkOwnership(objArr)));
+    }
+  }
+  
   @Override
   public String toString() {
     return getAbsoluteName();

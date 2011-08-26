@@ -49,19 +49,21 @@ public class DbJoin extends DbObject<DbObject<?>> implements Join {
   private final List<DbColumn> _fromColumns = new ArrayList<DbColumn>();
   /** join columns from the right table */
   private final List<DbColumn> _toColumns = new ArrayList<DbColumn>();
-    
+
   public DbJoin(DbSpec spec, DbTable fromTable, DbTable toTable,
                 String[] fromColNames, String[] toColNames) {
+    this(spec, fromTable, toTable, fromTable.findColumns(fromColNames),
+         toTable.findColumns(toColNames));
+  }
+  
+  public DbJoin(DbSpec spec, DbTable fromTable, DbTable toTable,
+                DbColumn[] fromColumns, DbColumn[] toColumns) {
     super(null, null);
     _spec = spec;
     _fromTable = fromTable;
     _toTable = toTable;
-    for(String fromColName : fromColNames) {
-      _fromColumns.add(_fromTable.findColumn(fromColName));
-    }
-    for(String toColName : toColNames) {
-      _toColumns.add(_toTable.findColumn(toColName));
-    }
+    addObjects(_fromColumns, _fromTable, fromColumns);
+    addObjects(_toColumns, _toTable, toColumns);
   }
 
   @Override

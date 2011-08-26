@@ -58,6 +58,18 @@ public class DbSchema extends DbObject<DbObject<?>> {
     return _spec;
   }
 
+  public List<DbTable> getTables() {
+    return _tables;
+  }
+  
+  public List<DbIndex> getIndexs() {
+    return _indexes;
+  }
+
+  public List<DbFunctionPackage> getFunctionPackages() {
+    return _functionPackages;
+  }
+    
   /**
    * @param name name of the table to find
    * @return the table previously added to this schema with the given name, or
@@ -76,7 +88,18 @@ public class DbSchema extends DbObject<DbObject<?>> {
    */
   public DbTable addTable(String name) {
     DbTable table = getSpec().createTable(this, name);
-    _tables.add(table);
+    return addTable(table);
+  }
+
+  /**
+   * Adds the given table to this schema.
+   * <p>
+   * Note, no effort is made to make sure the given table is unique.
+   * @param table the table to be added
+   * @return the given table
+   */
+  public <T extends DbTable> T addTable(T table) {
+    _tables.add(checkOwnership(table));
     return table;
   }
 
@@ -101,7 +124,18 @@ public class DbSchema extends DbObject<DbObject<?>> {
   public DbIndex addIndex(String name, String tableName,
                           String... colNames) {
     DbIndex index = getSpec().createIndex(findTable(tableName), name, colNames);
-    _indexes.add(index);
+    return addIndex(index);
+  }
+
+  /**
+   * Adds the given index to this schema.
+   * <p>
+   * Note, no effort is made to make sure the given index is unique.
+   * @param index the index to be added
+   * @return the given index
+   */
+  public <T extends DbIndex> T addIndex(T index) {
+    _indexes.add(checkOwnership(index));
     return index;
   }
 
@@ -130,7 +164,7 @@ public class DbSchema extends DbObject<DbObject<?>> {
    * @return the freshly created default package
    */
   public DbFunctionPackage addDefaultFunctionPackage() {
-    return addFunctionPackage(null);
+    return addFunctionPackage((String)null);
   }
   
   /**
@@ -143,8 +177,20 @@ public class DbSchema extends DbObject<DbObject<?>> {
   public DbFunctionPackage addFunctionPackage(String name) {
     DbFunctionPackage functionPackage =
       getSpec().createFunctionPackage(this, name);
-    _functionPackages.add(functionPackage);
-    return functionPackage;
+    return addFunctionPackage(functionPackage);
   }    
+
+  /**
+   * Adds the given functionPackage to this schema.
+   * <p>
+   * Note, no effort is made to make sure the given functionPackage is unique.
+   * @param functionPackage the functionPackage to be added
+   * @return the given functionPackage
+   */
+  public <T extends DbFunctionPackage> T addFunctionPackage(T functionPackage) {
+    _functionPackages.add(checkOwnership(functionPackage));
+    return functionPackage;
+  }
+
   
 }

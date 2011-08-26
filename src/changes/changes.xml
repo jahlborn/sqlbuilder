@@ -8,6 +8,11 @@
       <action dev="jahlborn" type="update">
         Make DbSpec the factory for all other DbObject classes.
       </action>
+      <action dev="jahlborn" type="update" issue="3397693">
+        Add methods/constructors to enable more flexible usage of DbObject
+        classes with custom subclasses (thanks to Douglas Russell for some
+        code contributions)
+      </action>
     </release>
     <release version="2.0.8" date="2011-04-22">
       <action dev="jahlborn" type="fix" issue="3237822">

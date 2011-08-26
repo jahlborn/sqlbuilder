@@ -57,6 +57,14 @@ public class DbSpec {
   public DbSpec() {
   }
 
+  public List<DbSchema> getSchemas() {
+    return _schemas;
+  }
+  
+  public List<DbJoin> getJoins() {
+    return _joins;
+  }
+  
   /**
    * @return the next unused alias for this group of db objects
    */
@@ -89,7 +97,7 @@ public class DbSpec {
    * @return the freshly created default schema
    */
   public DbSchema addDefaultSchema() {
-    return addSchema(null);
+    return addSchema((String)null);
   }
   
   /**
@@ -101,7 +109,18 @@ public class DbSpec {
    */
   public DbSchema addSchema(String name) {
     DbSchema schema = createSchema(name);
-    _schemas.add(schema);
+    return addSchema(schema);
+  }
+
+  /**
+   * Adds the given schema to this schema.
+   * <p>
+   * Note, no effort is made to make sure the given schema is unique.
+   * @param schema the schema to be added
+   * @return the given schema
+   */
+  public <T extends DbSchema> T addSchema(T schema) {
+    _schemas.add(checkOwnership(schema));
     return schema;
   }
 
@@ -143,10 +162,21 @@ public class DbSpec {
     DbJoin join = createJoin(findSchema(schemaFrom).findTable(tableFrom),
                              findSchema(schemaTo).findTable(tableTo),
                              fromColNames, toColNames);
-    _joins.add(join);
-    return join;
+    return addJoin(join);
   }
 
+  /**
+   * Adds the given join to this schema.
+   * <p>
+   * Note, no effort is made to make sure the given join is unique.
+   * @param join the join to be added
+   * @return the given join
+   */
+  public <T extends DbJoin> T addJoin(T join) {
+    _joins.add(checkOwnership(join));
+    return join;
+  }
+  
   /**
    * Creates and returns a new {@link DbSchema} with the given parameters.
    * <p>
@@ -272,6 +302,19 @@ public class DbSpec {
   {
     return new DbForeignKeyConstraint(parent, name, referencedTable,
                                       colNames, refColNames);
+  }
+  
+  /**
+   * @throws IllegalArgumentException if the parent of the given object is not
+   *         this object
+   */
+  protected <T extends DbObject<?>> T checkOwnership(T obj) {
+    if(obj.getSpec() != this) {
+      throw new IllegalArgumentException(
+          "Given " + obj.getClass().getSimpleName() + " is not owned by this " +
+          getClass().getSimpleName());
+    }
+    return obj;
   }
   
 }

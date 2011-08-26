@@ -99,6 +99,7 @@ public class DbColumn extends DbObject<DbTable>
    * column.
    * <p>
    * Note, no effort is made to make sure the given name is unique.
+   * @return the freshly created constraint
    */
   public DbConstraint notNull() {
     return notNull(null);
@@ -110,12 +111,12 @@ public class DbColumn extends DbObject<DbTable>
    * <p>
    * Note, no effort is made to make sure the given name is unique.
    * @param name the name of the new constraint
+   * @return the freshly created constraint
    */
   public DbConstraint notNull(String name) {
     DbConstraint constraint = getSpec().createColumnConstraint(
         this, name, Constraint.Type.NOT_NULL);
-    _constraints.add(constraint);
-    return constraint;
+    return addConstraint(constraint);
   }
 
   /**
@@ -123,6 +124,7 @@ public class DbColumn extends DbObject<DbTable>
    * column.
    * <p>
    * Note, no effort is made to make sure the given name is unique.
+   * @return the freshly created constraint
    */
   public DbConstraint unique() {
     return unique(null);
@@ -134,12 +136,12 @@ public class DbColumn extends DbObject<DbTable>
    * <p>
    * Note, no effort is made to make sure the given name is unique.
    * @param name the name of the new constraint
+   * @return the freshly created constraint
    */
   public DbConstraint unique(String name) {
     DbConstraint constraint = getSpec().createColumnConstraint(
         this, name, Constraint.Type.UNIQUE);
-    _constraints.add(constraint);
-    return constraint;
+    return addConstraint(constraint);
   }
 
   /**
@@ -147,6 +149,7 @@ public class DbColumn extends DbObject<DbTable>
    * column.
    * <p>
    * Note, no effort is made to make sure the given name is unique.
+   * @return the freshly created constraint
    */
   public DbConstraint primaryKey() {
     return primaryKey(null);
@@ -158,12 +161,12 @@ public class DbColumn extends DbObject<DbTable>
    * <p>
    * Note, no effort is made to make sure the given name is unique.
    * @param name the name of the new constraint
+   * @return the freshly created constraint
    */
   public DbConstraint primaryKey(String name) {
     DbConstraint constraint = getSpec().createColumnConstraint(
         this, name, Constraint.Type.PRIMARY_KEY);
-    _constraints.add(constraint);
-    return constraint;
+    return addConstraint(constraint);
   }
 
   /**
@@ -172,6 +175,7 @@ public class DbColumn extends DbObject<DbTable>
    * <p>
    * Note, no effort is made to make sure the given name is unique.
    * @param referencedTableName the name of the referenced table
+   * @return the freshly created constraint
    */
   public DbForeignKeyConstraint references(String referencedTableName) {
     return references(null, referencedTableName);
@@ -184,6 +188,7 @@ public class DbColumn extends DbObject<DbTable>
    * Note, no effort is made to make sure the given name is unique.
    * @param name the name of the new constraint
    * @param referencedTableName the name of the referenced table
+   * @return the freshly created constraint
    */
   public DbForeignKeyConstraint references(String name, 
                                            String referencedTableName) {
@@ -198,6 +203,7 @@ public class DbColumn extends DbObject<DbTable>
    * @param name the name of the new constraint
    * @param referencedTableName the name of the referenced table
    * @param referencedColName the names of the referenced column
+   * @return the freshly created constraint
    */
   public DbForeignKeyConstraint references(String name, 
                                            String referencedTableName, 
@@ -206,10 +212,21 @@ public class DbColumn extends DbObject<DbTable>
     DbForeignKeyConstraint fkConstraint =
       getSpec().createColumnForeignKeyConstraint(
         this, name, table, referencedColName);
-    _constraints.add(fkConstraint);
-    return fkConstraint;
+    return addConstraint(fkConstraint);
   }
 
+  /**
+   * Adds the given constraint to this column.
+   * <p>
+   * Note, no effort is made to make sure the given constraint is unique.
+   * @param constraint the constraint to be added
+   * @return the given constraint
+   */
+  public <T extends DbConstraint> T addConstraint(T constraint) {
+    _constraints.add(checkOwnership(constraint));
+    return constraint;
+  }
+  
   /**
    * Returns the standard jdbc type name for the give type value (one of {@link java.sql.Types}).
    */

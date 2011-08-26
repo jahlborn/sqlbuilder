@@ -43,14 +43,17 @@ public class DbIndex extends DbObject<DbSchema> implements Index {
   private final DbTable _table;
   /** the columns of the table which are indexed */
   private final List<DbColumn> _columns = new ArrayList<DbColumn>();
-    
+
   public DbIndex(DbTable table, String name,
                  String... colNames) {
+    this(table, name, table.findColumns(colNames));
+  }
+  
+  public DbIndex(DbTable table, String name,
+                 DbColumn... columns) {
     super(table.getParent(), name);
     _table = table;
-    for(String colName : colNames) {
-      _columns.add(_table.findColumn(colName));
-    }
+    addObjects(_columns, _table, columns);
   }
 
   public DbSchema getSchema() {

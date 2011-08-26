@@ -69,7 +69,18 @@ public class DbFunctionPackage extends DbObject<DbSchema> {
    */
   public DbFunction addFunction(String name) {
     DbFunction function = getSpec().createFunction(this, name);
-    _functions.add(function);
+    return addFunction(function);
+  }    
+
+  /**
+   * Adds the given function to this package.
+   * <p>
+   * Note, no effort is made to make sure the given function is unique.
+   * @param function the function to be added
+   * @return the given function
+   */
+  public <T extends DbFunction> T addFunction(T function) {
+    _functions.add(checkOwnership(function));
     return function;
   }    
 

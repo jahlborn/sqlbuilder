@@ -43,12 +43,13 @@ public class DbConstraint extends DbObject<DbObject<?>> implements Constraint {
 
   public DbConstraint(DbTable parent, String name, Type type, 
                       String... colNames) {
+    this(parent, name, type, parent.findColumns(colNames));
+  }
+
+  public DbConstraint(DbTable parent, String name, Type type, 
+                      DbColumn... columns) {
     this(parent, name, type);
-    if(colNames != null) {
-      for(String colName : colNames) {
-        _columns.add(parent.findColumn(colName));
-      }
-    }
+    addObjects(_columns, parent, columns);
   }
 
   private DbConstraint(DbObject<?> parent, String name, Type type) {
