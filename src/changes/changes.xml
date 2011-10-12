@@ -13,6 +13,10 @@
         Add SelectQuery.addCustomJoin(Object) for fully customizable join
         clauses.
       </action>
+      <action dev="jahlborn" type="update" issue="3422262">
+        Allow ComboCondition,UnaryCondition,BinaryCondition,ComboExpression to
+        have custom operators.
+      </action>
     </release>
     <release version="2.0.9" date="2011-08-25">
       <action dev="jahlborn" type="update">

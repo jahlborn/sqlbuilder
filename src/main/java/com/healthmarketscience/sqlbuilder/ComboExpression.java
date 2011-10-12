@@ -74,7 +74,15 @@ public class ComboExpression extends Expression
    * {@link Converter#CUSTOM_TO_EXPRESSION}.
    */
   public ComboExpression(Op comboOp, Object... expressions) {
-    _expressions = SqlObjectList.create(comboOp.toString());
+    this((Object)comboOp, expressions);
+  }
+    
+  /**
+   * {@code Object} -&gt; {@code Expression} conversions handled by
+   * {@link Converter#CUSTOM_TO_EXPRESSION}.
+   */
+  public ComboExpression(Object comboOpStr, Object... expressions) {
+    _expressions = SqlObjectList.create(comboOpStr.toString());
     _expressions.addObjects(Converter.CUSTOM_TO_EXPRESSION, expressions);
   }
     

@@ -70,29 +70,37 @@ public class BinaryCondition extends Condition
   }
 
 
-  private Op _binaryOp;
+  private Object _binaryOp;
   private SqlObject _leftValue;
   private SqlObject _rightValue;
   private ValueObject _escapeChar;
+
+  public BinaryCondition(Op binaryOp,
+                         SqlObject leftValue,
+                         SqlObject rightValue) {
+    this(binaryOp, (Object)leftValue, (Object)rightValue);
+  }
 
   /**
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toColumnSqlObject(Object)}.
    */
   public BinaryCondition(Op binaryOp,
-                         Object leftObj,
-                         Object rightObj) {
-    this(binaryOp,
-         Converter.toColumnSqlObject(leftObj),
-         Converter.toColumnSqlObject(rightObj));
+                         Object leftValue,
+                         Object rightValue) {
+    this((Object)binaryOp, leftValue, rightValue);
   }
     
-  public BinaryCondition(Op binaryOp,
-                         SqlObject leftValue,
-                         SqlObject rightValue) {
-    _binaryOp = binaryOp;
-    _leftValue = leftValue;
-    _rightValue = rightValue;
+  /**
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toColumnSqlObject(Object)}.
+   */
+  public BinaryCondition(Object binaryOpStr,
+                         Object leftValue,
+                         Object rightValue) {
+    _binaryOp = binaryOpStr;
+    _leftValue = Converter.toColumnSqlObject(leftValue);
+    _rightValue = Converter.toColumnSqlObject(rightValue);
   }
 
   @Override
