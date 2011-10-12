@@ -30,6 +30,7 @@ package com.healthmarketscience.sqlbuilder;
 import java.io.IOException;
 import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
+import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 
 
@@ -58,10 +59,23 @@ class ColumnObject extends Expression
 
   @Override
   public void appendTo(AppendableExt app) throws IOException {
-    if(SqlContext.getContext(app).getUseTableAliases()) {
-      app.append(_column.getTable().getAlias()).append(".");
-    }
+    appendTableAliasPrefix(app, _column.getTable());
     app.append(_column.getColumnNameSQL());
   }
-  
+
+  /**
+   * Outputs the table alias prefix <code>"[&lt;tableAlias&gt;.]"</code> for a
+   * column reference if the current SqlContext specifies table aliases should
+   * be used (and the table has an alias), otherwise does nothing.
+   */
+  static void appendTableAliasPrefix(AppendableExt app, Table table)
+    throws IOException
+  {
+    if(SqlContext.getContext(app).getUseTableAliases()) {
+      String alias = table.getAlias();
+      if(TableDefObject.hasAlias(alias)) {
+        app.append(alias).append(".");
+      }
+    }
+  }  
 }

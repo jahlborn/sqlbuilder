@@ -4,6 +4,12 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.0.10" date="TBD">
+      <action dev="jahlborn" type="update" issue="3421696">
+        Add more flexible table aliasing: handle Table with no alias and allow
+        DbTable alias to be passed in constructor.
+      </action>
+    </release>
     <release version="2.0.9" date="2011-08-25">
       <action dev="jahlborn" type="update">
         Make DbSpec the factory for all other DbObject classes.

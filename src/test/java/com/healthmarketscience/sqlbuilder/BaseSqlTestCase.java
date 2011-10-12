@@ -27,12 +27,14 @@ King of Prussia, PA 19406
 
 package com.healthmarketscience.sqlbuilder;
 
+import java.sql.Types;
+
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 import junit.framework.TestCase;
-import java.sql.Types;
 
 /**
  * @author james
@@ -55,6 +57,9 @@ public abstract class BaseSqlTestCase extends TestCase
   protected DbColumn _defTable2_col4;
   protected DbColumn _defTable2_col5;
 
+  protected DbJoin _idJoin;    
+  protected DbJoin _col4Join;
+  
   protected BaseSqlTestCase(String name) {
     super(name);
   }
@@ -81,6 +86,18 @@ public abstract class BaseSqlTestCase extends TestCase
     _defTable2_col5 = _defTable2.addColumn("col5", "DATE", null);
     _defTable2.foreignKey("t2_fk", new String[]{"col4","col5"},
                           null, "Table1", new String[]{"col2", "col3"});
+
+    _idJoin = _spec.addJoin(null, "Table1",
+                            null, "Table2",
+                            "col_id");
+
+    _table1.addColumn("col4", Types.VARCHAR, 255);
+    _defTable1.addColumn("altCol4", Types.VARCHAR, 255);
+    
+    _col4Join = _spec.addJoin("Schema1", "Table1",
+                              null, "Table1",
+                              new String[]{"col4"},
+                              new String[]{"altCol4"});
   }
 
   protected static void checkResult(String result, String expected)

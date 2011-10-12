@@ -48,8 +48,12 @@ public class DbTable extends DbObject<DbSchema> implements Table {
   private List<DbConstraint> _constraints = new ArrayList<DbConstraint>();
 
   public DbTable(DbSchema parent, String name) {
+    this(parent, name, parent.getSpec().getNextAlias());
+  }
+
+  public DbTable(DbSchema parent, String name, String alias) {
     super(parent, name);
-    _alias = parent.getSpec().getNextAlias();
+    _alias = alias;
   }
 
   public String getAlias() {
