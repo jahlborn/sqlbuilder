@@ -288,6 +288,13 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(selectStr9,
                 "SELECT t0.col1,t1.col2,t2.col5 AS MyCol,t2.col4 AS SomeCol FROM Schema1.Table1 t0,Table1 t1,Table2 t2");
 
+    String selectStr10 = new SelectQuery()
+      .addColumns(_table1_col1, _defTable1_col2)
+      .addCustomJoin("Schema1.Table1 t0 CROSS JOIN Table1 t1")
+      .toString();
+    checkResult(selectStr10,
+                "SELECT t0.col1,t1.col2 FROM Schema1.Table1 t0 CROSS JOIN Table1 t1");
+    
     
     try {
       new SelectQuery()

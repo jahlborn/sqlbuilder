@@ -208,6 +208,19 @@ public class SelectQuery extends Query<SelectQuery>
   }
 
   /**
+   * Adds a custom join string.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toCustomTableDefSqlObject(Object)}.
+   */
+  public SelectQuery addCustomJoin(Object joinStr)
+  {
+    SqlObject joinObj = Converter.toCustomTableDefSqlObject(joinStr);
+    _joins.addObject(joinObj);
+    return this;
+  }
+
+  /**
    * Adds a join of the given type from fromTableStr to toTableStr on
    * joinCond of the given join type.
    * <p>
