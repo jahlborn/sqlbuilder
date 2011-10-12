@@ -290,8 +290,10 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     String selectStr10 = new SelectQuery()
       .addColumns(_table1_col1, _defTable1_col2)
-      .addCustomJoin("Schema1.Table1 t0 CROSS JOIN Table1 t1")
-      .toString();
+      .addCustomJoin(
+          SqlObjectList.create(" CROSS JOIN ")
+          .addObjects(_table1, _defTable1, Converter.CUSTOM_TABLE_DEF_TO_OBJ))
+      .validate().toString();
     checkResult(selectStr10,
                 "SELECT t0.col1,t1.col2 FROM Schema1.Table1 t0 CROSS JOIN Table1 t1");
     

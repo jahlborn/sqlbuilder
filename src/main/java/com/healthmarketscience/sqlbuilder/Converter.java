@@ -158,6 +158,16 @@ public abstract class Converter<SrcType, DstType>
       }
     };
 
+  /** Converter which converts a custom table def object to a SqlObject using
+      {@link #toCustomTableDefSqlObject(Object)} */
+  protected static final Converter<Object, SqlObject> CUSTOM_TABLE_DEF_TO_OBJ =
+    new Converter<Object, SqlObject>() {
+      @Override
+      public SqlObject convert(Object value) {
+        return toCustomTableDefSqlObject(value);
+      }
+    };
+  
 
   /**
    * Converts the given src object to a SqlObject of the expected type.
