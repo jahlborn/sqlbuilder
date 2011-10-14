@@ -66,7 +66,9 @@ public class NotCondition extends Condition
   public void appendTo(AppendableExt app) throws IOException
   {
     if(!_condition.isEmpty()) {
-      app.append("(NOT ").append(_condition).append(")");
+      openParen(app);
+      app.append("NOT ").append(_condition);
+      closeParen(app);
     }
   }
 

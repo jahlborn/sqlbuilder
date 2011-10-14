@@ -133,13 +133,13 @@ public class UnaryCondition extends Condition
   @Override
   public void appendTo(AppendableExt app) throws IOException
   {
-    app.append("(");
+    openParen(app);
     if(_unaryOp.isPrefixOp()) {
       app.append(_unaryOp).append(_value);
     } else {
       app.append(_value).append(_unaryOp);
     }
-    app.append(")");
+    closeParen(app);
   }
 
   /**

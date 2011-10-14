@@ -126,12 +126,12 @@ public class BinaryCondition extends Condition
   
   @Override
   public void appendTo(AppendableExt app) throws IOException {
-    app.append("(")
-      .append(_leftValue).append(_binaryOp).append(_rightValue);
+    openParen(app);
+    app.append(_leftValue).append(_binaryOp).append(_rightValue);
     if(_escapeChar != null) {
       app.append(" ESCAPE ").append(_escapeChar);
     }
-    app.append(")");
+    closeParen(app);
   }
 
   /**

@@ -55,5 +55,10 @@ public abstract class Condition extends NestableClause
 
   
   protected Condition() {}
-    
+
+  @Override
+  public Condition setDisableParens(boolean disableParens) {
+    super.setDisableParens(disableParens);
+    return this;
+  }  
 }

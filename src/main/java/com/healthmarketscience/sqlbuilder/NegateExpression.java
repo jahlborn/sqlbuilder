@@ -67,7 +67,9 @@ public class NegateExpression extends Expression
   @Override
   public void appendTo(AppendableExt app) throws IOException {
     if(!_expression.isEmpty()) {
-      app.append("(- ").append(_expression).append(")");
+      openParen(app);
+      app.append("- ").append(_expression);
+      closeParen(app);
     }
   }
 

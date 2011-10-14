@@ -44,8 +44,32 @@ import java.util.ArrayList;
  */
 abstract class NestableClause extends SqlObject
 {  
+  private boolean _disableParens;
+
   protected NestableClause() {}
 
+  /**
+   * Returns whether or not wrapping parentheses are disabled for this clause
+   * (for clauses which utilize wrapping parentheses).  Defaults to {@code
+   * false}.
+   */
+  public boolean isDisableParens() {
+    return _disableParens;
+  }
+  
+  /**
+   * Controls whether or not this clause will wrap itself in parentheses (for
+   * relevant clauses).
+   * <p/>
+   * Warning: you should generally <b>not</b> disable parentheses as this may
+   * change the meaning of the SQL query.  However, sometimes non-standard SQL
+   * queries may require direct control over the wrapping parentheses.
+   */
+  public NestableClause setDisableParens(boolean disableParens) {
+    _disableParens = disableParens;
+    return this;
+  }
+  
   /**
    * Returns <code>true</code> iff the output of this instance would be an
    * empty expression, <code>false</code> otherwise.
@@ -56,11 +80,11 @@ abstract class NestableClause extends SqlObject
 
   /**
    * Returns {@code true} iff the output of this instance would include
-   * surrounding parenthesis, {@code false} otherwise.
+   * surrounding parentheses, {@code false} otherwise.
    * <p>
-   * Default implementation returns {@code !isEmpty()}.
+   * Default implementation returns {@code !isEmpty() && !isDisableParens()}.
    */
-  public boolean hasParens() { return !isEmpty(); }
+  public boolean hasParens() { return !isEmpty() && !isDisableParens(); }
 
   /**
    * Determines if any of the given clauses are non-empty.
@@ -110,15 +134,36 @@ abstract class NestableClause extends SqlObject
   }
 
   /**
+   * Appends an open parenthesis to the given AppendableExt if disableParens is
+   * {@code true}, otherwise does nothing.
+   */
+  protected void openParen(AppendableExt app) throws IOException {
+    if(!isDisableParens()) {
+      app.append("(");
+    } 
+  }
+
+  /**
+   * Appends a close parenthesis to the given AppendableExt if disableParens is
+   * {@code true}, otherwise does nothing.
+   */
+  protected void closeParen(AppendableExt app) throws IOException {
+    if(!isDisableParens()) {
+      app.append(")");
+    } 
+  }
+
+  /**
    * Appends the given custom clause to the given AppendableExt, handling
    * {@code null} and enclosing parens.
    */
-  protected static void appendCustomIfNotNull(AppendableExt app,
-                                              SqlObject obj)
+  protected void appendCustomIfNotNull(AppendableExt app, SqlObject obj)
     throws IOException
   {
     if(obj != null) {
-      app.append("(").append(obj).append(")");
+      openParen(app);
+      app.append(obj);
+      closeParen(app);
     }
   }
   
@@ -126,7 +171,7 @@ abstract class NestableClause extends SqlObject
    * Appends the given nested clauses to the given AppendableExt, handling
    * empty nested clauses and enclosing parens.
    */
-  protected static void appendNestedClauses(
+  protected void appendNestedClauses(
       AppendableExt app,
       SqlObjectList<? extends NestableClause> nestedClauses)
     throws IOException
@@ -167,7 +212,7 @@ abstract class NestableClause extends SqlObject
     }
 
     // append the non-empty nestedClauses
-    if(tmpNestedClauses.size() > 1) {
+    if((tmpNestedClauses.size() > 1) && !isDisableParens()) {
       app.append("(").append(tmpNestedClauses).append(")");
     } else {
       app.append(tmpNestedClauses);

@@ -420,6 +420,40 @@ public class SqlBuilderTest extends BaseSqlTestCase
     } catch(IllegalArgumentException e) {}
   }
 
+  public void testConditionAlterParens()
+  {
+    SelectQuery sq = new SelectQuery().addColumns(_table1_col1);
+
+    String reallyComplicatedConditionStr = ComboCondition.and(
+      BinaryCondition.lessThan(_table1_col1, "FOO", false),
+      ComboCondition.or(),
+      UnaryCondition.isNotNull(_defTable1_col_id),
+      new ComboCondition(ComboCondition.Op.OR,
+                         new CustomCondition("IM REALLY SNAZZY")
+                           .setDisableParens(true),
+                         new NotCondition(
+                           BinaryCondition.like(_defTable2_col5,
+                                                "BUZ%")),
+                         new BinaryCondition(BinaryCondition.Op.EQUAL_TO,
+                                             new CustomSql("YOU"),
+                                             "ME"))
+        .setDisableParens(true),
+      ComboCondition.or(
+        new UnaryCondition(UnaryCondition.Op.IS_NULL,
+                           _table1_col2)),
+      new InCondition(_defTable2_col4,
+                      "this string",
+                      new NumberValueObject(37))
+      .addObject(new NumberValueObject(42))
+      .setDisableParens(true),
+      BinaryCondition.notLike(_table1_col2, "\\_%").setLikeEscapeChar('\\')
+        .setDisableParens(true),
+      UnaryCondition.exists(sq))
+      .toString();
+    checkResult(reallyComplicatedConditionStr,
+                "((t0.col1 < 'FOO') AND (t1.col_id IS NOT NULL) AND IM REALLY SNAZZY OR (NOT (t2.col5 LIKE 'BUZ%')) OR (YOU = 'ME') AND (t0.col2 IS NULL) AND t2.col4 IN ('this string',37,42) AND t0.col2 NOT LIKE '\\_%' ESCAPE '\\' AND (EXISTS (SELECT t0.col1 FROM Schema1.Table1 t0)))");
+  }
+  
   public void testExpression()
   {
     Expression expr = ComboExpression.add(

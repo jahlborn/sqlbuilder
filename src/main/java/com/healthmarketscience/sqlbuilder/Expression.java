@@ -56,4 +56,9 @@ public abstract class Expression extends NestableClause
   
   protected Expression() {}
   
+  @Override
+  public Expression setDisableParens(boolean disableParens) {
+    super.setDisableParens(disableParens);
+    return this;
+  }  
 }

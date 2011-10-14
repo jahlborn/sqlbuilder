@@ -126,7 +126,8 @@ public class InCondition extends Condition {
   public void appendTo(AppendableExt app) throws IOException {
     if(!isEmpty()) {
       // ( x in (y1,y2,y3) )
-      app.append("(").append(_leftValue)
+      openParen(app);
+      app.append(_leftValue)
         .append(_negate ? " NOT IN " : " IN ");
 
       // expressions will have their own "()"
@@ -136,7 +137,9 @@ public class InCondition extends Condition {
         app.append("(").append(_rightValues).append(")");
       }
 
-      app.append(" )");
+      if(!isDisableParens()) {
+        app.append(" )");
+      }
     }
   }
 }

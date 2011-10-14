@@ -17,6 +17,10 @@
         Allow ComboCondition,UnaryCondition,BinaryCondition,ComboExpression to
         have custom operators.
       </action>
+      <action dev="jahlborn" type="update" issue="3422262">
+        Add option to disable wrapping parentheses in Conditions and
+        Expressions which utilize them.
+      </action>
     </release>
     <release version="2.0.9" date="2011-08-25">
       <action dev="jahlborn" type="update">
