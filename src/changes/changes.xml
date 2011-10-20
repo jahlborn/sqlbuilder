@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.0.10" date="TBD">
+    <release version="2.0.10" date="2011-10-19">
       <action dev="jahlborn" type="update" issue="3421696">
         Add more flexible table aliasing: handle Table with no alias and allow
         DbTable alias to be passed in constructor.
