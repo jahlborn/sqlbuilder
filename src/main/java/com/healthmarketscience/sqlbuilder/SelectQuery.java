@@ -84,7 +84,7 @@ public class SelectQuery extends Query<SelectQuery>
   private boolean _forUpdate;
   private SqlObjectList<SqlObject> _columns = SqlObjectList.create();
   private SqlObjectList<SqlObject> _joins = SqlObjectList.create("");
-  private List<SqlObject> _fromTables = new LinkedList<SqlObject>();
+  private List<SqlObject> _joinFromTables = new LinkedList<SqlObject>();
   private ComboCondition _condition = ComboCondition.and();
   private SqlObjectList<SqlObject> _grouping = SqlObjectList.create();
   private SqlObjectList<SqlObject> _ordering = SqlObjectList.create();
@@ -126,8 +126,8 @@ public class SelectQuery extends Query<SelectQuery>
       // add first from table
       _joins.addObject(fromTable);
     }
-    // track all from tables in case the user does validation
-    _fromTables.add(fromTable);
+    // track all join from tables in case the user does validation
+    _joinFromTables.add(fromTable);
   }
   
   /** Iff isDistinct is <code>true</code>, adds the DISTINCT keyword to the
@@ -205,6 +205,19 @@ public class SelectQuery extends Query<SelectQuery>
   public SelectQuery addFromTable(Table table)
   {
     return addCustomFromTable(table);
+  }
+
+  /**
+   * Adds a custom join string.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toCustomTableDefSqlObject(Object)}.
+   */
+  public SelectQuery addCustomJoin(Object joinStr)
+  {
+    SqlObject joinObj = Converter.toCustomTableDefSqlObject(joinStr);
+    _joins.addObject(joinObj);
+    return this;
   }
 
   /**
@@ -426,10 +439,10 @@ public class SelectQuery extends Query<SelectQuery>
       throw new ValidationException("No tables given in select");
     }
 
-    // note, if _fromTables is empty, then all the referenced tables are in
+    // note, if _joinFromTables is empty, then all the referenced tables are in
     // the _joins collection (using add*FromTable() methods), and no
     // extended validation needs to be done
-    if(checkTables && !_fromTables.isEmpty()) {
+    if(checkTables && !_joinFromTables.isEmpty()) {
       
       // verify that all the "from" tables not added to the _joins list
       // actually show up where they should.
@@ -438,12 +451,12 @@ public class SelectQuery extends Query<SelectQuery>
       // Each table F<N> must show up among (F<0> U F<0..N-1> U T<0..N-1>)
       //
       // _joins  = F0, T0, T1, T2 ...
-      // _fromTables = F0, F1, F2 ...
+      // _joinFromTables = F0, F1, F2 ...
       // 
       Set<Table> joinTables = new HashSet<Table>();
       Set<Table> fromTable = new HashSet<Table>();
       Set<Column> joinColumns = new HashSet<Column>();
-      Iterator<SqlObject> fromIter = _fromTables.iterator();
+      Iterator<SqlObject> fromIter = _joinFromTables.iterator();
       Iterator<SqlObject> toIter = _joins.iterator();
       
       // the first toIter table is actually F0 (see comment above)

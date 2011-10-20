@@ -44,7 +44,7 @@ public abstract class Converter<SrcType, DstType>
   /**
    * Converter which converts an Object to a CustomSql using
       {@link #toCustomSqlObject(Object)} */
-  protected static final Converter<Object, SqlObject> CUSTOM_TO_OBJ =
+  public static final Converter<Object, SqlObject> CUSTOM_TO_OBJ =
     new Converter<Object, SqlObject>() {
     @Override
       public SqlObject convert(Object obj) {
@@ -61,7 +61,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * </ul>
    */
-  protected static final Converter<Column, SqlObject> COLUMN_TO_OBJ =
+  public static final Converter<Column, SqlObject> COLUMN_TO_OBJ =
     new Converter<Column, SqlObject>() {
     @Override
     public SqlObject convert(Column col) {
@@ -71,7 +71,7 @@ public abstract class Converter<SrcType, DstType>
 
   /** Converter which converts a value object to a SqlObject using
       {@link #toValueSqlObject(Object)} */
-  protected static final Converter<Object, SqlObject> VALUE_TO_OBJ =
+  public static final Converter<Object, SqlObject> VALUE_TO_OBJ =
     new Converter<Object, SqlObject>() {
       @Override
       public SqlObject convert(Object value) {
@@ -81,7 +81,7 @@ public abstract class Converter<SrcType, DstType>
 
   /** Converter which converts a column value object to a SqlObject using
       {@link #toColumnSqlObject(Object)} */
-  protected static final Converter<Object, SqlObject> COLUMN_VALUE_TO_OBJ =
+  public static final Converter<Object, SqlObject> COLUMN_VALUE_TO_OBJ =
     new Converter<Object, SqlObject>() {
       @Override
       public SqlObject convert(Object value) {
@@ -91,7 +91,7 @@ public abstract class Converter<SrcType, DstType>
 
   /** Converter which converts a custom column object to a SqlObject using
       {@link #toCustomColumnSqlObject(Object)} */
-  protected static final Converter<Object, SqlObject> CUSTOM_COLUMN_TO_OBJ =
+  public static final Converter<Object, SqlObject> CUSTOM_COLUMN_TO_OBJ =
     new Converter<Object, SqlObject>() {
       @Override
       public SqlObject convert(Object value) {
@@ -103,7 +103,7 @@ public abstract class Converter<SrcType, DstType>
    * Converter which converts an Object to an Expression using
    * {@link #toExpressionObject(Object)}
    */
-  protected static final Converter<Object, Expression> CUSTOM_TO_EXPRESSION =
+  public static final Converter<Object, Expression> CUSTOM_TO_EXPRESSION =
     new Converter<Object, Expression>() {
     @Override
       public Expression convert(Object obj) {
@@ -115,7 +115,7 @@ public abstract class Converter<SrcType, DstType>
    * Converter which converts an Object to a Condition using
    * {@link #toConditionObject(Object)}
    */
-  protected static final Converter<Object, Condition> CUSTOM_TO_CONDITION =
+  public static final Converter<Object, Condition> CUSTOM_TO_CONDITION =
     new Converter<Object, Condition>() {
     @Override
       public Condition convert(Object obj) {
@@ -126,7 +126,7 @@ public abstract class Converter<SrcType, DstType>
   
   /** Converter which converts a Column to a TypedColumnObject or a value
       object to a SqlObject using {@link #toCustomSqlObject(Object)} */
-  protected static final Converter<Object, SqlObject> TYPED_COLUMN_TO_OBJ =
+  public static final Converter<Object, SqlObject> TYPED_COLUMN_TO_OBJ =
     new Converter<Object, SqlObject>() {
     @Override
       public SqlObject convert(Object value) {
@@ -140,7 +140,7 @@ public abstract class Converter<SrcType, DstType>
 
   /** Converter which converts an Object to a Subquery using
       {@link #toSubquery} */
-  protected static final Converter<Object, Subquery> CUSTOM_TO_SUBQUERY =
+  public static final Converter<Object, Subquery> CUSTOM_TO_SUBQUERY =
     new Converter<Object, Subquery>() {
     @Override
       public Subquery convert(Object value) {
@@ -150,7 +150,7 @@ public abstract class Converter<SrcType, DstType>
 
   /** Converter which converts an Object to a SqlObject using
       {@link #toCustomConstraintSqlObject} */
-  protected static final Converter<Object, SqlObject> CUSTOM_TO_CONSTRAINTCLAUSE =
+  public static final Converter<Object, SqlObject> CUSTOM_TO_CONSTRAINTCLAUSE =
     new Converter<Object, SqlObject>() {
     @Override
       public SqlObject convert(Object value) {
@@ -158,6 +158,16 @@ public abstract class Converter<SrcType, DstType>
       }
     };
 
+  /** Converter which converts a custom table def object to a SqlObject using
+      {@link #toCustomTableDefSqlObject(Object)} */
+  public static final Converter<Object, SqlObject> CUSTOM_TABLE_DEF_TO_OBJ =
+    new Converter<Object, SqlObject>() {
+      @Override
+      public SqlObject convert(Object value) {
+        return toCustomTableDefSqlObject(value);
+      }
+    };
+  
 
   /**
    * Converts the given src object to a SqlObject of the expected type.

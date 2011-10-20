@@ -77,7 +77,16 @@ public class ComboCondition extends Condition
    */
   public ComboCondition(Op comboOp, Object... conditions)
   {
-    _conditions = SqlObjectList.create(comboOp.toString());
+    this((Object)comboOp, conditions);
+  }
+    
+  /**
+   * {@code Object} -&gt; {@code Condition} conversions handled by
+   * {@link Converter#CUSTOM_TO_CONDITION}.
+   */
+  public ComboCondition(Object comboOpStr, Object... conditions)
+  {
+    _conditions = SqlObjectList.create(comboOpStr.toString());
     _conditions.addObjects(Converter.CUSTOM_TO_CONDITION, conditions);
   }
     

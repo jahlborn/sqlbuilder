@@ -28,7 +28,6 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -129,34 +128,37 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
    * Adds the given object to the list
    * @param obj the object to be added
    */
-  public void addObject(ObjType obj) {
+  public SqlObjectList<ObjType> addObject(ObjType obj) {
     _objects.add(obj);
+    return this;
   }
 
   /**
    * Adds the given objects to the list
    * @param objs the objects to be added, no-op if {@code null}
    */
-  public void addObjects(ObjType... objs) {
+  public SqlObjectList<ObjType> addObjects(ObjType... objs) {
     if(objs == null) {
-      return;
+      return this;
     }
     for(ObjType obj : objs) {
       _objects.add(obj);
     }
+    return this;
   }
 
   /**
    * Adds the given objects to the list
    * @param objs the objects to be added, no-op if {@code null}
    */
-  public void addObjects(Collection<? extends ObjType> objs) {
+  public SqlObjectList<ObjType> addObjects(Iterable<? extends ObjType> objs) {
     if(objs == null) {
-      return;
+      return this;
     }
     for(ObjType obj : objs) {
       _objects.add(obj);
     }
+    return this;
   }
 
   /**
@@ -166,15 +168,16 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
    *                  from the given objects
    * @param objs the objects to be added, no-op if {@code null}
    */
-  public <SrcType, DstType extends ObjType> void addObjects(
+  public <SrcType, DstType extends ObjType> SqlObjectList<ObjType> addObjects(
       Converter<SrcType, DstType> converter, SrcType... objs)
   {
     if(objs == null) {
-      return;
+      return this;
     }
     for(SrcType obj : objs) {
       _objects.add(converter.convert(obj));
     }
+    return this;
   }
 
   /**
@@ -184,16 +187,17 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
    *                  from the given objects
    * @param objs the objects to be added, no-op if {@code null}
    */
-  public <SrcType, DstType extends ObjType> void addObjects(
+  public <SrcType, DstType extends ObjType> SqlObjectList<ObjType> addObjects(
       Converter<SrcType, DstType> converter,
-      Collection<? extends SrcType> objs)
+      Iterable<? extends SrcType> objs)
   {
     if(objs == null) {
-      return;
+      return this;
     }
     for(SrcType obj : objs) {
       _objects.add(converter.convert(obj));
     }
+    return this;
   }
 
   @Override

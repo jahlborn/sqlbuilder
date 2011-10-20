@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import com.healthmarketscience.common.util.AppendableExt;
+import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.RejoinTable;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbFunction;
@@ -62,12 +63,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String createStr2 = new CreateTableQuery(_table1, true)
       .validate().toString();
     checkResult(createStr2,
-                "CREATE TABLE Schema1.Table1 (col1 VARCHAR(213),col2 NUMBER(7),col3 TIMESTAMP)");
+                "CREATE TABLE Schema1.Table1 (col1 VARCHAR(213),col2 NUMBER(7),col3 TIMESTAMP,col4 VARCHAR(255))");
 
     String createStr3 = new CreateTableQuery(_defTable1, true)
       .validate().toString();
     checkResult(createStr3,
-                "CREATE TABLE Table1 (col_id NUMBER,col2 VARCHAR(64),col3 DATE)");
+                "CREATE TABLE Table1 (col_id NUMBER,col2 VARCHAR(64),col3 DATE,altCol4 VARCHAR(255))");
 
     @SuppressWarnings("deprecation")
     String createStr4 = new CreateTableQuery(_defTable1, false)
@@ -95,7 +96,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                             .addColumns(_defTable1_col2, _defTable1_col3))
       .validate().toString();
     checkResult(createStr5,
-                "CREATE TABLE Table1 (col_id NUMBER NOT NULL CONSTRAINT id_pk PRIMARY KEY,col2 VARCHAR(64),col3 DATE NOT NULL,UNIQUE (col2,col3))");
+                "CREATE TABLE Table1 (col_id NUMBER NOT NULL CONSTRAINT id_pk PRIMARY KEY,col2 VARCHAR(64),col3 DATE NOT NULL,altCol4 VARCHAR(255),UNIQUE (col2,col3))");
 
     String createStr6 = new CreateTableQuery(_defTable2, true)
       .validate().toString();
@@ -207,19 +208,6 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
   public void testSelect()
   {
-    // add some joins to use in our selects
-    DbJoin idJoin = _spec.addJoin(null, "Table1",
-                                  null, "Table2",
-                                  "col_id");
-
-    _table1.addColumn("col4");
-    _defTable1.addColumn("altCol4");
-    
-    DbJoin col4Join = _spec.addJoin("Schema1", "Table1",
-                                    null, "Table1",
-                                    new String[]{"col4"},
-                                    new String[]{"altCol4"});
-      
     {
       SelectQuery selectQuery1 = new SelectQuery()
         .addColumns(_table1_col1, _defTable1_col2, _defTable2_col5);
@@ -234,8 +222,8 @@ public class SqlBuilderTest extends BaseSqlTestCase
                   "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0,Table1 t1,Table2 t2");
 
       String selectStr3 = selectQuery1.addJoins(SelectQuery.JoinType.INNER,
-                                                col4Join)
-        .addJoins(SelectQuery.JoinType.LEFT_OUTER, idJoin)
+                                                _col4Join)
+        .addJoins(SelectQuery.JoinType.LEFT_OUTER, _idJoin)
         .validate().toString();
       checkResult(selectStr3,
                   "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id)");
@@ -300,6 +288,15 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(selectStr9,
                 "SELECT t0.col1,t1.col2,t2.col5 AS MyCol,t2.col4 AS SomeCol FROM Schema1.Table1 t0,Table1 t1,Table2 t2");
 
+    String selectStr10 = new SelectQuery()
+      .addColumns(_table1_col1, _defTable1_col2)
+      .addCustomJoin(
+          SqlObjectList.create(" CROSS JOIN ")
+          .addObjects(Converter.CUSTOM_TABLE_DEF_TO_OBJ, _table1, _defTable1))
+      .validate().toString();
+    checkResult(selectStr10,
+                "SELECT t0.col1,t1.col2 FROM Schema1.Table1 t0 CROSS JOIN Table1 t1");
+    
     
     try {
       new SelectQuery()
@@ -359,6 +356,31 @@ public class SqlBuilderTest extends BaseSqlTestCase
       
   }
 
+  public void testSelectNoAlias()
+  {
+    RejoinTable noAliasTable = new RejoinTable(_table1, null);
+    Column col1 = noAliasTable.findColumnByName("col1");
+    
+    SelectQuery selectQuery1 = new SelectQuery()
+      .addColumns(col1, _defTable1_col2, _defTable2_col5);
+
+    String selectStr1 = selectQuery1.addJoin(
+        SelectQuery.JoinType.INNER,
+        noAliasTable, _defTable1,
+        col1, _defTable1_col2)
+        .addJoins(SelectQuery.JoinType.LEFT_OUTER, _idJoin)
+        .validate().toString();
+      checkResult(selectStr1,
+                  "SELECT col1,t1.col2,t2.col5 FROM Schema1.Table1 INNER JOIN Table1 t1 ON (col1 = t1.col2) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id)");
+
+      String selectStr2 = selectQuery1
+        .addCondition(BinaryCondition.greaterThan(_defTable2_col4, 42, true))
+        .addCondition(BinaryCondition.equalTo(col1, "foo"))
+        .validate().toString();
+      checkResult(selectStr2,
+                  "SELECT col1,t1.col2,t2.col5 FROM Schema1.Table1 INNER JOIN Table1 t1 ON (col1 = t1.col2) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE ((t2.col4 >= 42) AND (col1 = 'foo'))");
+  }
+  
   public void testCondition()
   {
     SelectQuery sq = new SelectQuery().addColumns(_table1_col1);
@@ -398,6 +420,40 @@ public class SqlBuilderTest extends BaseSqlTestCase
     } catch(IllegalArgumentException e) {}
   }
 
+  public void testConditionAlterParens()
+  {
+    SelectQuery sq = new SelectQuery().addColumns(_table1_col1);
+
+    String reallyComplicatedConditionStr = ComboCondition.and(
+      BinaryCondition.lessThan(_table1_col1, "FOO", false),
+      ComboCondition.or(),
+      UnaryCondition.isNotNull(_defTable1_col_id),
+      new ComboCondition(ComboCondition.Op.OR,
+                         new CustomCondition("IM REALLY SNAZZY")
+                           .setDisableParens(true),
+                         new NotCondition(
+                           BinaryCondition.like(_defTable2_col5,
+                                                "BUZ%")),
+                         new BinaryCondition(BinaryCondition.Op.EQUAL_TO,
+                                             new CustomSql("YOU"),
+                                             "ME"))
+        .setDisableParens(true),
+      ComboCondition.or(
+        new UnaryCondition(UnaryCondition.Op.IS_NULL,
+                           _table1_col2)),
+      new InCondition(_defTable2_col4,
+                      "this string",
+                      new NumberValueObject(37))
+      .addObject(new NumberValueObject(42))
+      .setDisableParens(true),
+      BinaryCondition.notLike(_table1_col2, "\\_%").setLikeEscapeChar('\\')
+        .setDisableParens(true),
+      UnaryCondition.exists(sq))
+      .toString();
+    checkResult(reallyComplicatedConditionStr,
+                "((t0.col1 < 'FOO') AND (t1.col_id IS NOT NULL) AND IM REALLY SNAZZY OR (NOT (t2.col5 LIKE 'BUZ%')) OR (YOU = 'ME') AND (t0.col2 IS NULL) AND t2.col4 IN ('this string',37,42) AND t0.col2 NOT LIKE '\\_%' ESCAPE '\\' AND (EXISTS (SELECT t0.col1 FROM Schema1.Table1 t0)))");
+  }
+  
   public void testExpression()
   {
     Expression expr = ComboExpression.add(

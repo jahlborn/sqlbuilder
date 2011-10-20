@@ -57,6 +57,7 @@ class AllTableColumns extends TableObject
   
   @Override
   public void appendTo(AppendableExt app) throws IOException {
-    app.append(_table.getAlias()).append(".*");
+    ColumnObject.appendTableAliasPrefix(app, _table);
+    app.append("*");
   }
 }

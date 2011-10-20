@@ -123,10 +123,19 @@ public class InCondition extends Condition {
   }
 
   @Override
+  protected void closeParen(AppendableExt app) throws IOException {
+    if(!isDisableParens()) {
+      // backwards compat, separate the 2 closing parens
+      app.append(" )");
+    } 
+  }
+  
+  @Override
   public void appendTo(AppendableExt app) throws IOException {
     if(!isEmpty()) {
-      // ( x in (y1,y2,y3) )
-      app.append("(").append(_leftValue)
+      // (x in (y1,y2,y3) )
+      openParen(app);
+      app.append(_leftValue)
         .append(_negate ? " NOT IN " : " IN ");
 
       // expressions will have their own "()"
@@ -136,7 +145,7 @@ public class InCondition extends Condition {
         app.append("(").append(_rightValues).append(")");
       }
 
-      app.append(" )");
+      closeParen(app);
     }
   }
 }

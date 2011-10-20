@@ -42,11 +42,25 @@ import com.healthmarketscience.common.util.AppendableExt;
 public class UnaryCondition extends Condition
 {
   /**
+   * Interface which can be implemented to provide a custom unary operation.
+   */
+  public interface CustomUnaryOp
+  {
+    /** Returns {@code true} if the operator comes before the value, {@code
+        false} otherwise. */
+    public boolean isPrefixOp();
+
+    /** Returns the Converter which handles the {@code Object} -&gt; {@code
+        SqlObject} conversion for the operation value. */
+    public Converter<Object,? extends SqlObject> getConverter();
+  }
+  
+  /**
    * Enum representing the unary operations supported in a SQL condition,
    * e.g. <code>"(&lt;column&gt; &lt;unaryOp&gt;)"</code> or
    * <code>"(&lt;unaryOp&gt; &lt;column&gt;)"</code>.
    */
-  public enum Op
+  public enum Op implements CustomUnaryOp
   {
     /** {@code Object} -&gt; {@code SqlObject} conversions handled by
         {@link Converter#COLUMN_VALUE_TO_OBJ}. */
@@ -84,7 +98,7 @@ public class UnaryCondition extends Condition
   }
 
   
-  private Op _unaryOp;
+  private CustomUnaryOp _unaryOp;
   private SqlObject _value;
 
   public UnaryCondition(Op unaryOp, SqlObject obj)
@@ -98,6 +112,15 @@ public class UnaryCondition extends Condition
    */
   public UnaryCondition(Op unaryOp, Object value)
   {
+    this((CustomUnaryOp)unaryOp, value);
+  }
+        
+  /**
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link CustomUnaryOp#getConverter}.
+   */
+  public UnaryCondition(CustomUnaryOp unaryOp, Object value)
+  {
     _unaryOp = unaryOp;
     _value = _unaryOp.getConverter().convert(value);
   }
@@ -110,13 +133,13 @@ public class UnaryCondition extends Condition
   @Override
   public void appendTo(AppendableExt app) throws IOException
   {
-    app.append("(");
+    openParen(app);
     if(_unaryOp.isPrefixOp()) {
       app.append(_unaryOp).append(_value);
     } else {
       app.append(_value).append(_unaryOp);
     }
-    app.append(")");
+    closeParen(app);
   }
 
   /**

@@ -33,7 +33,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 
 /**
- * Outputs the table definition <code>"&lt;table&gt; &lt;alias&gt;"</code>
+ * Outputs the table definition <code>"&lt;table&gt; [&lt;alias&gt;]"</code>
  * (used for FROM clauses).
  *
  * @author James Ahlborn
@@ -46,7 +46,18 @@ class TableDefObject extends TableObject
 
   @Override
   public void appendTo(AppendableExt app) throws IOException {
-    app.append(_table.getTableNameSQL()).append(" ").append(_table.getAlias());
+    app.append(_table.getTableNameSQL());
+    String alias = _table.getAlias();
+    if(hasAlias(alias)) {
+      app.append(" ").append(alias);
+    }
   }
 
+  /**
+   * Returns {@code true} if the given alias is a non-empty string, {@code
+   * false} otherwise.
+   */
+  public static boolean hasAlias(String alias) {
+    return ((alias != null) && (alias.length() > 0));
+  }
 }
