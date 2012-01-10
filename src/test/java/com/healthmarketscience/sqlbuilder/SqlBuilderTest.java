@@ -28,6 +28,7 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
+import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -899,6 +900,15 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(queryStr5, 
                 "ALTER TABLE Table2 ADD CONSTRAINT t2_fk FOREIGN KEY (col4,col5) REFERENCES Table1 (col2,col3)");
 
+    DbColumn toAdd = _defTable1.addColumn("col5", Types.VARCHAR, 255);
+    toAdd.notNull();
+    String queryStr6 =
+      new AlterTableQuery(_defTable1)
+      .setAction(new AlterTableQuery.AddColumnAction(toAdd)
+                 .addConstraint(new ConstraintClause(ConstraintClause.Type.UNIQUE, null)))
+      .validate().toString();
+    checkResult(queryStr6,
+                "ALTER TABLE Table1 ADD col5 VARCHAR(255) NOT NULL UNIQUE");
   }
 
   public void testComment()

@@ -130,10 +130,7 @@ public abstract class Converter<SrcType, DstType>
     new Converter<Object, SqlObject>() {
     @Override
       public SqlObject convert(Object value) {
-        if(value instanceof Column) {
-          return new TypedColumnObject((Column)value);
-        }
-        return toCustomSqlObject(value);
+        return toCustomTypedColumnSqlObject(value);
       }
     };
 
@@ -608,6 +605,30 @@ public abstract class Converter<SrcType, DstType>
       return toTableDefSqlObject((Table)table);
     }
     return toCustomSqlObject(table);
+  }
+
+  /**
+   * Converts a column Object to a SqlObject.
+   * <p>
+   * Conversions (in order):
+   * <ul>
+   * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link TypedColumnObject}</li>
+   * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
+   * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
+   * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
+   * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
+   * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
+   * </ul>
+   * 
+   * @param column object to coerce to a typed column definition SqlObject
+   * @return the given table Object wrapped as a SqlObject.
+   */
+  public static SqlObject toCustomTypedColumnSqlObject(Object column)
+  {
+    if(column instanceof Column) {
+      return new TypedColumnObject((Column)column);
+    }
+    return toCustomSqlObject(column);
   }
 
   /**

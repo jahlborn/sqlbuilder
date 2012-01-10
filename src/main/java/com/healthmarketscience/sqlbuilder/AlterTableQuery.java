@@ -84,6 +84,23 @@ public class AlterTableQuery extends Query<AlterTableQuery>
     return setAction(new AddConstraintAction(constraint));
   }
 
+  /**
+   * Sets the alter table action to add the given column.
+   */
+  public AlterTableQuery setAddColumn(Column column) {
+    return setAddCustomColumn(column);
+  }
+
+  /**
+   * Sets the alter table action to add the given column.
+     * <p>
+     * {@code Object} -&gt; {@code SqlObject} conversions handled by
+     * {@link Converter#toCustomTypedColumnSqlObject}.
+   */
+  public AlterTableQuery setAddCustomColumn(Object column) {
+    return setAction(new AddColumnAction(column));
+  }
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
@@ -126,7 +143,47 @@ public class AlterTableQuery extends Query<AlterTableQuery>
       app.append(" ADD ").append(_constraint);
     }
   }
-  
+
+
+  /**
+   * "Action" for adding a column to a table.,
+   * e.g. {@code "... ADD <column name> <column type> [constraints]}.
+   *
+   * @author Eric Fennell
+   */
+  public static class AddColumnAction extends SqlObject
+  {
+    private SqlObject _column;
+
+    public AddColumnAction(Object column) {
+      _column = Converter.toCustomTypedColumnSqlObject(column);
+    }
+
+    @Override
+    protected void collectSchemaObjects(ValidationContext vContext) {
+      _column.collectSchemaObjects(vContext);
+    }
+
+    @Override
+    public void appendTo(AppendableExt app) throws IOException {
+      app.append(" ADD ").append(_column);
+    }
+
+    /**
+     * Adds a constraint to the column specified in this action
+     * <p>
+     * {@code Object} -&gt; {@code SqlObject} constraint conversions handled by
+     * {@link Converter#toCustomConstraintClause}.
+     */
+    public AddColumnAction addConstraint(Object constraint)
+    {
+      if(_column instanceof TypedColumnObject) {
+        ((TypedColumnObject)_column).addConstraint(constraint);
+      }
+      return this;
+    }
+  }
+
 
   /**
    * "Action" for adding a unique constraint to a table.,
