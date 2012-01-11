@@ -69,7 +69,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String createStr3 = new CreateTableQuery(_defTable1, true)
       .validate().toString();
     checkResult(createStr3,
-                "CREATE TABLE Table1 (col_id NUMBER,col2 VARCHAR(64),col3 DATE,altCol4 VARCHAR(255))");
+                "CREATE TABLE Table1 (col_id NUMBER,col2 VARCHAR(64) DEFAULT 'blah',col3 DATE,altCol4 VARCHAR(255))");
 
     @SuppressWarnings("deprecation")
     String createStr4 = new CreateTableQuery(_defTable1, false)
@@ -84,7 +84,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addColumnConstraint(_table1_col1, CreateTableQuery.ColumnConstraint.UNIQUE)
       .validate().toString();
     checkResult(createStr4,
-                "CREATE TABLE Table1 (col_id NUMBER PRIMARY KEY,col2 VARCHAR(64),col3 DATE NOT NULL CONSTRAINT col3_fk REFERENCES Schema1.Table1 (col3),col4 NUMBER NOT NULL)");
+                "CREATE TABLE Table1 (col_id NUMBER PRIMARY KEY,col2 VARCHAR(64) DEFAULT 'blah',col3 DATE NOT NULL CONSTRAINT col3_fk REFERENCES Schema1.Table1 (col3),col4 NUMBER NOT NULL)");
 
     String createStr5 = new CreateTableQuery(_defTable1, true)
       .addColumnConstraint(_defTable1_col_id,
@@ -93,11 +93,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
                            ConstraintClause.primaryKey("id_pk"))
       .addColumnConstraint(_defTable1_col3,
                            ConstraintClause.notNull())
+      .setColumnDefaultValue(_defTable1_col3, new CustomSql("CURRENT_DATE"))
       .addCustomConstraints(ConstraintClause.unique() 
                             .addColumns(_defTable1_col2, _defTable1_col3))
       .validate().toString();
     checkResult(createStr5,
-                "CREATE TABLE Table1 (col_id NUMBER NOT NULL CONSTRAINT id_pk PRIMARY KEY,col2 VARCHAR(64),col3 DATE NOT NULL,altCol4 VARCHAR(255),UNIQUE (col2,col3))");
+                "CREATE TABLE Table1 (col_id NUMBER NOT NULL CONSTRAINT id_pk PRIMARY KEY,col2 VARCHAR(64) DEFAULT 'blah',col3 DATE DEFAULT CURRENT_DATE NOT NULL,altCol4 VARCHAR(255),UNIQUE (col2,col3))");
 
     String createStr6 = new CreateTableQuery(_defTable2, true)
       .validate().toString();
@@ -909,6 +910,15 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(queryStr6,
                 "ALTER TABLE Table1 ADD col5 VARCHAR(255) NOT NULL UNIQUE");
+
+    toAdd.setDefaultValue("someValue");
+    String queryStr7 =
+      new AlterTableQuery(_defTable1)
+      .setAddColumn(toAdd)
+      .validate().toString();
+    checkResult(queryStr7,
+                "ALTER TABLE Table1 ADD col5 VARCHAR(255) DEFAULT 'someValue' NOT NULL");
+
   }
 
   public void testComment()

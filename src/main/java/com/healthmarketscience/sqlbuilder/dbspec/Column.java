@@ -52,4 +52,7 @@ public interface Column {
 
   /** @return any constraints for this column */
   public List<? extends Constraint> getConstraints();
+
+  /** @return the default value for this column, if any */
+  public Object getDefaultValue();
 }

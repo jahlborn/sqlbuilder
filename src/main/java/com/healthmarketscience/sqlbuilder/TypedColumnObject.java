@@ -42,12 +42,17 @@ import com.healthmarketscience.sqlbuilder.dbspec.Column;
 class TypedColumnObject extends ColumnObject
 {
   private SqlObjectList<SqlObject> _constraints = SqlObjectList.create(" ");
+  private SqlObject _defaultValue;
 
   TypedColumnObject(Column column) {
     super(column);
 
     _constraints.addObjects(Converter.CUSTOM_TO_CONSTRAINTCLAUSE,
                             column.getConstraints());
+    Object defVal = column.getDefaultValue();
+    if(defVal != null) {
+      _defaultValue = Converter.toValueSqlObject(defVal);
+    }
   }
 
   /**
@@ -59,11 +64,24 @@ class TypedColumnObject extends ColumnObject
   void addConstraint(Object obj) {
     _constraints.addObject(Converter.toCustomConstraintClause(obj));
   }
+
+  /**
+   * Sets the given value as the column default value.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} value conversions handled by
+   * {@link Converter#toValueSqlObject}.
+   */
+  void setDefaultValue(Object val) {
+    _defaultValue = Converter.toValueSqlObject(val);
+  }
    
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
     _constraints.collectSchemaObjects(vContext);
+    if(_defaultValue != null) {
+      _defaultValue.collectSchemaObjects(vContext);
+    }
   }
  
   @Override
@@ -73,6 +91,10 @@ class TypedColumnObject extends ColumnObject
     Integer colFieldLength = _column.getTypeLength();
     if(colFieldLength != null) {
       app.append("(").append(colFieldLength).append(")");
+    }
+
+    if(_defaultValue != null) {
+      app.append(" DEFAULT ").append(_defaultValue);
     }
 
     if(!_constraints.isEmpty()) {

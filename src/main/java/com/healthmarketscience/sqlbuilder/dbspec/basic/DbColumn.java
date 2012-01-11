@@ -65,7 +65,8 @@ public class DbColumn extends DbObject<DbTable>
     
   private final String _typeName;
   private final Integer _typeLength;
-  private List<DbConstraint> _constraints = new ArrayList<DbConstraint>();
+  private final List<DbConstraint> _constraints = new ArrayList<DbConstraint>();
+  private Object _defaultValue;
 
   public DbColumn(DbTable parent, String name,
                   String typeName, Integer typeLength) {
@@ -92,6 +93,19 @@ public class DbColumn extends DbObject<DbTable>
 
   public List<DbConstraint> getConstraints() {
     return _constraints;
+  }
+
+  /**
+   * Sets the default value for this column.  A value of {@code null} will
+   * be treated as <i>no</i> default value.  
+   */
+  public DbColumn setDefaultValue(Object defaultValue) {
+    _defaultValue = defaultValue;
+    return this;
+  }
+
+  public Object getDefaultValue() {
+    return _defaultValue;
   }
 
   /**

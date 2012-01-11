@@ -108,6 +108,8 @@ public class RejoinTable implements Table
 
     public List<? extends Constraint> getConstraints() { return _column.getConstraints(); }
 
+    public Object getDefaultValue() { return _column.getDefaultValue(); }
+
     @Override
     public String toString() {
       return "Rejoin: " + getOriginalColumn().toString() +

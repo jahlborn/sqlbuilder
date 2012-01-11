@@ -76,7 +76,7 @@ public abstract class BaseSqlTestCase extends TestCase
     _table1_col3 = _table1.addColumn("col3", Types.TIMESTAMP, null);
     _defTable1 = _defSchema.addTable("Table1");
     _defTable1_col_id = _defTable1.addColumn("col_id", "NUMBER", null);
-    _defTable1_col2 = _defTable1.addColumn("col2", Types.VARCHAR, 64);
+    _defTable1_col2 = _defTable1.addColumn("col2", Types.VARCHAR, 64).setDefaultValue("blah");
     _defTable1_col3 = _defTable1.addColumn("col3", Types.DATE, null);
     _defTable2 = _defSchema.addTable("Table2");
     _defTable2_col_id = _defTable2.addColumn("col_id", "NUMBER", null);

@@ -175,10 +175,22 @@ public class AlterTableQuery extends Query<AlterTableQuery>
      * {@code Object} -&gt; {@code SqlObject} constraint conversions handled by
      * {@link Converter#toCustomConstraintClause}.
      */
-    public AddColumnAction addConstraint(Object constraint)
-    {
+    public AddColumnAction addConstraint(Object constraint) {
       if(_column instanceof TypedColumnObject) {
         ((TypedColumnObject)_column).addConstraint(constraint);
+      }
+      return this;
+    }
+
+    /**
+     * Sets the given value as the column default value for this action.
+     * <p>
+     * {@code Object} -&gt; {@code SqlObject} value conversions handled by
+     * {@link Converter#toValueSqlObject}.
+     */
+    public AddColumnAction setDefaultValue(Object defaultValue) {
+      if(_column instanceof TypedColumnObject) {
+        ((TypedColumnObject)_column).setDefaultValue(defaultValue);
       }
       return this;
     }

@@ -183,6 +183,28 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     }
     return this;
   }
+  
+  /**
+   * Sets the given value as the column default value on a previously added
+   * column
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} value conversions handled by
+   * {@link Converter#toValueSqlObject}.
+   */
+  public CreateTableQuery setColumnDefaultValue(Column column, Object defaultValue)
+  {
+    for(ListIterator<SqlObject> iter = _columns.listIterator();
+        iter.hasNext(); ) {
+      SqlObject tmpCol = iter.next();
+      if((tmpCol instanceof TypedColumnObject) &&
+         (((TypedColumnObject)tmpCol)._column == column)) {
+        // add constraint
+        ((TypedColumnObject)tmpCol).setDefaultValue(defaultValue);
+        break;
+      }
+    }
+    return this;
+  }
 
   /**
    * Adds the given Constraints as table constraints.
