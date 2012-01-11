@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.0.11" date="TBD">
+    <release version="2.0.11" date="2012-01-10">
       <action dev="jahlborn" type="add">
           Added the AddColumnAction to the AlterTableQuery, thanks to Eric Fennell.
       </action>
