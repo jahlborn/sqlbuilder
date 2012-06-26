@@ -87,6 +87,7 @@ public class RejoinTable implements Table
    * RejoinTable instead of the original table.  All other methods return the
    * information from the original column.
    */
+  @SuppressWarnings("deprecation")
   public class RejoinColumn implements Column
   {
     /** the original column object */
@@ -105,6 +106,8 @@ public class RejoinTable implements Table
     public String getTypeNameSQL() { return _column.getTypeNameSQL(); }
 
     public Integer getTypeLength() { return _column.getTypeLength(); }
+
+    public List<?> getTypeQualifiers() { return _column.getTypeQualifiers(); }
 
     public List<? extends Constraint> getConstraints() { return _column.getConstraints(); }
 

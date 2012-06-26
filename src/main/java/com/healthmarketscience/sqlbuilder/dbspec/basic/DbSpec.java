@@ -203,9 +203,9 @@ public class DbSpec {
    * This method can be overriden to utilize custom model subclasses.
    */
   public DbColumn createColumn(DbTable parent, String name,
-                               String typeName, Integer typeLength)
+                               String typeName, Object... typeQualifiers)
   {
-    return new DbColumn(parent, name, typeName, typeLength);
+    return new DbColumn(parent, name, typeName, typeQualifiers);
   }
   
   /**

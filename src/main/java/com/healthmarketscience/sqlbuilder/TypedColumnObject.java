@@ -28,6 +28,9 @@ King of Prussia, PA 19406
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+
 import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 
@@ -85,12 +88,32 @@ class TypedColumnObject extends ColumnObject
   }
  
   @Override
+  @SuppressWarnings("deprecation")
   public void appendTo(AppendableExt app) throws IOException {
+
     app.append(_column.getColumnNameSQL()).append(" ")
       .append(_column.getTypeNameSQL());
-    Integer colFieldLength = _column.getTypeLength();
-    if(colFieldLength != null) {
-      app.append("(").append(colFieldLength).append(")");
+
+    List<?> colQuals = _column.getTypeQualifiers();
+    if(colQuals != null) {
+
+      if(!colQuals.isEmpty()) {
+        app.append("(");
+        Iterator<?> iter = colQuals.iterator();
+        app.append(iter.next());
+        while(iter.hasNext()) {
+          app.append(",").append(iter.next());
+        }
+        app.append(")");
+      }
+
+    } else {
+
+      // backwards compat code
+      Integer colFieldLength = _column.getTypeLength();
+      if(colFieldLength != null) {
+        app.append("(").append(colFieldLength).append(")");
+      }
     }
 
     if(_defaultValue != null) {

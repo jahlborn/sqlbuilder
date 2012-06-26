@@ -73,17 +73,17 @@ public abstract class BaseSqlTestCase extends TestCase
     _table1 = _schema1.addTable("Table1");
     _table1_col1 = _table1.addColumn("col1", "VARCHAR", 213);
     _table1_col2 = _table1.addColumn("col2", "NUMBER", 7);
-    _table1_col3 = _table1.addColumn("col3", Types.TIMESTAMP, null);
+    _table1_col3 = _table1.addColumn("col3", Types.DECIMAL, 4, 8);
     _defTable1 = _defSchema.addTable("Table1");
     _defTable1_col_id = _defTable1.addColumn("col_id", "NUMBER", null);
     _defTable1_col2 = _defTable1.addColumn("col2", Types.VARCHAR, 64).setDefaultValue("blah");
-    _defTable1_col3 = _defTable1.addColumn("col3", Types.DATE, null);
+    _defTable1_col3 = _defTable1.addColumn("col3", Types.DATE, null, null);
     _defTable2 = _defSchema.addTable("Table2");
     _defTable2_col_id = _defTable2.addColumn("col_id", "NUMBER", null);
     _defTable2_col_id.notNull();
     _defTable2_col_id.primaryKey("col_id_pk");
     _defTable2_col4 = _defTable2.addColumn("col4", "VARCHAR", 64);
-    _defTable2_col5 = _defTable2.addColumn("col5", "DATE", null);
+    _defTable2_col5 = _defTable2.addColumn("col5", "DATE", null, null);
     _defTable2.foreignKey("t2_fk", new String[]{"col4","col5"},
                           null, "Table1", new String[]{"col2", "col3"});
 

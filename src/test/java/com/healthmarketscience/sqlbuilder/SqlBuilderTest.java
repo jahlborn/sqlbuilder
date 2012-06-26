@@ -59,12 +59,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String createStr1 = new CreateTableQuery(_table1)
       .addColumns(_table1_col1, _table1_col3).validate().toString();
     checkResult(createStr1,
-                "CREATE TABLE Schema1.Table1 (col1 VARCHAR(213),col3 TIMESTAMP)");
+                "CREATE TABLE Schema1.Table1 (col1 VARCHAR(213),col3 DECIMAL(4,8))");
     
     String createStr2 = new CreateTableQuery(_table1, true)
       .validate().toString();
     checkResult(createStr2,
-                "CREATE TABLE Schema1.Table1 (col1 VARCHAR(213),col2 NUMBER(7),col3 TIMESTAMP,col4 VARCHAR(255))");
+                "CREATE TABLE Schema1.Table1 (col1 VARCHAR(213),col2 NUMBER(7),col3 DECIMAL(4,8),col4 VARCHAR(255))");
 
     String createStr3 = new CreateTableQuery(_defTable1, true)
       .validate().toString();

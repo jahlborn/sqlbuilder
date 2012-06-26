@@ -4,9 +4,16 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.0.12" date="TBD">
+      <action dev="jahlborn" type="update" issue="3536960">
+        Add support for arbitrary column type qualifiers (e.g. scale and
+        precision).
+      </action>
+    </release>
     <release version="2.0.11" date="2012-01-10">
       <action dev="jahlborn" type="add">
-          Added the AddColumnAction to the AlterTableQuery, thanks to Eric Fennell.
+          Added the AddColumnAction to the AlterTableQuery, thanks to Eric
+          Fennell.
       </action>
       <action dev="jahlborn" type="update">
           Add support for column default values.

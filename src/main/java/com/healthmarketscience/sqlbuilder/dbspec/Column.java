@@ -46,9 +46,19 @@ public interface Column {
   /** @return the type of this column */
   public String getTypeNameSQL();
 
-  /** @return the length of the type of this column, may be
-      <code>null</code> */
+  /**
+   * @return the length of the type of this column, may be <code>null</code>
+   * @deprecated use {@link #getTypeQualifiers} instead
+   */
+   @Deprecated
   public Integer getTypeLength();
+
+  /**
+   * @return the various type qualifiers for this column (e.g. length or
+   *         scale/precision) in declaration order.  May be {@code null} or
+   *         empty if none.
+   */
+  public List<?> getTypeQualifiers();
 
   /** @return any constraints for this column */
   public List<? extends Constraint> getConstraints();

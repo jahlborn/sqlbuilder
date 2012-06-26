@@ -105,7 +105,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    * @return the freshly created column
    */
   public DbColumn addColumn(String name) {
-    return addColumn(name, null, null);
+    return addColumn(name, null, null, null);
   }
   
   /**
@@ -118,7 +118,23 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    * @return the freshly created column
    */
   public DbColumn addColumn(String name, String typeName, Integer typeLength) {
-    DbColumn column = getSpec().createColumn(this, name, typeName, typeLength);
+    return addColumn(name, typeName, typeLength, null);
+  }    
+
+  /**
+   * Creates and adds an typed column with the given parameters to this table.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new column
+   * @param typeName type name for the column
+   * @param typePrecision optional precision specification for the column
+   * @param typeScale optional scale specification for the column
+   * @return the freshly created column
+   */
+  public DbColumn addColumn(String name, String typeName, 
+                            Integer typePrecision, Integer typeScale) {
+    DbColumn column = getSpec().createColumn(this, name, typeName,
+                                             typePrecision, typeScale);
     return addColumn(column);
   }    
 
@@ -132,7 +148,23 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    * @return the freshly created column
    */
   public DbColumn addColumn(String name, int type, Integer typeLength) {
-    return addColumn(name, DbColumn.getTypeName(type), typeLength);
+    return addColumn(name, type, typeLength, null);
+  }    
+
+  /**
+   * Creates and adds an typed column with the given parameters to this table.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new column
+   * @param type type for the column (one of {@link java.sql.Types})
+   * @param typePrecision optional precision specification for the column
+   * @param typeScale optional scale specification for the column
+   * @return the freshly created column
+   */
+  public DbColumn addColumn(String name, int type, Integer typePrecision, 
+                            Integer typeScale) {
+    return addColumn(name, DbColumn.getTypeName(type), typePrecision, 
+                     typeScale);
   }    
 
   /**

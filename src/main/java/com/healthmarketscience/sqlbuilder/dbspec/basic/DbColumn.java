@@ -41,10 +41,12 @@ import java.sql.Types;
  *
  * @author James Ahlborn
  */
+@SuppressWarnings("deprecation")
 public class DbColumn extends DbObject<DbTable>
   implements Column
 {
-  private static final Map<Integer,String> _typeNameMap = new HashMap<Integer,String>();
+  private static final Map<Integer,String> _typeNameMap =
+    new HashMap<Integer,String>();
   static {
     try {
       // create a type -> type name map using the name of the constant field
@@ -64,15 +66,26 @@ public class DbColumn extends DbObject<DbTable>
   }
     
   private final String _typeName;
-  private final Integer _typeLength;
+  private final List<Object> _qualifiers = new ArrayList<Object>();
   private final List<DbConstraint> _constraints = new ArrayList<DbConstraint>();
   private Object _defaultValue;
 
   public DbColumn(DbTable parent, String name,
                   String typeName, Integer typeLength) {
+    this(parent, name, typeName, (Object)typeLength);
+  }
+
+  public DbColumn(DbTable parent, String name,
+                  String typeName, Object... typeQualifiers) {
     super(parent, name);
     _typeName = typeName;
-    _typeLength = typeLength;
+    if(typeQualifiers != null) {
+      for(Object qual : typeQualifiers) {
+        if(qual != null) {
+          _qualifiers.add(qual);
+        }
+      }
+    }
   }
 
   public DbTable getTable() {
@@ -88,7 +101,17 @@ public class DbColumn extends DbObject<DbTable>
   }
     
   public Integer getTypeLength() {
-    return _typeLength;
+    if(!_qualifiers.isEmpty()) {
+      Object first = _qualifiers.get(0);
+      if(first instanceof Integer) {
+        return (Integer)first;
+      }
+    }
+    return null;
+  }
+
+  public List<Object> getTypeQualifiers() {
+    return _qualifiers;
   }
 
   public List<DbConstraint> getConstraints() {
