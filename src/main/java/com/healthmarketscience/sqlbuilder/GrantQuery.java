@@ -35,7 +35,7 @@ import com.healthmarketscience.common.util.AppendableExt;
  *
  * @author James Ahlborn
  */
-public class GrantQuery extends BaseGrantQuery
+public class GrantQuery extends BaseGrantQuery<GrantQuery>
 {
 
   private boolean _allowGranteeToGrant;

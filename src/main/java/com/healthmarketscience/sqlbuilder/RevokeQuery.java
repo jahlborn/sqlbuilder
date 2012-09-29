@@ -36,7 +36,7 @@ import com.healthmarketscience.common.util.AppendableExt;
  *
  * @author James Ahlborn
  */
-public class RevokeQuery extends BaseGrantQuery
+public class RevokeQuery extends BaseGrantQuery<RevokeQuery>
 {
 
   private DropQuery.Behavior _behavior;
