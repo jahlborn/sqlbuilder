@@ -16,9 +16,8 @@
     <developer>
       <id>jahlborn</id>
       <name>James Ahlborn</name>
-      <email>jahlborn@hmsonline.com</email>
-      <organization>Health Market Science</organization>
-      <organizationUrl> http://www.healthmarketscience.com</organizationUrl>
+      <email>jahlborn@users.sf.net</email>
+      <organization>Dell Boomi</organization>
       <timezone>-5</timezone>
     </developer>
   </developers>
@@ -26,26 +25,18 @@
     <contributor>
       <name>Eric Bernstein</name>
       <email>ebernstein@users.sf.net</email>
-      <organization>Health Market Science</organization>
-      <organizationUrl> http://www.healthmarketscience.com</organizationUrl>
       <timezone>-5</timezone>
     </contributor>
     <contributor>
       <name>Kevin Mudrick</name>
-      <organization>Health Market Science</organization>
-      <organizationUrl> http://www.healthmarketscience.com</organizationUrl>
       <timezone>-5</timezone>
     </contributor>
     <contributor>
       <name>Mike DeLaurentis</name>
-      <organization>Health Market Science</organization>
-      <organizationUrl> http://www.healthmarketscience.com</organizationUrl>
       <timezone>-5</timezone>
     </contributor>
     <contributor>
       <name>Jay Liang</name>
-      <organization>Health Market Science</organization>
-      <organizationUrl> http://www.healthmarketscience.com</organizationUrl>
       <timezone>-5</timezone>
     </contributor>
     <contributor>
@@ -58,10 +49,10 @@
     </contributor>
   </contributors>
   <scm>
-    <connection>scm:svn:http://openhms.svn.sourceforge.net/svnroot/openhms/sqlbuilder/trunk/</connection>
+    <connection>scm:svn://svn.code.sf.net/p/openhms/code/sqlbuilder/trunk/</connection>
     <!-- read/write svn connection -->
-    <developerConnection>scm:svn:https://openhms.svn.sourceforge.net/svnroot/openhms/sqlbuilder/trunk/</developerConnection>
-    <url>http://openhms.svn.sourceforge.net/viewvc/openhms/sqlbuilder/trunk/</url>
+    <developerConnection>scm:svn+ssh://svn.code.sf.net/p/openhms/code/sqlbuilder/trunk/</developerConnection>
+    <url>https://svn.code.sf.net/p/openhms/code/sqlbuilder/trunk/</url>
   </scm>
   <build>
     <pluginManagement>
