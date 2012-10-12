@@ -52,7 +52,7 @@
     <connection>scm:svn:svn://svn.code.sf.net/p/openhms/code/sqlbuilder/trunk/</connection>
     <!-- read/write svn connection -->
     <developerConnection>scm:svn:svn+ssh://svn.code.sf.net/p/openhms/code/sqlbuilder/trunk/</developerConnection>
-    <url>https://svn.code.sf.net/p/openhms/code/sqlbuilder/trunk/</url>
+    <url>http://svn.code.sf.net/p/openhms/code/sqlbuilder/trunk/</url>
   </scm>
   <build>
     <pluginManagement>
