@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.healthmarketscience</groupId>
     <artifactId>openhms-parent</artifactId>
-    <version>1.0.11</version>
+    <version>1.0.17</version>
   </parent>
   <groupId>com.healthmarketscience.sqlbuilder</groupId>
   <artifactId>sqlbuilder</artifactId>
@@ -85,12 +85,28 @@
   <reporting>
     <plugins>
       <plugin>
+        <artifactId>maven-changes-plugin</artifactId>
+        <configuration>
+          <issueLinkTemplatePerSystem>
+            <SourceForge2Features>http://sourceforge.net/p/openhms/feature-requests/%ISSUE%</SourceForge2Features>
+            <SourceForge2Patches>http://sourceforge.net/p/openhms/patches/%ISSUE%</SourceForge2Patches>
+          </issueLinkTemplatePerSystem>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>changes-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <minmemory>128m</minmemory>
           <maxmemory>512</maxmemory>
           <links>
-            <list>http://download.oracle.com/javase/1.5.0/docs/api</list>
+            <list>http://docs.oracle.com/javase/1.5.0/docs/api/</list>
             <list>http://openhms.sourceforge.net/common-util/apidocs</list>
           </links>
           <source>1.5</source>

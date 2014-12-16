@@ -72,6 +72,12 @@ public class QueryPreparerTest extends BaseSqlTestCase {
     QueryPreparer.PlaceHolder sph7 = prep.addStaticPlaceHolder(
         obj2, Types.VARCHAR);
     QueryPreparer.MultiPlaceHolder mph1 = prep.getNewMultiPlaceHolder();
+    QueryPreparer.ListPlaceHolder lph1 = prep.getNewListPlaceHolder()
+      .addStaticLongs(1L, 2L, 3L, 4L, 5L);
+    QueryPreparer.ListPlaceHolder lph2 = prep.getNewListPlaceHolder()
+      .addPlaceHolders(3);
+    QueryPreparer.ListPlaceHolder lph3 = prep.getNewListPlaceHolder()
+      .addPlaceHolders(2);
 
     SelectQuery query = new SelectQuery()
       .addCustomColumns(sph2, sph3, sph4, sph5, sph6, sph7)
@@ -88,13 +94,15 @@ public class QueryPreparerTest extends BaseSqlTestCase {
                                  new BinaryCondition(BinaryCondition.Op.EQUAL_TO,
                                                      new CustomSql("YOU"),
                                                      sph1)),
+              new InCondition(_table1_col2, lph2).setNegate(true),
               ComboCondition.or(
                   new UnaryCondition(UnaryCondition.Op.IS_NULL,
                                      _table1_col2),
-                  BinaryCondition.notEqualTo(mph1, mph1))));
+                  BinaryCondition.notEqualTo(mph1, mph1),
+                  new InCondition(_defTable1_col_id, lph1))));
     String queryStr = query.toString();
     checkResult(queryStr,
-                "SELECT ?,?,?,?,?,? FROM Schema1.Table1 t0,Table1 t1,Table2 t2 WHERE ((t0.col1 < ?) AND (t0.col2 <= ?) AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE ?)) OR (YOU = ?)) AND ((t0.col2 IS NULL) OR (? <> ?)))");
+                "SELECT ?,?,?,?,?,? FROM Schema1.Table1 t0,Table1 t1,Table2 t2 WHERE ((t0.col1 < ?) AND (t0.col2 <= ?) AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE ?)) OR (YOU = ?)) AND (t0.col2 NOT IN (?,?,?) ) AND ((t0.col2 IS NULL) OR (? <> ?) OR (t1.col_id IN (?,?,?,?,?) )))");
 
     assertEquals((0 + startIndex), sph2.getIndex());
     assertEquals((1 + startIndex), sph3.getIndex());
@@ -106,10 +114,13 @@ public class QueryPreparerTest extends BaseSqlTestCase {
     assertEquals((8 + startIndex), ph2.getIndex());
     assertEquals(false, ph3.isInQuery());
     assertEquals((9 + startIndex), sph1.getIndex());
-    assertEquals(3, mph1.getIndexes().size());
-    assertEquals(Arrays.asList((7 + startIndex), (10 + startIndex),
-                               (11 + startIndex)),
-                 mph1.getIndexes());
+    checkIndexes(mph1.getIndexes(), (7 + startIndex), (13 + startIndex),
+                 (14 + startIndex));
+    checkIndexes(lph1.getIndexes(), (15 + startIndex), (16 + startIndex),
+                 (17 + startIndex), (18 + startIndex), (19 + startIndex));
+    checkIndexes(lph2.getIndexes(), (10 + startIndex), (11 + startIndex),
+                 (12 + startIndex));
+    assertEquals(false, lph3.isInQuery());
 
     MockPreparedStatement mockStmt = new MockPreparedStatement();
     PreparedStatement stmt = (PreparedStatement)
@@ -122,6 +133,7 @@ public class QueryPreparerTest extends BaseSqlTestCase {
     ph2.setObject(obj3, stmt);
     ph3.setObject(new Object(), Types.DATE, stmt);
     mph1.setString("foo", stmt);
+    lph2.setStrings(stmt, "lph1", null, "lph3");
 
     @SuppressWarnings("unchecked")
     List<List<Object>> expected = Arrays.asList(
@@ -133,11 +145,19 @@ public class QueryPreparerTest extends BaseSqlTestCase {
         Arrays.<Object>asList("setObject", (4 + startIndex), obj1),
         Arrays.<Object>asList("setObject", (5 + startIndex), obj2,
                               Types.VARCHAR),
+        Arrays.<Object>asList("setLong", (15 + startIndex), 1L),
+        Arrays.<Object>asList("setLong", (16 + startIndex), 2L),
+        Arrays.<Object>asList("setLong", (17 + startIndex), 3L),
+        Arrays.<Object>asList("setLong", (18 + startIndex), 4L),
+        Arrays.<Object>asList("setLong", (19 + startIndex), 5L),
         Arrays.<Object>asList("setNull", (6 + startIndex), Types.BLOB),
         Arrays.<Object>asList("setObject", (8 + startIndex), obj3),
         Arrays.<Object>asList("setString", (7 + startIndex), "foo"),
-        Arrays.<Object>asList("setString", (10 + startIndex), "foo"),
-        Arrays.<Object>asList("setString", (11 + startIndex), "foo")
+        Arrays.<Object>asList("setString", (13 + startIndex), "foo"),
+        Arrays.<Object>asList("setString", (14 + startIndex), "foo"),
+        Arrays.<Object>asList("setString", (10 + startIndex), "lph1"),
+        Arrays.<Object>asList("setNull", (11 + startIndex), Types.VARCHAR),
+        Arrays.<Object>asList("setString", (12 + startIndex), "lph3")
         );
 
     assertEquals(expected, mockStmt._calls);
@@ -149,6 +169,9 @@ public class QueryPreparerTest extends BaseSqlTestCase {
     
   }
 
+  private void checkIndexes(List<Integer> idxs, Integer... expectedIdxs) {
+    assertEquals(Arrays.asList(expectedIdxs), idxs);
+  }
   
   private static class MockPreparedStatement
     implements InvocationHandler

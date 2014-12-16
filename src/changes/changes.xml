@@ -4,6 +4,13 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.0.13" date="TBD">
+      <action dev="jahlborn" type="add" system="SourceForge2Features"
+              issue="13">
+        Add QueryPreparer.ListPlaceHolder to simplify working with lists of
+        PlaceHolders (common in IN expressions).
+      </action>
+    </release>
     <release version="2.0.12" date="2012-10-01">
       <action dev="jahlborn" type="update" issue="3536960">
         Add support for arbitrary column type qualifiers (e.g. scale and

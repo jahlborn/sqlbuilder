@@ -32,8 +32,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Formatter;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -136,34 +138,6 @@ public class QueryPreparer
   }
   
   /**
-   * outputs the static place holders in order
-   */
-  @Override
-  public String toString(){
-    Formatter fmt = new Formatter();
-
-    if(_staticPlaceHolders != null) {
-      
-      for(StaticPlaceHolder placeHolder : _staticPlaceHolders){
-        if(placeHolder != null) {
-          fmt.format("[%s] %s%n",
-                     placeHolder.getClass().getSimpleName(),
-                     placeHolder.displayToString());
-        } else {
-          // this is generally not a good thing, but don't fail here
-          fmt.format("<null>???");
-        }
-      }
-      
-    } else {
-      
-      fmt.format("<No static place holders>%n");
-    }
-
-    return fmt.toString();
-  }
-
-  /**
    * Creates a QueryPreparer with a different startIndex from the default.
    * This may be useful if there are other parameters in the PreparedStatement
    * which are not owned by this QueryPreparer.
@@ -194,12 +168,22 @@ public class QueryPreparer
   }
 
   /**
+   * @return a new ListPlaceHolder tied to this QueryPreparer.  Its internal
+   *         state is not valid until the query is converted to an actual
+   *         string.  Also, it can only be used in <i>one</i> place in the
+   *         query.
+   */
+  public ListPlaceHolder getNewListPlaceHolder() {
+    return new ListPlaceHolder(this);
+  }
+
+  /**
    * @return a new StaticPlaceHolder which will always insert the given String
    *         value
    * @see #setStaticValues
    */
   public StaticPlaceHolder addStaticPlaceHolder(String val) {
-		return addStaticPlaceHolder(new StringStaticPlaceHolder(val, this));
+    return addStaticPlaceHolder(new StringStaticPlaceHolder(val, this));
   }
 
   /**
@@ -273,8 +257,8 @@ public class QueryPreparer
    * @see #setStaticValues
    */
   public StaticPlaceHolder addStaticPlaceHolder(Object obj) {
-    return addStaticPlaceHolder(new ObjectStaticPlaceHolder<Object>(obj,
-                                                                    this));
+    return addStaticPlaceHolder(
+        new ObjectStaticPlaceHolder<Object>(obj, this));
   }
 
   /**
@@ -315,6 +299,35 @@ public class QueryPreparer
   }
 
   /**
+   * outputs the static place holders in order
+   */
+  @Override
+  public String toString() {
+    Formatter fmt = new Formatter();
+
+    if(_staticPlaceHolders != null) {
+      
+      for(StaticPlaceHolder placeHolder : _staticPlaceHolders){
+        if(placeHolder != null) {
+          fmt.format("[%s] %s%n",
+                     placeHolder.getClass().getSimpleName(),
+                     placeHolder.displayToString());
+        } else {
+          // this is generally not a good thing, but don't fail here
+          fmt.format("<null>???");
+        }
+      }
+      
+    } else {
+      
+      fmt.format("<No static place holders>%n");
+    }
+
+    return fmt.toString();
+  }
+
+
+  /**
    * A SqlObject which outputs a '?', and records the current index at the
    * time the <code>appendTo</code> method is called.  This enables the user
    * to set parameters correctly in a PreparedStatement where the position is
@@ -335,6 +348,10 @@ public class QueryPreparer
 
     public PlaceHolder(QueryPreparer outer) {
       _outer = outer;
+    }
+
+    protected QueryPreparer getOuter() {
+      return _outer;
     }
 
     /**
@@ -539,7 +556,7 @@ public class QueryPreparer
     }
     
     @Override
-    public final void appendTo(AppendableExt app) throws IOException {
+    public void appendTo(AppendableExt app) throws IOException {
       addIndex(_outer._curIndex++);
       SqlObject.QUESTION_MARK.appendTo(app);
     }
@@ -678,9 +695,9 @@ public class QueryPreparer
           ps.setObject(index, value, sqlType);
         }
       }
-    }
-    
+    }    
   }
+
 
   /**
    * Convenience PlaceHolder which also maintains a value which will always be
@@ -705,6 +722,477 @@ public class QueryPreparer
      */
     public abstract String displayToString();
   }
+
+
+  /**
+   * A SqlObject which outputs 0 or more '?' separated by commas, and records
+   * the current indexes at the times the <code>appendTo</code> method is
+   * called.  This enables the user to set parameters correctly in a
+   * PreparedStatement where the position is not known at query creation time.
+   *
+   * Note: a ListPlaceHolder may not be used in more than one place in the
+   * query unless all the underlying PlaceHolders are instances of {@link
+   * MultiPlaceHolder}.
+   */
+  public static class ListPlaceHolder extends PlaceHolder
+  {
+    /** the delegate placeholders */
+    private final SqlObjectList<PlaceHolder> _delegates = SqlObjectList.create();
+    
+    public ListPlaceHolder(QueryPreparer outer) {
+      super(outer);
+    }
+
+    @Override
+    public boolean isInQuery() {
+      return (!_delegates.isEmpty() && _delegates.get(0).isInQuery());
+    }
+    
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Note, this method should generally not be used for ListPlaceHolders as
+     * they usually have more than one index, however if there is at most one
+     * index, this method will behave like the parent class.
+     * 
+     * @throws UnsupportedOperationException if this method is called and
+     *         there is more than one index
+     */
+    @Override
+    public int getIndex() {
+      if(_delegates.size() <= 1) {
+        // support single-use-like behavior
+        return((!_delegates.isEmpty()) ?
+               _delegates.get(0).getIndex() :
+               NO_INDEX);
+      } 
+
+      throw new UnsupportedOperationException(
+          "This method may not be used for multi-value ListPlaceHolder");
+    }
+
+    @Override
+    public List<Integer> getIndexes() {
+      List<Integer> idxs = new ArrayList<Integer>(_delegates.size());
+      for(PlaceHolder ph : _delegates) {
+        idxs.addAll(ph.getIndexes());
+      } 
+      return idxs;
+    }
+
+    /**
+     * Adds a new PlaceHolder to this list and returns it.
+     */
+    public PlaceHolder addNewPlaceHolder() {
+      return addPlaceHolder(getOuter().getNewPlaceHolder());
+    }
+
+    /**
+     * Adds a new MultiPlaceHolder to this list and returns it.
+     */
+    public MultiPlaceHolder addNewMultiPlaceHolder() {
+      return addPlaceHolder(getOuter().getNewMultiPlaceHolder());
+    }
+
+    /**
+     * Adds the given StaticPlaceHolder to this list and returns it.
+     */
+    public StaticPlaceHolder addStaticPlaceHolder(StaticPlaceHolder ph) {
+      return addPlaceHolder(getOuter().addStaticPlaceHolder(ph));
+    }
+
+    /**
+     * Adds the given number of PlaceHolders to this list.
+     */
+    public ListPlaceHolder addPlaceHolders(int size) {
+      for(int i = 0; i < size; ++i) {
+        addPlaceHolder(getOuter().getNewPlaceHolder());
+      }
+      return this;
+    }
+
+    private <P extends PlaceHolder> P addPlaceHolder(P ph) {
+      _delegates.addObject(ph);
+      return ph;
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given String values.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticStrings(String... values) {
+      return addStaticStrings((values != null) ? Arrays.asList(values) : 
+                              Collections.<String>emptyList());
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given String values.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticStrings(Iterable<? extends String> values) {
+      if(values != null) {
+        for(String value : values) {
+          addPlaceHolder(getOuter().addStaticPlaceHolder(value));
+        }
+      }
+      return this;
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given long values.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticLongs(long... values) {
+      if(values != null) {
+        for(long value : values) {
+          addPlaceHolder(getOuter().addStaticPlaceHolder(value));
+        }
+      }
+      return this;
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given Long values.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticLongs(Iterable<? extends Long> values) {
+      if(values != null) {
+        for(Long value : values) {
+          addPlaceHolder(getOuter().addStaticPlaceHolder(value));
+        }
+      }
+      return this;
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given int values.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticIntegers(int... values) {
+      if(values != null) {
+        for(int value : values) {
+          addPlaceHolder(getOuter().addStaticPlaceHolder(value));
+        }
+      }
+      return this;
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given Integer values.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticIntegers(Iterable<? extends Integer> values) {
+      if(values != null) {
+        for(Integer value : values) {
+          addPlaceHolder(getOuter().addStaticPlaceHolder(value));
+        }
+      }
+      return this;
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given boolean values.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticBooleans(boolean... values) {
+      if(values != null) {
+        for(boolean value : values) {
+          addPlaceHolder(getOuter().addStaticPlaceHolder(value));
+        }
+      }
+      return this;
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given Boolean values.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticBooleans(Iterable<? extends Boolean> values) {
+      if(values != null) {
+        for(Boolean value : values) {
+          addPlaceHolder(getOuter().addStaticPlaceHolder(value));
+        }
+      }
+      return this;
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given Object values.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticObjects(Object... values) {
+      return addStaticObjects(
+          (values != null) ? Arrays.asList(values) : Collections.emptyList());
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given Object values.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticObjects(Iterable<?> values) {
+      if(values != null) {
+        for(Object value : values) {
+          addPlaceHolder(getOuter().addStaticPlaceHolder(value));
+        }
+      }
+      return this;
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given Object values and given sql type.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticObjects(int sqlType, Object... values) {
+      return addStaticObjects(sqlType, 
+          (values != null) ? Arrays.asList(values) : Collections.emptyList());
+    }
+
+    /**
+     * Adds StaticPlaceHolders for the given Object values and given sql type.
+     * @see QueryPreparer#setStaticValues
+     */
+    public ListPlaceHolder addStaticObjects(int sqlType, Iterable<?> values) {
+      if(values != null) {
+        for(Object value : values) {
+          addPlaceHolder(getOuter().addStaticPlaceHolder(value, sqlType));
+        }
+      }
+      return this;
+    }
+
+    /**
+     * Calls setNull on the given PreparedStatement with the given sql type
+     * for the positions of this PlaceHolder.
+     */
+    public void setNulls(int sqlType, PreparedStatement ps)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        for(PlaceHolder ph : _delegates) {
+          ph.setNull(sqlType, ps);
+        }
+      }
+    }
+    
+    /**
+     * Calls setInt on the given PreparedStatement with the given values for
+     * the positions of this PlaceHolder.
+     */
+    public void setInts(PreparedStatement ps, int... values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        int idx = 0;
+        for(PlaceHolder ph : _delegates) {
+          ph.setInt(values[idx++], ps);
+        } 
+      }
+    }
+    
+    /**
+     * Calls setInt on the given PreparedStatement with the given values for
+     * the positions of this PlaceHolder.  If given value is
+     * <code>null</code>, calls setNull with the sql type
+     * <code>INTEGER</code>.
+     */
+    public void setInts(PreparedStatement ps, Iterable<? extends Integer> values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        Iterator<? extends Integer> iter = values.iterator();
+        for(PlaceHolder ph : _delegates) {
+          ph.setInt(iter.next(), ps);
+        } 
+      }
+    }
+    
+    /**
+     * Calls setLong on the given PreparedStatement with the given values
+     * for the positions of this PlaceHolder.
+     */
+    public void setLongs(PreparedStatement ps, long... values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        int idx = 0;
+        for(PlaceHolder ph : _delegates) {
+          ph.setLong(values[idx++], ps);
+        } 
+      }
+    }
+    
+    /**
+     * Calls setLong on the given PreparedStatement with the given values for
+     * the positions of this PlaceHolder.  If given value is
+     * <code>null</code>, calls setNull with the sql type <code>BIGINT</code>.
+     */
+    public void setLongs(PreparedStatement ps, Iterable<? extends Long> values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        Iterator<? extends Long> iter = values.iterator();
+        for(PlaceHolder ph : _delegates) {
+          ph.setLong(iter.next(), ps);
+        } 
+      }
+    }
+    
+    /**
+     * Calls setBoolean on the given PreparedStatement with the given values
+     * for the positions of this PlaceHolder.
+     */
+    public void setBooleans(PreparedStatement ps, boolean... values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        int idx = 0;
+        for(PlaceHolder ph : _delegates) {
+          ph.setBoolean(values[idx++], ps);
+        } 
+      }
+    }
+    
+    /**
+     * Calls setBoolean on the given PreparedStatement with the given values for
+     * the positions of this PlaceHolder.  If given value is <code>null</code>,
+     * calls setNull with the sql type <code>BOOLEAN</code>.
+     */
+    public void setBooleans(PreparedStatement ps, 
+                            Iterable<? extends Boolean> values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        Iterator<? extends Boolean> iter = values.iterator();
+        for(PlaceHolder ph : _delegates) {
+          ph.setBoolean(iter.next(), ps);
+        } 
+      }
+    }
+    
+    /**
+     * Calls setString on the given PreparedStatement with the given values for
+     * the positions of this PlaceHolder.  If given value is <code>null</code>,
+     * calls setNull with the sql type <code>VARCHAR</code>.
+     */
+    public void setStrings(PreparedStatement ps, String... values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        setStringsImpl(ps, Arrays.asList(values));
+      }
+    }
+    
+    /**
+     * Calls setString on the given PreparedStatement with the given values
+     * for the positions of this PlaceHolder.  If given value is
+     * <code>null</code>, calls setNull with the sql type
+     * <code>VARCHAR</code>.
+     */
+    public void setStrings(PreparedStatement ps, 
+                           Iterable<? extends String> values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        setStringsImpl(ps, values);
+      }
+    }
+
+    private void setStringsImpl(PreparedStatement ps,
+                                Iterable<? extends String> values)
+      throws SQLException
+    {
+      Iterator<? extends String> iter = values.iterator();
+      for(PlaceHolder ph : _delegates) {
+        ph.setString(iter.next(), ps);
+      } 
+    }
+    
+    /**
+     * Calls setObject on the given PreparedStatement with the given values
+     * for the positions of this PlaceHolder.
+     *
+     * Note, calling this method with a <code>null</code> value may or may not
+     * work, depending on the JDBC driver.  The only reliable (across all JDBC
+     * drivers) way to set a <code>null</code> object is to call
+     * {@link #setObjects(int,PreparedStatement,Object...)} with the correct SQL
+     * type.
+     */
+    public void setObjects(PreparedStatement ps, Object... values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        setObjectsImpl(ps, Arrays.asList(values));
+      }
+    }
+
+    /**
+     * Calls setObject on the given PreparedStatement with the given values
+     * for the positions of this PlaceHolder.
+     *
+     * Note, calling this method with a <code>null</code> value may or may not
+     * work, depending on the JDBC driver.  The only reliable (across all JDBC
+     * drivers) way to set a <code>null</code> object is to call
+     * {@link #setObjects(int,PreparedStatement,Iterable)} with the correct SQL
+     * type.
+     */
+    public void setObjects(PreparedStatement ps, Iterable<?> values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        setObjectsImpl(ps, values);
+      }
+    }
+    
+    private void setObjectsImpl(PreparedStatement ps, Iterable<?> values)
+      throws SQLException
+    {
+      Iterator<?> iter = values.iterator();
+      for(PlaceHolder ph : _delegates) {
+        ph.setObject(iter.next(), ps);
+      } 
+    }
+    
+    /**
+     * Calls setObject on the given PreparedStatement with the given values
+     * and the given sql type for the positions of this PlaceHolder.
+     */
+    public void setObjects(int sqlType, PreparedStatement ps, Object... values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        setObjectsImpl(sqlType, ps, Arrays.asList(values));
+      }
+    }
+        
+    /**
+     * Calls setObject on the given PreparedStatement with the given value and
+     * the given sql type for the position of this PlaceHolder.  If given
+     * value is <code>null</code>, calls setNull with the given sql type.
+     */
+    public void setObjects(int sqlType, PreparedStatement ps, Iterable<?> values)
+      throws SQLException
+    {
+      if(isInQuery()) {
+        setObjectsImpl(sqlType, ps, values);
+      }
+    }
+        
+    private void setObjectsImpl(int sqlType, PreparedStatement ps,
+                                Iterable<?> values)
+      throws SQLException
+    {
+      Iterator<?> iter = values.iterator();
+      for(PlaceHolder ph : _delegates) {
+        ph.setObject(iter.next(), sqlType, ps);
+      } 
+    }
+        
+    @Override
+    public final void appendTo(AppendableExt app) throws IOException {  
+      _delegates.appendTo(app);
+    }
+  }
+
 
   /**
    * StaticPlaceHolder which always calls setNull on the PreparedStatement
