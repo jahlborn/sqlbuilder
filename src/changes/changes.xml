@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.0.13" date="TBD">
+    <release version="2.0.13" date="2014-12-27">
       <action dev="jahlborn" type="add" system="SourceForge2Features"
               issue="13">
         Add QueryPreparer.ListPlaceHolder to simplify working with lists of
