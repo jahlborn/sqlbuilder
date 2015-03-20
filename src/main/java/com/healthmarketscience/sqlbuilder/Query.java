@@ -37,7 +37,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 
 /**
- * Base class for all query statments which adds a validation facility.
+ * Base class for all query statements which adds a validation facility.
  *
  * The query classes are designed for "builder" type use, so all return
  * values are the query object itself.
