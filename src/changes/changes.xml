@@ -4,6 +4,12 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.1.0" date="2015-04-16" 
+             description="Relicense to Apache License">
+      <action dev="jahlborn" type="add">
+        OpenHMS relicenses to Apache License, 2.0!
+      </action>
+    </release>
     <release version="2.0.13" date="2014-12-27">
       <action dev="jahlborn" type="add" system="SourceForge2Features"
               issue="13">
