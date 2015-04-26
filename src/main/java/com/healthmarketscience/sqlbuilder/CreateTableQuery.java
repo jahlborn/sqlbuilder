@@ -23,15 +23,34 @@ import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
+import com.healthmarketscience.sqlbuilder.custom.CustomSyntax;
+import com.healthmarketscience.sqlbuilder.custom.HookType;
+import com.healthmarketscience.sqlbuilder.custom.HookAnchor;
+import com.healthmarketscience.sqlbuilder.custom.oracle.OraTableSpaceClause;
 
 /**
  * Query which generates a CREATE TABLE statement.
+ * <p/>
+ * Note that this query supports custom SQL syntax, see {@link Hook} for more
+ * details.
  *
  * @author James Ahlborn
  */
 public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
 {
-
+  /**
+   * The HookAnchors supported for CREATE TABLE queries.  See {@link com.healthmarketscience.sqlbuilder.custom}
+   * for more details on custom SQL syntax.
+   */
+  public enum Hook implements HookAnchor {
+    /** Anchor for the beginning of the query, only supports {@link
+        HookType#BEFORE} */
+    HEADER, 
+    /** Anchor for the end of the query, only supports {@link
+        HookType#BEFORE} */
+    TRAILER;
+  }
+  
   /** column level constraints
    * @deprecated use {@link ConstraintClause} instead
    */
@@ -215,6 +234,49 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     return this;
   }
 
+  /** Sets a specific tablespace for the table to be created in by appending
+   * <code>TABLESPACE &lt;tableSpace&gt;</code> to the end of the CREATE
+   * query.
+   *  <p>
+   *  <em>WARNING, this is not ANSI SQL compliant.</em>
+   *
+   * @see OraTableSpaceClause
+   * 
+   * @deprecated Use {@code addCustomization(new OraTableSpaceClause(tableSpace))}
+   *             instead.
+   */
+  @Deprecated
+  public CreateTableQuery setTableSpace(String tableSpace) {
+    return addCustomization(new OraTableSpaceClause(tableSpace));
+  }
+  
+  /**
+   * Adds custom SQL to this query.  See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
+   * custom SQL syntax.
+   * @param hook the part of the query being customized
+   * @param type the type of customization
+   * @param obj the custom sql.  The {@code Object} -&gt; {@code SqlObject}
+   *            conversions handled by {@link Converter#toCustomSqlObject}.
+   */
+  public CreateTableQuery addCustomization(Hook hook, HookType type, Object obj) {
+    super.addCustomization(hook, type, obj);
+    return this;
+  }
+  
+  /**
+   * Adds custom SQL to this query.  See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
+   * custom SQL syntax.
+   * @param obj the custom sql syntax on which the 
+   *            {@link CustomSyntax#apply(CreateTableQuery)} method will be
+   *            invoked (may be {@code null}).
+   */
+  public CreateTableQuery addCustomization(CustomSyntax obj) {
+    if(obj != null) {
+      obj.apply(this);
+    }
+    return this;
+  }
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
@@ -240,13 +302,16 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   {
     newContext.setUseTableAliases(false);
     
+    customAppendTo(app, Hook.HEADER);
+
     app.append("CREATE TABLE ").append(_object)
       .append(" (").append(_columns);
     if(!_constraints.isEmpty()) {
       app.append(",").append(_constraints);
     }
     app.append(")");
-    appendTableSpace(app);
+
+    customAppendTo(app, Hook.TRAILER);
   }
   
   /**

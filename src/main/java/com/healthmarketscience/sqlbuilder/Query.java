@@ -34,7 +34,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  * @author James Ahlborn
  */
 public abstract class Query<ThisType extends Query<ThisType>>
-  extends SqlObject implements Verifiable<ThisType>
+  extends CustomizableSqlObject implements Verifiable<ThisType>
 {
   protected Query() {}
 
@@ -82,6 +82,7 @@ public abstract class Query<ThisType extends Query<ThisType>>
   protected void collectSchemaObjects(ValidationContext vContext) {
     // always add this query to the list of things to verify
     vContext.addVerifiable(this);
+    super.collectSchemaObjects(vContext);
   }
   
   @Override

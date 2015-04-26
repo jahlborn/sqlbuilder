@@ -16,8 +16,6 @@ limitations under the License.
 
 package com.healthmarketscience.sqlbuilder;
 
-import java.io.IOException;
-import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 
 /**
@@ -31,7 +29,6 @@ public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery<ThisType>
 
   protected SqlObject _object;
   protected SqlObjectList<SqlObject> _columns = SqlObjectList.create();
-  private String _tableSpace;
 
   protected BaseCreateQuery(SqlObject objectStr) {
     _object = objectStr;
@@ -60,17 +57,6 @@ public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery<ThisType>
     return addCustomColumns((Object[])columns);
   }
 
-  /** Sets a specific tablespace for the table to be created in by appending
-   * <code>TABLESPACE &lt;tableSpace&gt;</code> to the end of the CREATE
-   * query.
-   *  <p>
-   *  <em>WARNING, this is not ANSI SQL compliant.</em>
-   * */
-  public ThisType setTableSpace(String tableSpace) {
-    _tableSpace = tableSpace;
-    return getThisType();
-  }
-
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
@@ -88,16 +74,6 @@ public abstract class BaseCreateQuery<ThisType extends BaseCreateQuery<ThisType>
     // can not have a "*" in the column list
     if(SelectQuery.hasAllColumns(_columns)) {
       throw new ValidationException("Cannot use the '*' syntax in this query");
-    }
-  }
-  
-  /**
-   * Appends a "TABLESPACE ..." clause to the given AppendableExt if a
-   * tableSpace has been specified.
-   */
-  protected void appendTableSpace(AppendableExt app) throws IOException {
-    if (_tableSpace != null) {
-      app.append(" TABLESPACE " + _tableSpace);
     }
   }
 

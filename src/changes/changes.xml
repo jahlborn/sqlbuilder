@@ -4,6 +4,13 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.1.1" date="TBD">
+      <action dev="jahlborn" type="update" system="SourceForge2Features"
+              issue="14">
+        Add a framework for enabling SqlBuilder queries to support custom SQL
+        syntax.  Add a few common database-specific customizations.
+      </action>
+    </release>
     <release version="2.1.0" date="2015-04-16" 
              description="Relicense to Apache License">
       <action dev="jahlborn" type="add">

@@ -30,6 +30,9 @@ import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Join;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
+import com.healthmarketscience.sqlbuilder.custom.CustomSyntax;
+import com.healthmarketscience.sqlbuilder.custom.HookType;
+import com.healthmarketscience.sqlbuilder.custom.HookAnchor;
 
 
 
@@ -37,12 +40,15 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  * Query which generates a SELECT statement.  Supports arbitrary columns
  * (including "DISTINCT" modifier), "FOR UPDATE" clause, all join types,
  * "WHERE" clause, "GROUP BY" clause, "ORDER BY" clause, and "HAVING" clause.
- *<p>
+ *<p/>
  * If Columns are used for any referenced columns, and no complicated joins
  * are required, the table list may be left empty and it will be
  * auto-generated in the append call.  Note, that this is not the most
  * efficient method (as this list will not be cached for the future due to
  * mutability constraints on <code>appendTo</code>).
+ * <p/>
+ * Note that this query supports custom SQL syntax, see {@link Hook} for more
+ * details.
  *
  * @author James Ahlborn
  */
@@ -68,6 +74,36 @@ public class SelectQuery extends Query<SelectQuery>
     public String toString() { return _joinClause; }
   }
 
+  /**
+   * The HookAnchors supported for SELECT queries.  See {@link com.healthmarketscience.sqlbuilder.custom} for
+   * more details on custom SQL syntax.
+   */
+  public enum Hook implements HookAnchor
+  {
+    /** Anchor for the beginning of the query, only supports {@link
+        HookType#BEFORE} */
+    HEADER, 
+    /** Anchor for the "SELECT " clause */
+    SELECT, 
+    /** Anchor for the "DISTINCT " clause */
+    DISTINCT, 
+    /** Anchor for the " FROM " clause */
+    FROM,
+    /** Anchor for the " WHERE " clause */
+    WHERE, 
+    /** Anchor for the " GROUP BY " clause */
+    GROUP_BY, 
+    /** Anchor for the " HAVING " sub-clause (only possible if there is a
+        GROUP BY clause) */
+    HAVING, 
+    /** Anchor for the " ORDER BY " clause */
+    ORDER_BY, 
+    /** Anchor for the " FOR UPDATE " clause */
+    FOR_UPDATE, 
+    /** Anchor for the end of the query, only supports {@link
+        HookType#BEFORE} */
+    TRAILER;
+  }
 
   private boolean _isDistinct;
   private boolean _forUpdate;
@@ -397,6 +433,33 @@ public class SelectQuery extends Query<SelectQuery>
     return this;
   }
   
+  /**
+   * Adds custom SQL to this query.  See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
+   * custom SQL syntax.
+   * @param hook the part of the query being customized
+   * @param type the type of customization
+   * @param obj the custom sql.  The {@code Object} -&gt; {@code SqlObject}
+   *            conversions handled by {@link Converter#toCustomSqlObject}.
+   */
+  public SelectQuery addCustomization(Hook hook, HookType type, Object obj) {
+    super.addCustomization(hook, type, obj);
+    return this;
+  }
+  
+  /**
+   * Adds custom SQL to this query.  See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
+   * custom SQL syntax.
+   * @param obj the custom sql syntax on which the 
+   *            {@link CustomSyntax#apply(SelectQuery)} method will be
+   *            invoked (may be {@code null}).
+   */
+  public SelectQuery addCustomization(CustomSyntax obj) {
+    if(obj != null) {
+      obj.apply(this);
+    }
+    return this;
+  }
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
@@ -508,19 +571,12 @@ public class SelectQuery extends Query<SelectQuery>
       if(orderObj instanceof OrderObject) {
         orderObj = ((OrderObject)orderObj).getObject();
       }
-      if(orderObj instanceof NumberValueObject) {
-        NumberValueObject numObj = (NumberValueObject)orderObj;
-        if(numObj.isFloatingPoint()) {
-          throw new ValidationException(
-              "Ordering indexes must be integer values, given: " + numObj);
-        }
-        // note that index is 1 based
-        long idx = numObj.getValue().longValue();
-        if((idx < 1) || (idx > numColumns)) {
-          throw new ValidationException(
-              "Ordering index out of range, given: " + idx + ", range: 1 to " +
-              numColumns);
-        }
+      // note that index is 1 based
+      if((orderObj instanceof NumberValueObject) &&
+         !((NumberValueObject)orderObj).isIntegralInRange(1, numColumns)) {
+        throw new ValidationException(
+            "Ordering index '" + orderObj + "' must be integer in range: 1 to "
+            + numColumns);
       }
     }
   }
@@ -531,14 +587,16 @@ public class SelectQuery extends Query<SelectQuery>
   {
     newContext.setUseTableAliases(true);
     
-    // append basic select
-    app.append("SELECT ");
+    customAppendTo(app, Hook.HEADER);
 
-    if(_isDistinct) {
-      app.append("DISTINCT ");
-    }
+    // append basic select
+    customAppendTo(app, Hook.SELECT, "SELECT ");
+
+    maybeAppendTo(app, Hook.DISTINCT, "DISTINCT ", _isDistinct);
       
-    app.append(_columns).append(" FROM ");
+    app.append(_columns);
+
+    customAppendTo(app, Hook.FROM, " FROM ");
 
     SqlObjectList<SqlObject> joins = _joins;
     if(joins.isEmpty()) {
@@ -583,29 +641,26 @@ public class SelectQuery extends Query<SelectQuery>
 
     // append the joins
     app.append(joins);
-      
-    if(!_condition.isEmpty()) {
-      // append "where" condition(s)
-      app.append(" WHERE ").append(_condition);
-    }
 
-    if(!_grouping.isEmpty()) {
-      // append grouping clause
-      app.append(" GROUP BY ").append(_grouping);
-      if (!_having.isEmpty()) {
-        // append having clause
-        app.append(" HAVING ").append(_having);
-      }
+    // append "where" condition(s)
+    maybeAppendTo(app, Hook.WHERE, " WHERE ", _condition, !_condition.isEmpty());
+
+    // append grouping clause
+    boolean hasGroupings = !_grouping.isEmpty();
+    maybeAppendTo(app, Hook.GROUP_BY, " GROUP BY ", _grouping, hasGroupings);
+    if(hasGroupings) {
+      // append having clause (which is considered a sub-clause of the GROUP
+      // BY clause)
+      maybeAppendTo(app, Hook.HAVING, " HAVING ", _having, !_having.isEmpty());
     }
     
-    if(!_ordering.isEmpty()) {
-      // append ordering clause
-      app.append(" ORDER BY ").append(_ordering);
-    }
+    // append ordering clause
+    maybeAppendTo(app, Hook.ORDER_BY, " ORDER BY ", _ordering, 
+                  !_ordering.isEmpty());
 
-    if(_forUpdate) {
-      app.append(" FOR UPDATE");
-    }
+    maybeAppendTo(app, Hook.FOR_UPDATE, " FOR UPDATE", _forUpdate);
+
+    customAppendTo(app, Hook.TRAILER);
   }
 
   /**

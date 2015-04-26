@@ -43,18 +43,29 @@ public class NumberValueObject extends Expression
   @Override
   public boolean hasParens() { return false; }
 
-  /** @return the number value held by this NumberValueObject */
-  Number getValue() {
-    return _value;
+  /**
+   * @return {@code true} if this number value is an integral value in the
+   *         given range (inclusive), {@code false} otherwise.
+   */
+  public boolean isIntegralInRange(long min, long max) {
+    if(isFloatingPoint()) {
+      return false;
+    }
+
+    long value = _value.longValue();
+    return ((min <= value) && (value <= max));
   }
-  
+
   /**
    * @return <code>true</code> if the given number is a floating point value
    */
-  boolean isFloatingPoint()
-  {
+  private boolean isFloatingPoint() {
     if(_value instanceof BigInteger) {
       return false;
+    }
+
+    if((_value instanceof Float) || (_value instanceof Double)) {
+      return true;
     }
 
     BigDecimal dec = ((_value instanceof BigDecimal) ? 
