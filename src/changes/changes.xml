@@ -10,6 +10,11 @@
         Add a framework for enabling SqlBuilder queries to support custom SQL
         syntax.  Add a few common database-specific customizations.
       </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features"
+              issue="5">
+        Add NamedParamObject which supports the "named" param syntax used by
+        some SQL or SQL-like frameworks.
+      </action>
     </release>
     <release version="2.1.0" date="2015-04-16" 
              description="Relicense to Apache License">
