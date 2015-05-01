@@ -40,7 +40,7 @@ public class ValidationContext {
   /** whether or not collection/validation should proceed into nested
       subqueries */
   private boolean _localOnly;
-  private Collection<Tuple2<ValidationContext,Verifiable>> _verifiables;
+  private Collection<Tuple2<ValidationContext,? extends Verifiable<?>>> _verifiables;
 
   public ValidationContext() {
     this(null, null, null, DEFAULT_LOCAL_ONLY);
@@ -68,7 +68,7 @@ public class ValidationContext {
     _columns = ((columns != null) ? columns : new HashSet<Column>());
     _localOnly = localOnly;
     _verifiables = ((_parent != null) ? _parent._verifiables :
-                    new ArrayList<Tuple2<ValidationContext,Verifiable>>(2));
+                    new ArrayList<Tuple2<ValidationContext,? extends Verifiable<?>>>(2));
   }
 
   public ValidationContext getParent() {
@@ -107,7 +107,7 @@ public class ValidationContext {
     _localOnly = newLocalOnly;
   }
 
-  public void addVerifiable(Verifiable verifiable)
+  public void addVerifiable(Verifiable<?> verifiable)
   {
     if(verifiable == null) {
       throw new IllegalArgumentException("verifiable was null");
@@ -116,7 +116,7 @@ public class ValidationContext {
   }
 
   public void validateAll() throws ValidationException {
-    for(Tuple2<ValidationContext,Verifiable> verifiable : _verifiables) {
+    for(Tuple2<ValidationContext,? extends Verifiable<?>> verifiable : _verifiables) {
       try {
         verifiable.get1().validate(verifiable.get0());
       } catch(ValidationException e) {

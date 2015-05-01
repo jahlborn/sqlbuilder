@@ -30,7 +30,7 @@ public class ValidationException extends RuntimeException
 {
   private static final long serialVersionUID = -2933877497839744427L;  
 
-  private transient Tuple2<ValidationContext,Verifiable> _failedVerifiable;
+  private transient Tuple2<ValidationContext,? extends Verifiable<?>> _failedVerifiable;
   
   public ValidationException(String message) {
     super(message);
@@ -44,12 +44,12 @@ public class ValidationException extends RuntimeException
     super(cause);
   }
 
-  public Tuple2<ValidationContext,Verifiable> getFailedVerifiable() {
+  public Tuple2<ValidationContext,? extends Verifiable<?>> getFailedVerifiable() {
     return _failedVerifiable;
   }
 
   public void setFailedVerifiable(
-      Tuple2<ValidationContext,Verifiable> newFailedVerifiable) {
+      Tuple2<ValidationContext,? extends Verifiable<?>> newFailedVerifiable) {
     _failedVerifiable = newFailedVerifiable;
   }
 
@@ -57,7 +57,7 @@ public class ValidationException extends RuntimeException
   public String getMessage() {
     String msg = super.getMessage();
     if(getFailedVerifiable() != null) {
-      Verifiable verifiable = getFailedVerifiable().get1();
+      Verifiable<?> verifiable = getFailedVerifiable().get1();
       try {
         msg = msg + " [Failed clause:" + verifiable + "]";
       } catch(Exception e) {
