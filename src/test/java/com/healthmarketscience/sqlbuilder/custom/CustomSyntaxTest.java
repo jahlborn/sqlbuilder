@@ -94,10 +94,11 @@ public class CustomSyntaxTest extends BaseSqlTestCase
   public void testMysqlCreateTableClause()
   {
     String createTableStr = new CreateTableQuery(_table1, true)
+      .addColumnConstraint(_table1_col3, MysObjects.AUTO_INCREMENT_COLUMN)
       .addCustomization(MysObjects.IF_NOT_EXISTS_TABLE)
       .validate().toString();
     checkResult(createTableStr,
-                "CREATE TABLE IF NOT EXISTS Schema1.Table1 (col1 VARCHAR(213),col2 NUMBER(7),col3 DECIMAL(4,8),col4 VARCHAR(255))");
+                "CREATE TABLE IF NOT EXISTS Schema1.Table1 (col1 VARCHAR(213),col2 NUMBER(7),col3 DECIMAL(4,8) AUTO_INCREMENT,col4 VARCHAR(255))");
   }
 
   public void testPostgresqlLimitClause()
