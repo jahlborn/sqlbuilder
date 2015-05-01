@@ -61,6 +61,7 @@ public class PgOffsetClause extends CustomSyntax
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     vContext.addVerifiable(this);
+    collectSchemaObjects(_value, vContext);
   }
 
   public final PgOffsetClause validate() throws ValidationException {

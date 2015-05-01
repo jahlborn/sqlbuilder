@@ -70,6 +70,10 @@ public class MysLimitClause extends CustomSyntax
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     vContext.addVerifiable(this);
+    if(_offset != null) {
+      collectSchemaObjects(_offset, vContext);
+    }
+    collectSchemaObjects(_rowCount, vContext);
   }
 
   public final MysLimitClause validate() throws ValidationException {

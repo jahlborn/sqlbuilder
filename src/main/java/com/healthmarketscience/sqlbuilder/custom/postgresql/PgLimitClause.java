@@ -62,6 +62,7 @@ public class PgLimitClause extends CustomSyntax
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     vContext.addVerifiable(this);
+    collectSchemaObjects(_value, vContext);
   }
 
   public final PgLimitClause validate() throws ValidationException {

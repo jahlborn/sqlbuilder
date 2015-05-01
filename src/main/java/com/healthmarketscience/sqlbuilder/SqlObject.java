@@ -100,6 +100,15 @@ public abstract class SqlObject extends AppendeeObject
     // validate everything that's verifiable
     vContext.validateAll();
   }
+  
+  /**
+   * Utility method for classes which may not be in this package to invoke
+   * {@link #collectSchemaObjects(ValidationContext)} on a SqlObject.
+   */
+  public static void collectSchemaObjects(
+      SqlObject obj, ValidationContext vContext) {
+    obj.collectSchemaObjects(vContext);
+  }
     
   /**
    * Used during Query.validate() calls to collect the dbschema objects
