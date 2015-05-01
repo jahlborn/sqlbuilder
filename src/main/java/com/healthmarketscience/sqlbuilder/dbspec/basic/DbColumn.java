@@ -16,14 +16,15 @@ limitations under the License.
 
 package com.healthmarketscience.sqlbuilder.dbspec.basic;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.healthmarketscience.sqlbuilder.Condition;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
-import java.sql.Types;
 
 /**
  * Representation of a column in a database schema.
@@ -239,6 +240,19 @@ public class DbColumn extends DbObject<DbTable>
       getSpec().createColumnForeignKeyConstraint(
         this, name, table, referencedColName);
     return addConstraint(fkConstraint);
+  }
+
+  /**
+   * Creates and adds check constraint with the given parameters to this
+   * table.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param condition the check condition
+   */
+  public DbCheckConstraint checkCondition(String name, Condition condition) {
+    DbCheckConstraint constraint = getSpec().createColumnCheckConstraint(
+        this, name, condition);
+    return addConstraint(constraint);
   }
 
   /**

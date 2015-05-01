@@ -15,6 +15,9 @@
         Add NamedParamObject which supports the "named" param syntax used by
         some SQL or SQL-like frameworks.
       </action>
+      <action dev="jahlborn" type="add">
+        Add CheckConstraint for handling table/column CHECK constraints.
+      </action>
     </release>
     <release version="2.1.0" date="2015-04-16" 
              description="Relicense to Apache License">

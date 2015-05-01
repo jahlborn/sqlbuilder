@@ -19,6 +19,7 @@ package com.healthmarketscience.sqlbuilder.dbspec.basic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.healthmarketscience.sqlbuilder.Condition;
 import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
@@ -220,6 +221,18 @@ public class DbTable extends DbObject<DbSchema> implements Table {
     return addConstraint(fkConstraint);
   }
 
+  /**
+   * Creates and adds check constraint with the given parameters to this
+   * table.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param condition the check condition
+   */
+  public DbCheckConstraint checkCondition(String name, Condition condition) {
+    DbCheckConstraint constraint = getSpec().createTableCheckConstraint(
+        this, name, condition);
+    return addConstraint(constraint);
+  }
 
   /**
    * Adds the given constraint to this table.

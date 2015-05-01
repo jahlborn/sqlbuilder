@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2011 James Ahlborn
+Copyright (c) 2015 James Ahlborn
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,30 +16,19 @@ limitations under the License.
 
 package com.healthmarketscience.sqlbuilder.dbspec;
 
-import java.util.List;
+import com.healthmarketscience.sqlbuilder.Condition;
 
 /**
- * Maintains information about a database (table or column) constraint for use
- * with the sqlbuilder utilities.
+ * Maintains information about a database (table or column) check constraint
+ * for use with the sqlbuilder utilities.
+ *
  *
  * @author James Ahlborn
  */
-public interface Constraint 
+public interface CheckConstraint extends Constraint 
 {
-  public enum Type {
-    NOT_NULL,
-    UNIQUE,
-    PRIMARY_KEY,
-    FOREIGN_KEY,
-    CHECK;
-  }
-
-  /** @return the type of this constraint */
-  public Type getType();
-
-  /** @return the name of this constraint, if any */
-  public String getConstraintNameSQL();
-
-  /** @return the constrained columns */
-  public List<? extends Column> getColumns();
+  /**
+   * @return the check condition for this constraint
+   */
+  public Condition getCondition();
 }

@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.healthmarketscience.common.util.AppendableExt;
+import com.healthmarketscience.sqlbuilder.dbspec.CheckConstraint;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
 import com.healthmarketscience.sqlbuilder.dbspec.ForeignKeyConstraint;
@@ -41,7 +42,8 @@ public class ConstraintClause extends SqlObject
     NOT_NULL("NOT NULL"),
     UNIQUE("UNIQUE"),
     PRIMARY_KEY("PRIMARY KEY"),
-    FOREIGN_KEY("FOREIGN KEY", "REFERENCES");
+    FOREIGN_KEY("FOREIGN KEY", "REFERENCES"),
+    CHECK("CHECK");
 
     private final String _tableTypeStr;
     private final String _colTypeStr;
@@ -131,6 +133,8 @@ public class ConstraintClause extends SqlObject
       return Type.PRIMARY_KEY;
     case FOREIGN_KEY:
       return Type.FOREIGN_KEY;
+    case CHECK:
+      return Type.CHECK;
     default:
       throw new RuntimeException("Unexpected constraint type " + consType);
     }
@@ -141,10 +145,14 @@ public class ConstraintClause extends SqlObject
    * ForeignKeyConstraintClause) for the given Constraint.
    */
   public static ConstraintClause from(Constraint cons) {
-    if(cons.getType() == Constraint.Type.FOREIGN_KEY) {
+    switch(cons.getType()) {
+    case FOREIGN_KEY:
       return new ForeignKeyConstraintClause((ForeignKeyConstraint)cons);
+    case CHECK:
+      return new CheckConstraintClause((CheckConstraint)cons);
+    default:
+      return new ConstraintClause(cons);
     }
-    return new ConstraintClause(cons);
   }
 
   /**
@@ -211,6 +219,23 @@ public class ConstraintClause extends SqlObject
   public static ForeignKeyConstraintClause foreignKey(Object name, 
                                                       Object refTableStr) {
     return new ForeignKeyConstraintClause(name, refTableStr);
+  }
+
+  /**
+   * Convenience method for generating an unnamed check constraint.
+   */
+  public static CheckConstraintClause checkCondition(Condition checkCondition) {
+    return checkCondition(null, checkCondition);
+  }
+
+  /**
+   * Convenience method for generating a check constraint with the given name.
+   * @param name name of the constraint, may be {@code null}
+   * @param checkCondition the check condition
+   */
+  public static CheckConstraintClause checkCondition(Object name, 
+                                                     Condition checkCondition) {
+    return new CheckConstraintClause(name, checkCondition);
   }
 
   /**

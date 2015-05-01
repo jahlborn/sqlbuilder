@@ -75,6 +75,8 @@ public abstract class BaseSqlTestCase extends TestCase
     _defTable2_col5 = _defTable2.addColumn("col5", "DATE", null, null);
     _defTable2.foreignKey("t2_fk", new String[]{"col4","col5"},
                           null, "Table1", new String[]{"col2", "col3"});
+    _defTable2.checkCondition("neq_cond", BinaryCondition.notEqualTo(
+                                  _defTable2_col4, _defTable2_col5));
 
     _idJoin = _spec.addJoin(null, "Table1",
                             null, "Table2",

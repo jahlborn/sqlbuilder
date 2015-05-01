@@ -18,6 +18,7 @@ package com.healthmarketscience.sqlbuilder.dbspec.basic;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.healthmarketscience.sqlbuilder.Condition;
 
 /**
  * Root object for a collection of db objects all residing in the same
@@ -292,7 +293,31 @@ public class DbSpec {
     return new DbForeignKeyConstraint(parent, name, referencedTable,
                                       colNames, refColNames);
   }
-  
+
+  /**
+   * Creates and returns a new column {@link DbCheckConstraint} with the given
+   * parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbCheckConstraint createColumnCheckConstraint(
+      DbColumn parent, String name, Condition condition)
+  {
+    return new DbCheckConstraint(parent, name, condition);
+  }
+
+  /**
+   * Creates and returns a new table {@link DbCheckConstraint} with the given
+   * parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbCheckConstraint createTableCheckConstraint(
+      DbTable parent, String name, Condition condition)
+  {
+    return new DbCheckConstraint(parent, name, condition);
+  }
+    
   /**
    * @throws IllegalArgumentException if the parent of the given object is not
    *         this object

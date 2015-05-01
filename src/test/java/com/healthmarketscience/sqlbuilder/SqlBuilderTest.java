@@ -29,7 +29,6 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbFunction;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbFunctionPackage;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbIndex;
-import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 
@@ -81,6 +80,8 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addColumnConstraint(_defTable1_col_id,
                            ConstraintClause.primaryKey("id_pk"))
       .setColumnTypeName(_defTable1_col_id, "BIGINT")
+      .addColumnConstraint(_defTable1_col_id, ConstraintClause.checkCondition(
+                               BinaryCondition.greaterThan(_defTable1_col_id, 10, false)))
       .addColumnConstraint(_defTable1_col3,
                            ConstraintClause.notNull())
       .setColumnDefaultValue(_defTable1_col3, new CustomSql("CURRENT_DATE"))
@@ -88,13 +89,13 @@ public class SqlBuilderTest extends BaseSqlTestCase
                             .addColumns(_defTable1_col2, _defTable1_col3))
       .validate().toString();
     checkResult(createStr5,
-                "CREATE TABLE Table1 (col_id BIGINT NOT NULL CONSTRAINT id_pk PRIMARY KEY,col2 VARCHAR(64) DEFAULT 'blah',col3 DATE DEFAULT CURRENT_DATE NOT NULL,altCol4 VARCHAR(255),UNIQUE (col2,col3))");
+                "CREATE TABLE Table1 (col_id BIGINT NOT NULL CONSTRAINT id_pk PRIMARY KEY CHECK (col_id > 10),col2 VARCHAR(64) DEFAULT 'blah',col3 DATE DEFAULT CURRENT_DATE NOT NULL,altCol4 VARCHAR(255),UNIQUE (col2,col3))");
 
     String createStr6 = new CreateTableQuery(_defTable2, true)
       .setTableType(CreateTableQuery.TableType.TEMPORARY)
       .validate().toString();
     checkResult(createStr6,
-                "CREATE TEMPORARY TABLE Table2 (col_id NUMBER NOT NULL CONSTRAINT col_id_pk PRIMARY KEY,col4 VARCHAR(64),col5 DATE,CONSTRAINT t2_fk FOREIGN KEY (col4,col5) REFERENCES Table1 (col2,col3))");
+                "CREATE TEMPORARY TABLE Table2 (col_id NUMBER NOT NULL CONSTRAINT col_id_pk PRIMARY KEY,col4 VARCHAR(64),col5 DATE,CONSTRAINT t2_fk FOREIGN KEY (col4,col5) REFERENCES Table1 (col2,col3),CONSTRAINT neq_cond CHECK (col4 <> col5))");
 
     try {
       new CreateTableQuery(_table1).validate();
