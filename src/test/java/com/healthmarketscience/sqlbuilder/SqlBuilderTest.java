@@ -80,6 +80,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                            ConstraintClause.notNull())
       .addColumnConstraint(_defTable1_col_id,
                            ConstraintClause.primaryKey("id_pk"))
+      .setColumnTypeName(_defTable1_col_id, "BIGINT")
       .addColumnConstraint(_defTable1_col3,
                            ConstraintClause.notNull())
       .setColumnDefaultValue(_defTable1_col3, new CustomSql("CURRENT_DATE"))
@@ -87,7 +88,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                             .addColumns(_defTable1_col2, _defTable1_col3))
       .validate().toString();
     checkResult(createStr5,
-                "CREATE TABLE Table1 (col_id NUMBER NOT NULL CONSTRAINT id_pk PRIMARY KEY,col2 VARCHAR(64) DEFAULT 'blah',col3 DATE DEFAULT CURRENT_DATE NOT NULL,altCol4 VARCHAR(255),UNIQUE (col2,col3))");
+                "CREATE TABLE Table1 (col_id BIGINT NOT NULL CONSTRAINT id_pk PRIMARY KEY,col2 VARCHAR(64) DEFAULT 'blah',col3 DATE DEFAULT CURRENT_DATE NOT NULL,altCol4 VARCHAR(255),UNIQUE (col2,col3))");
 
     String createStr6 = new CreateTableQuery(_defTable2, true)
       .setTableType(CreateTableQuery.TableType.TEMPORARY)
@@ -914,6 +915,14 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(queryStr7,
                 "ALTER TABLE Table1 ADD col5 VARCHAR(255) DEFAULT 'someValue' NOT NULL");
+
+    String queryStr8 =
+      new AlterTableQuery(_defTable1)
+      .setAction(new AlterTableQuery.AddColumnAction(toAdd)
+                 .setTypeName("NVARCHAR"))
+      .validate().toString();
+    checkResult(queryStr8,
+                "ALTER TABLE Table1 ADD col5 NVARCHAR(255) DEFAULT 'someValue' NOT NULL");
 
   }
 

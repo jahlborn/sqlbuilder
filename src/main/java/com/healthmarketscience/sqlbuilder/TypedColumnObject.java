@@ -33,18 +33,27 @@ import com.healthmarketscience.sqlbuilder.dbspec.Column;
  */
 class TypedColumnObject extends ColumnObject
 {
+  private String _typeName;
   private SqlObjectList<SqlObject> _constraints = SqlObjectList.create(" ");
   private SqlObject _defaultValue;
 
   TypedColumnObject(Column column) {
     super(column);
 
+    _typeName = column.getTypeNameSQL();
     _constraints.addObjects(Converter.CUSTOM_TO_CONSTRAINTCLAUSE,
                             column.getConstraints());
     Object defVal = column.getDefaultValue();
     if(defVal != null) {
       _defaultValue = Converter.toValueSqlObject(defVal);
     }
+  }
+
+  /**
+   * Sets the column type name
+   */
+  void setTypeName(String typeName) {
+    _typeName = typeName;
   }
 
   /**
@@ -80,8 +89,7 @@ class TypedColumnObject extends ColumnObject
   @SuppressWarnings("deprecation")
   public void appendTo(AppendableExt app) throws IOException {
 
-    app.append(_column.getColumnNameSQL()).append(" ")
-      .append(_column.getTypeNameSQL());
+    app.append(_column.getColumnNameSQL()).append(" ").append(_typeName);
 
     List<?> colQuals = _column.getTypeQualifiers();
     if(colQuals != null) {

@@ -17,7 +17,6 @@ limitations under the License.
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
-import java.util.ListIterator;
 
 import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
@@ -209,9 +208,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
    */
   public CreateTableQuery addColumnConstraint(Column column, Object constraint)
   {
-    for(ListIterator<SqlObject> iter = _columns.listIterator();
-        iter.hasNext(); ) {
-      SqlObject tmpCol = iter.next();
+    for(SqlObject tmpCol : _columns) {
       if((tmpCol instanceof TypedColumnObject) &&
          (((TypedColumnObject)tmpCol)._column == column)) {
         // add constraint
@@ -231,13 +228,28 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
    */
   public CreateTableQuery setColumnDefaultValue(Column column, Object defaultValue)
   {
-    for(ListIterator<SqlObject> iter = _columns.listIterator();
-        iter.hasNext(); ) {
-      SqlObject tmpCol = iter.next();
+    for(SqlObject tmpCol : _columns) {
       if((tmpCol instanceof TypedColumnObject) &&
          (((TypedColumnObject)tmpCol)._column == column)) {
-        // add constraint
+        // set default value
         ((TypedColumnObject)tmpCol).setDefaultValue(defaultValue);
+        break;
+      }
+    }
+    return this;
+  }
+
+  /**
+   * Sets the given type name as the column type name on a previously added
+   * column (overriding any type info on the column instance itself).
+   */
+  public CreateTableQuery setColumnTypeName(Column column, String typeName)
+  {
+    for(SqlObject tmpCol : _columns) {
+      if((tmpCol instanceof TypedColumnObject) &&
+         (((TypedColumnObject)tmpCol)._column == column)) {
+        // set type name
+        ((TypedColumnObject)tmpCol).setTypeName(typeName);
         break;
       }
     }

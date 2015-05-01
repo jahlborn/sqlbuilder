@@ -183,6 +183,17 @@ public class AlterTableQuery extends Query<AlterTableQuery>
       }
       return this;
     }
+
+    /**
+     * Sets the given type name as the column type name for this action
+     * (overriding any type info on the column instance itself).
+     */
+    public AddColumnAction setTypeName(String typeName) {
+      if(_column instanceof TypedColumnObject) {
+        ((TypedColumnObject)_column).setTypeName(typeName);
+      }
+      return this;
+    }
   }
 
 
