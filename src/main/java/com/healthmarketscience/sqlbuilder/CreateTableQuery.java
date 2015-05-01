@@ -46,6 +46,8 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     /** Anchor for the beginning of the query, only supports {@link
         HookType#BEFORE} */
     HEADER, 
+    /** Anchor for the "TABLE " part of the "CREATE TABLE " clause */
+    TABLE, 
     /** Anchor for the end of the query, only supports {@link
         HookType#BEFORE} */
     TRAILER;
@@ -71,6 +73,26 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     public String toString() { return _constraintClause; }
   }
 
+  /**
+   * Enum which defines the optional table type information.
+   */
+  public enum TableType
+  {
+    GLOBAL_TEMP("GLOBAL TEMPORARY "),
+    LOCAL_TEMP("LOCAL TEMPORARY "),
+    TEMPORARY("TEMPORARY ");
+
+    private final String _typeClause;
+
+    private TableType(String typeClause) {
+      _typeClause = typeClause;
+    }
+    
+    @Override
+    public String toString() { return _typeClause; }
+  }
+
+  private TableType _tableType;
   protected SqlObjectList<SqlObject> _constraints = SqlObjectList.create();
   
   public CreateTableQuery(Table table) {
@@ -113,6 +135,14 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   @Override
   public DropQuery getDropQuery() {
     return new DropQuery(DropQuery.Type.TABLE, _object);
+  }
+
+  /**
+   * Sets the type of table to be created.
+   */
+  public CreateTableQuery setTableType(TableType tableType) {
+    _tableType = tableType;
+    return this;
   }
   
   /**
@@ -168,7 +198,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   public CreateTableQuery setColumnConstraint(Column column,
                                               ColumnConstraint constraint)
   {
-    return addColumnConstraint(column, (Object)constraint);
+    return addColumnConstraint(column, constraint);
   }
   
   /**
@@ -304,7 +334,12 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     
     customAppendTo(app, Hook.HEADER);
 
-    app.append("CREATE TABLE ").append(_object)
+    app.append("CREATE ");
+    if(_tableType != null) {
+      app.append(_tableType);
+    }
+    customAppendTo(app, Hook.TABLE, "TABLE ")
+      .append(_object)
       .append(" (").append(_columns);
     if(!_constraints.isEmpty()) {
       app.append(",").append(_constraints);

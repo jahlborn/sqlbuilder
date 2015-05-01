@@ -23,10 +23,12 @@ import com.healthmarketscience.sqlbuilder.CreateTableQuery;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.ValidationException;
 import com.healthmarketscience.sqlbuilder.custom.mysql.MysLimitClause;
+import com.healthmarketscience.sqlbuilder.custom.mysql.MysObjects;
 import com.healthmarketscience.sqlbuilder.custom.oracle.OraObjects;
 import com.healthmarketscience.sqlbuilder.custom.oracle.OraTableSpaceClause;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgLimitClause;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgOffsetClause;
+import com.healthmarketscience.sqlbuilder.custom.postgresql.PgObjects;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbIndex;
 
 /**
@@ -87,6 +89,15 @@ public class CustomSyntaxTest extends BaseSqlTestCase
     } catch(ValidationException e) {
       // success
     }     
+  }
+
+  public void testMysqlCreateTableClause()
+  {
+    String createTableStr = new CreateTableQuery(_table1, true)
+      .addCustomization(MysObjects.IF_NOT_EXISTS_TABLE)
+      .validate().toString();
+    checkResult(createTableStr,
+                "CREATE TABLE IF NOT EXISTS Schema1.Table1 (col1 VARCHAR(213),col2 NUMBER(7),col3 DECIMAL(4,8),col4 VARCHAR(255))");
   }
 
   public void testPostgresqlLimitClause()
@@ -155,6 +166,15 @@ public class CustomSyntaxTest extends BaseSqlTestCase
     } catch(ValidationException e) {
       // success
     }     
+  }
+
+  public void testPostgresqlCreateTableClause()
+  {
+    String createTableStr = new CreateTableQuery(_table1, true)
+      .addCustomization(PgObjects.IF_NOT_EXISTS_TABLE)
+      .validate().toString();
+    checkResult(createTableStr,
+                "CREATE TABLE IF NOT EXISTS Schema1.Table1 (col1 VARCHAR(213),col2 NUMBER(7),col3 DECIMAL(4,8),col4 VARCHAR(255))");
   }
 
   public void testOracleTablespace()

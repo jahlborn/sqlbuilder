@@ -90,9 +90,10 @@ public class SqlBuilderTest extends BaseSqlTestCase
                 "CREATE TABLE Table1 (col_id NUMBER NOT NULL CONSTRAINT id_pk PRIMARY KEY,col2 VARCHAR(64) DEFAULT 'blah',col3 DATE DEFAULT CURRENT_DATE NOT NULL,altCol4 VARCHAR(255),UNIQUE (col2,col3))");
 
     String createStr6 = new CreateTableQuery(_defTable2, true)
+      .setTableType(CreateTableQuery.TableType.TEMPORARY)
       .validate().toString();
     checkResult(createStr6,
-                "CREATE TABLE Table2 (col_id NUMBER NOT NULL CONSTRAINT col_id_pk PRIMARY KEY,col4 VARCHAR(64),col5 DATE,CONSTRAINT t2_fk FOREIGN KEY (col4,col5) REFERENCES Table1 (col2,col3))");
+                "CREATE TEMPORARY TABLE Table2 (col_id NUMBER NOT NULL CONSTRAINT col_id_pk PRIMARY KEY,col4 VARCHAR(64),col5 DATE,CONSTRAINT t2_fk FOREIGN KEY (col4,col5) REFERENCES Table1 (col2,col3))");
 
     try {
       new CreateTableQuery(_table1).validate();
@@ -108,6 +109,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String createStr1 = query.validate().toString();
     checkResult(createStr1,
                 "CREATE INDEX Schema1.Index1 ON Schema1.Table1 (col1,col2)");
+
+    
+    String createStr2 = query.setIndexType(CreateIndexQuery.IndexType.UNIQUE)
+      .validate().toString();
+    checkResult(createStr2,
+                "CREATE UNIQUE INDEX Schema1.Index1 ON Schema1.Table1 (col1,col2)");
 
     String dropStr1 = query.getDropQuery().validate().toString();
     checkResult(dropStr1,

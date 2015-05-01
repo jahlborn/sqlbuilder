@@ -107,7 +107,7 @@ public class AlterTableQuery extends Query<AlterTableQuery>
   }
   
   /**
-   * "Action" for adding a unique constraint to a table.,
+   * Base "Action" for adding a constraint to a table.,
    * e.g. {@code "... ADD <constraint_clause>}.
    */
   public static class AddConstraintAction extends SqlObject

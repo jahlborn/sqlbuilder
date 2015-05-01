@@ -43,11 +43,31 @@ public class CreateIndexQuery extends BaseCreateQuery<CreateIndexQuery>
     /** Anchor for the beginning of the query, only supports {@link
         HookType#BEFORE} */
     HEADER, 
+    /** Anchor for the "INDEX " part of the "CREATE INDEX " clause */
+    INDEX, 
     /** Anchor for the end of the query, only supports {@link
         HookType#BEFORE} */
     TRAILER;
   }
   
+  /**
+   * Enum which defines the optional index type information.
+   */
+  public enum IndexType
+  {
+    UNIQUE("UNIQUE ");
+
+    private final String _typeClause;
+
+    private IndexType(String typeClause) {
+      _typeClause = typeClause;
+    }
+    
+    @Override
+    public String toString() { return _typeClause; }
+  }
+
+  private IndexType _indexType;
   protected SqlObject _table;
 
   public CreateIndexQuery(Index index) {
@@ -74,6 +94,14 @@ public class CreateIndexQuery extends BaseCreateQuery<CreateIndexQuery>
   public CreateIndexQuery(Object tableStr, Object index) {
     super(Converter.toCustomIndexSqlObject(index));
     _table = Converter.toCustomTableSqlObject(tableStr);
+  }
+
+  /**
+   * Sets the type of index to be created.
+   */
+  public CreateIndexQuery setIndexType(IndexType indexType) {
+    _indexType = indexType;
+    return this;
   }
 
   /**
@@ -169,8 +197,13 @@ public class CreateIndexQuery extends BaseCreateQuery<CreateIndexQuery>
     
     customAppendTo(app, Hook.HEADER);
 
-    app.append("CREATE INDEX ").append(_object).append(" ON ").append(_table)
-        .append(" (").append(_columns).append(")");
+    app.append("CREATE ");
+    if(_indexType != null) {
+      app.append(_indexType);
+    }
+    customAppendTo(app, Hook.INDEX, "INDEX ")
+      .append(_object).append(" ON ").append(_table)
+      .append(" (").append(_columns).append(")");
 
     customAppendTo(app, Hook.TRAILER);
   }
