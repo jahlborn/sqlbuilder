@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.1.1" date="TBD">
+    <release version="2.1.1" date="2015-07-01">
       <action dev="jahlborn" type="update" system="SourceForge2Features"
               issue="14">
         Add a framework for enabling SqlBuilder queries to support custom SQL
