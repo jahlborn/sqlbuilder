@@ -8,6 +8,7 @@
       <item name="Examples" href="example.html"/>
       <item name="Syntax Reference" href="syntax_reference.html"/>
       <item name="FAQ" href="faq.html"/>
+      <item name="GitHub Mirror" href="https://github.com/jahlborn/sqlbuilder"/>
     </menu>
 
     <menu ref="reports"/>
