@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.healthmarketscience</groupId>
     <artifactId>openhms-parent</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.3-SNAPSHOT</version>
   </parent>
   <groupId>com.healthmarketscience.sqlbuilder</groupId>
   <artifactId>sqlbuilder</artifactId>
@@ -67,6 +67,54 @@
       </plugins>
     </pluginManagement>    
     <plugins>
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <version>1.5.3</version>
+        <executions>
+          <execution>
+            <id>no-regex</id>
+            <phase>site</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+        <configuration>
+          <includes>
+            <include>${project.build.directory}/site/apidocs/**/*.html</include>
+          </includes>
+          <regex>false</regex>
+          <replacements>
+            <replacement>
+              <token>&lt;pre&gt;</token>
+              <value>&lt;div class="source"&gt;&lt;pre class="prettyprint linenums"&gt;</value>
+            </replacement>
+            <replacement>
+              <token>&lt;/pre&gt;</token>
+              <value>&lt;/pre&gt;&lt;/div&gt;</value>
+            </replacement>
+          </replacements>
+        </configuration>
+          </execution>
+          <execution>
+            <id>with-regex</id>
+            <phase>site</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+        <configuration>
+          <includes>
+            <include>${project.build.directory}/site/apidocs/**/*.html</include>
+          </includes>
+          <replacements>
+            <replacement>
+              <token>\s+&lt;/pre&gt;</token>
+              <value>&lt;/pre&gt;</value>
+            </replacement>
+          </replacements>
+        </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -84,6 +132,15 @@
   </dependencies>
   <reporting>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <configuration>
+          <rulesets>
+            <ruleset>${basedir}/src/site/pmd/custom-ruleset.xml</ruleset>
+          </rulesets>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-changes-plugin</artifactId>
         <configuration>
@@ -110,6 +167,7 @@
             <list>http://openhms.sourceforge.net/common-util/apidocs</list>
           </links>
           <source>1.5</source>
+          <stylesheetfile>${basedir}/src/site/javadoc/stylesheet.css</stylesheetfile>
           <groups>
             <group>
               <title>SqlBuilder Core Package</title>
@@ -121,6 +179,9 @@
             </group>
           </groups>
           <quiet>true</quiet>
+          <top><![CDATA[
+          <script type="text/javascript" src="{@docRoot}/../js/apache-maven-fluido-1.4.min.js"></script>
+          ]]></top>
         </configuration>
       </plugin>
       <plugin>

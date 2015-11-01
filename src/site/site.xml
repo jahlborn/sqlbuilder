@@ -1,5 +1,13 @@
 <?xml version="1.0"?>
 <project name="SqlBuilder">
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.4</version>
+  </skin>
+  <bannerLeft>
+    <name>${project.name}</name>
+  </bannerLeft>
   <body>
     <menu name="SqlBuilder">
       <item name="About" href="index.html"/>
@@ -14,5 +22,17 @@
     <menu ref="reports"/>
 
   </body>
+
+  <custom>
+    <fluidoSkin>
+      <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+      <copyrightClass>center</copyrightClass>
+      <gitHub>
+        <projectId>jahlborn/sqlbuilder</projectId>
+        <ribbonOrientation>right</ribbonOrientation>
+        <ribbonColor>gray</ribbonColor>        
+      </gitHub>
+    </fluidoSkin>
+  </custom>
 
 </project>

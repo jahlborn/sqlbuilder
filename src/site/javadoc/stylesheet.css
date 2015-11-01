@@ -1,0 +1,252 @@
+/*
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+*/
+
+/* Javadoc style sheet */
+
+/* Define colors, fonts and other style attributes here to override the defaults  */
+
+/* Page background color */
+body { background-color: #FFFFFF }
+
+a:link, a:visited {
+ color: blue;
+ }
+
+a:active, a:hover, #leftcol a:active, #leftcol a:hover {
+ color: #f30 !important;
+ }
+
+a:link.selfref, a:visited.selfref {
+ color: #555 !important;
+ }
+
+.a td {
+ background: #ddd;
+ color: #000;
+ }
+
+/* Table colors */
+.TableHeadingColor     { background: #036; color:#FFFFFF } /* Dark blue */
+.TableSubHeadingColor  { background: #bbb; color:#fff } /* Dark grey */
+.TableRowColor         { background: #efefef } /* White */
+
+/* Font used in left-hand frame lists */
+.FrameTitleFont   { font-size: medium; font-family: normal; color:#000000 }
+.FrameHeadingFont { font-size: medium; font-family: normal; color:#000000 }
+.FrameItemFont    { font-size: medium; font-family: normal; color:#000000 }
+
+/* Example of smaller, sans-serif font in frames */
+/* .FrameItemFont  { font-size: 10pt; font-family: Helvetica, Arial, sans-serif } */
+
+/* Navigation bar fonts and colors */
+.NavBarCell1    { background-color:#ddd;}/* Light mauve */
+.NavBarCell1Rev { background-color:#888;}/* Dark Blue */
+.NavBarFont1    { font-family: Arial, Helvetica, sans-serif; color:#000000;}
+.NavBarFont1Rev { font-family: Arial, Helvetica, sans-serif; color:#FFFFFF;}
+
+.NavBarCell2    { font-family: Arial, Helvetica, sans-serif; background-color:#FFFFFF;}
+.NavBarCell3    { font-family: Arial, Helvetica, sans-serif; background-color:#FFFFFF;}
+
+/* usage tag classes */
+.UsageGeneralHeader       { background: #efefef; color:#008000; text-decoration:underline }
+.UsageIntermediateHeader  { background: #efefef; color:#D4CF01; text-decoration:underline }
+.UsageAdvancedHeader      { background: #efefef; color:#D48201; text-decoration:underline }
+.UsageGeneral       { background: #efefef }
+.UsageIntermediate  { background: #efefef }
+.UsageAdvanced      { background: #efefef }
+
+
+/* Customizations pulled in from fluido 1.4 (and custom site.css) */
+ul,ol {
+    padding:0;
+    margin:0 0 10px 25px
+}
+ul ul,ul ol,ol ol,ol ul {
+    margin-bottom:0
+}
+li {
+    line-height:20px
+}
+ul.unstyled,ol.unstyled {
+    margin-left:0;
+    list-style:none
+}
+ul.inline,ol.inline {
+    margin-left:0;
+    list-style:none
+}
+ul.inline>li,ol.inline>li {
+    display:inline-block;
+    *display:inline;
+    padding-right:5px;
+    padding-left:5px;
+    *zoom:1
+}
+
+
+pre.prettyprint {
+    border:1px solid #999;
+    page-break-inside:avoid
+}
+pre.prettyprint {
+    padding:0 3px 2px;
+    font-family:Monaco,Menlo,Consolas,"Courier New",monospace;
+    font-size:12px;
+    color:#333;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px
+}
+/* code { */
+/*     padding:2px 4px; */
+/*     color:#d14; */
+/*     white-space:nowrap; */
+/*     background-color:#f7f7f9; */
+/*     border:1px solid #e1e1e8 */
+/* } */
+pre.prettyprint {
+    display:block;
+    padding:9.5px;
+    margin:0 0 10px;
+    font-size:13px;
+    line-height:20px;
+    word-break:break-all;
+    word-wrap:break-word;
+    white-space:pre;
+    white-space:pre-wrap;
+    background-color:#f5f5f5;
+    border:1px solid #ccc;
+    border:1px solid rgba(0,0,0,0.15);
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px
+}
+pre.prettyprint {
+    margin-bottom:20px
+}
+pre.prettyprint code {
+    padding:0;
+    color:inherit;
+    white-space:pre;
+    white-space:pre-wrap;
+    background-color:transparent;
+    border:0
+}
+.pre-scrollable {
+    max-height:340px;
+    overflow-y:scroll
+}
+
+.pln {
+    color:#000
+}
+@media screen {
+    .str {
+        color:#080
+    }
+    .kwd {
+        color:#008
+    }
+    .com {
+        color:#800
+    }
+    .typ {
+        color:#606
+    }
+    .lit {
+        color:#066
+    }
+    .pun,.opn,.clo {
+        color:#660
+    }
+    .tag {
+        color:#008
+    }
+    .atn {
+        color:#606
+    }
+    .atv {
+        color:#080
+    }
+    .dec,.var {
+        color:#606
+    }
+    .fun {
+        color:red
+    }
+
+}
+@media print,projection {
+    .str {
+        color:#060
+    }
+    .kwd {
+        color:#006;
+        font-weight:bold
+    }
+    .com {
+        color:#600;
+        font-style:italic
+    }
+    .typ {
+        color:#404;
+        font-weight:bold
+    }
+    .lit {
+        color:#044
+    }
+    .pun,.opn,.clo {
+        color:#440
+    }
+    .tag {
+        color:#006;
+        font-weight:bold
+    }
+    .atn {
+        color:#404
+    }
+    .atv {
+        color:#060
+    }
+
+}
+pre.prettyprint {
+    padding:2px;
+    border:1px solid #888
+}
+ol.linenums {
+    margin-top:0;
+    margin-bottom:0;
+    padding-left:15px
+}
+li.L1,li.L3,li.L5,li.L7,li.L9 {
+    background:#eee
+}
+
+li.L1,li.L3,li.L5,li.L7,li.L9 {
+    color:#888
+}
+li.L0,li.L2,li.L4,li.L6,li.L8 {
+    color:#888
+}
+.source
+{
+    padding-left: 10pt;
+    padding-right: 10pt;    
+}

@@ -19,7 +19,6 @@ package com.healthmarketscience.sqlbuilder.custom.postgresql;
 import com.healthmarketscience.sqlbuilder.ValidationContext;
 import java.io.IOException;
 import com.healthmarketscience.common.util.AppendableExt;
-import com.healthmarketscience.sqlbuilder.CreateIndexQuery;
 import com.healthmarketscience.sqlbuilder.custom.HookType;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
 import com.healthmarketscience.sqlbuilder.custom.CustomSyntax;

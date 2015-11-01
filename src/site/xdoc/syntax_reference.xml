@@ -35,7 +35,7 @@
         types automatically.
       </p>
       <ul>
-        <table>
+        <table border="1">
           <tr>
             <th>Example Common Method</th>
             <th>Equivalent Custom Method</th>
@@ -51,7 +51,7 @@
         method for constructing the object with each enum value.
       </p>
       <ul>
-        <table>
+        <table border="1">
           <tr>
             <th>Example Constructor With Enum</th>
             <th>Equivalent Static Method</th>
@@ -68,7 +68,7 @@
     <section name="Queries">
       <subsection name="DDL Queries"
                   id="DDL_Queries">
-        <table>
+        <table border="1">
           <tr>
             <td>
               <a href="apidocs/com/healthmarketscience/sqlbuilder/CreateTableQuery.html">CreateTableQuery</a>
@@ -187,7 +187,7 @@
 
       <subsection name="DML Queries"
                   id="DML_Queries">
-        <table>
+        <table border="1">
           <tr>
             <td>
               <a name="SelectQuery"/>
@@ -321,7 +321,7 @@
           themselves empty.
         </p>
 
-        <table>
+        <table border="1">
           <tr>
             <td>
               <a href="apidocs/com/healthmarketscience/sqlbuilder/ComboCondition.html">ComboCondition</a>
@@ -417,7 +417,7 @@
           content.
         </p>
         
-        <table>
+        <table border="1">
           <tr>
             <td>
               <a href="apidocs/com/healthmarketscience/sqlbuilder/ComboExpression.html">ComboExpression</a>
@@ -464,7 +464,7 @@
 
       <subsection name="Simple Values"
                   id="Simple_Values">
-        <table>
+        <table border="1">
           <tr>
             <td>
               <a href="apidocs/com/healthmarketscience/sqlbuilder/ValueObject.html">ValueObject</a>
@@ -496,7 +496,7 @@
 
       <subsection name="Complex Values"
                   id="Complex_Values">
-        <table>
+        <table border="1">
           <tr>
             <td>
               <a href="apidocs/com/healthmarketscience/sqlbuilder/SimpleCaseStatement.html">SimpleCaseStatement</a>
@@ -603,7 +603,7 @@
 
       <subsection name="JDBC Support"
                   id="JDBC_Support">
-        <table>
+        <table border="1">
           <tr>
             <td>
               <a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcEscape.html">JdbcEscape</a>
