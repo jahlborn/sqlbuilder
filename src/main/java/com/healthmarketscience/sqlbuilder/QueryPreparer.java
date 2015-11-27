@@ -358,7 +358,7 @@ public class QueryPreparer
     /**
      * Returns the 1-based index of this PlaceHolder in the query.
      * @return 1-based index of this PlaceHolder if the query has been
-     *         generated, {@value QueryPreparer#NO_INDEX} otherwise
+     *         generated, -1 otherwise
      */
     public int getIndex() {
       return _index;
