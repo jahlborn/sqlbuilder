@@ -140,12 +140,21 @@ String selectQuery =
         </li>
         <li>99% of the SqlBuilder codebase is ANSI SQL92 compliant</li>
         <li>JDBC escape syntax support (<a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcEscape.html">JdbcEscape</a>)</li>
-        <li>Helpers for managing prepared statement parameters (<a href="apidocs/com/healthmarketscience/sqlbuilder/QueryPreparer.html">QueryPreparer</a>) and reading results (<a href="apidocs/com/healthmarketscience/sqlbuilder/QueryReader.html">QueryReader</a>)</li>
+        <li>Helpers for managing PreparedStatement parameters (<a href="apidocs/com/healthmarketscience/sqlbuilder/QueryPreparer.html">QueryPreparer</a>) and reading results (<a href="apidocs/com/healthmarketscience/sqlbuilder/QueryReader.html">QueryReader</a>)</li>
         <li>Optional <a href="apidocs/com/healthmarketscience/sqlbuilder/Query.html#validate()">query validation</a></li>
         <li>Two usage modes:
         <ul>
           <li>Predefined, strongly verifiable <a href="apidocs/com/healthmarketscience/sqlbuilder/dbspec/package-summary.html">database model</a> (optionally using the included <a href="apidocs/com/healthmarketscience/sqlbuilder/dbspec/basic/package-summary.html">basic implementation</a>)</li>
           <li>Fully customized, weakly verifiable constants using <a href="apidocs/com/healthmarketscience/sqlbuilder/CustomSql.html">CustomSql</a></li>
+        </ul>
+        </li>
+        <li>Does <i>not</i> do any form of SQL string escaping:
+        <ul>
+          <li>SQL escapes are database dependent</li>
+          <li>SQL escaping is pretty much impossible to do correctly in a
+              library external to the database</li>
+          <li>PreparedStatements should always be used to avoid any need for
+              string escaping (use <a href="apidocs/com/healthmarketscience/sqlbuilder/QueryPreparer.html">QueryPreparer</a> for a convenient helper)</li>
         </ul>
         </li>
       </ul>

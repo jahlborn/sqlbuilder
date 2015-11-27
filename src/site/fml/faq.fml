@@ -10,12 +10,9 @@
       <answer>
         <p>
           In general, the SqlBuilder package has strived to use ANSI SQL92
-          syntax only (with a few minor deviances).  While allowing for custom
-          syntax would certainly be useful, no good design has yet been found
-          for such functionality (feel free to post a feature request if you
-          can think of a good db customization infrastructure).  For now, you
-          can use the "custom" methods to insert custom SQL syntax into a
-          query.
+          syntax only (with a few minor deviances).  As of the 2.1.1 release,
+          SqlBuilder supports a <a href="apidocs/com/healthmarketscience/sqlbuilder/custom/package-summary.html">syntax customization framework</a>,
+          with a few database specific constructs currently built-in.
         </p>
       </answer>
     </faq>
