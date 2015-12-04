@@ -4,6 +4,11 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.1.2" date="TBD">
+      <action dev="jahlborn" type="update">
+        New site style!
+      </action>
+    </release>
     <release version="2.1.1" date="2015-07-01">
       <action dev="jahlborn" type="update" system="SourceForge2Features"
               issue="14">
