@@ -31,7 +31,7 @@ public class DbConstraint extends DbObject<DbObject<?>> implements Constraint {
   /** the type for this constraint */
   private final Type _type;
   /** constrained columns */
-  private List<DbColumn> _columns = new ArrayList<DbColumn>();
+  private final List<DbColumn> _columns = new ArrayList<DbColumn>();
 
   public DbConstraint(DbColumn parent, String name, Type type) {
     this((DbObject<?>)parent, name, type);

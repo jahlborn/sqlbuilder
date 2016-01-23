@@ -31,11 +31,11 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
 public class DbTable extends DbObject<DbSchema> implements Table {
 
   /** alias to use for this table in queries (should be unique) */
-  private String _alias;
+  private final String _alias;
   /** columns currently created for this table */
-  private List<DbColumn> _columns = new ArrayList<DbColumn>();
+  private final List<DbColumn> _columns = new ArrayList<DbColumn>();
   /** constraints currently defined for this table */
-  private List<DbConstraint> _constraints = new ArrayList<DbConstraint>();
+  private final List<DbConstraint> _constraints = new ArrayList<DbConstraint>();
 
   public DbTable(DbSchema parent, String name) {
     this(parent, name, parent.getSpec().getNextAlias());
