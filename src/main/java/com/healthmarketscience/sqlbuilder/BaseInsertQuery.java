@@ -27,7 +27,7 @@ import com.healthmarketscience.common.util.AppendableExt;
  * @author James Ahlborn
  */
 abstract class BaseInsertQuery<ThisType extends BaseInsertQuery<ThisType>>
-  extends Query<ThisType>
+  extends BaseCTEQuery<ThisType>
 {
   private SqlObject _table;
   protected SqlObjectList<SqlObject> _columns = SqlObjectList.create();

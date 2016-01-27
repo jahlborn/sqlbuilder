@@ -33,14 +33,14 @@ public class BooleanValueObject extends Expression
   private static final Integer TRUE_NUMBER = 1;
   private static final Integer FALSE_NUMBER = 0;
 
-  private Object _value;
+  private Boolean _value;
 
   public BooleanValueObject(Object value) {
     this((Boolean)value);
   }
 
   public BooleanValueObject(Boolean value) {
-    _value = toValue(value);
+    _value = value;
   }
 
   @Override
@@ -52,11 +52,11 @@ public class BooleanValueObject extends Expression
   
   @Override
   public void appendTo(AppendableExt app) throws IOException {
-    app.append(_value);
+    app.append(toSqlValue(_value));
   }
 
 
-  private static Object toValue(Boolean b)
+  private static Object toSqlValue(Boolean b)
   {
     return (b.booleanValue() ? TRUE_NUMBER : FALSE_NUMBER);
   }

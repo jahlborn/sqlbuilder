@@ -230,6 +230,10 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
       app.append(" ORDER BY ").append(_ordering);
     }
   }
+
+  SqlObject getFirstQuery() {
+    return (!_queries.isEmpty() ? _queries.get(0).getQuery() : null);
+  }
   
   /**
    * Convenience method to create a UNION query.
@@ -329,7 +333,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
       _type = type;
     }
 
-    private Object getQuery() {
+    private SqlObject getQuery() {
       return _query;
     }
 

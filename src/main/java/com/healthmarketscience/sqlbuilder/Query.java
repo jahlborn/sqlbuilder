@@ -87,6 +87,8 @@ public abstract class Query<ThisType extends Query<ThisType>>
   
   @Override
   public final void appendTo(AppendableExt app) throws IOException {
+    prependTo(app);
+
     SqlContext newContext = SqlContext.pushContext(app);
     newContext.setQuery(this);
     appendTo(app, newContext);
@@ -100,6 +102,15 @@ public abstract class Query<ThisType extends Query<ThisType>>
   @SuppressWarnings("unchecked")
   protected final ThisType getThisType() {
     return (ThisType)this;
+  }
+
+  /**
+   * Called by {@link #appendTo(AppendableExt)} before
+   * {@link #appendTo(AppendableExt,SqlContext)} within the original
+   * SqlContext.
+   */
+  protected void prependTo(AppendableExt app) throws IOException {
+    // base does nothing
   }
   
   /**

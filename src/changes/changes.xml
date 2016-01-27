@@ -8,6 +8,10 @@
       <action dev="jahlborn" type="update">
         New site style!
       </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features"
+              issue="16">
+        Initial foray into SQL99 syntax with Common Table Expression support.
+      </action>
     </release>
     <release version="2.1.1" date="2015-07-01">
       <action dev="jahlborn" type="update" system="SourceForge2Features"
@@ -24,7 +28,7 @@
         Add CheckConstraint for handling table/column CHECK constraints.
       </action>
     </release>
-    <release version="2.1.0" date="2015-04-16" 
+    <release version="2.1.0" date="2015-04-16"
              description="Relicense to Apache License">
       <action dev="jahlborn" type="add">
         OpenHMS relicenses to Apache License, 2.0!

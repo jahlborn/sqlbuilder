@@ -52,7 +52,7 @@ import com.healthmarketscience.sqlbuilder.custom.HookAnchor;
  *
  * @author James Ahlborn
  */
-public class SelectQuery extends Query<SelectQuery>
+public class SelectQuery extends BaseCTEQuery<SelectQuery>
 {
   /**
    * Enum which defines the join types supported in a FROM clause.
@@ -302,7 +302,6 @@ public class SelectQuery extends Query<SelectQuery>
                              Column fromColumn,
                              Column toColumn)
   {
-    
     return addJoin(joinType, fromTable, toTable, 
         Collections.singletonList(fromColumn), Collections.singletonList(toColumn));
   }
@@ -484,13 +483,6 @@ public class SelectQuery extends Query<SelectQuery>
       validateTables(vContext);
     }
 
-    // if we don't have any tables, but we don't have any Columns either,
-    // that's a problem (because we can't infer the tables in this case)
-    if((!checkTables) && (vContext.getColumns().isEmpty())) {
-      // we must have some tables in this case
-      throw new ValidationException("No tables given in select");
-    }
-
     // note, if _joinFromTables is empty, then all the referenced tables are in
     // the _joins collection (using add*FromTable() methods), and no
     // extended validation needs to be done
@@ -596,13 +588,40 @@ public class SelectQuery extends Query<SelectQuery>
       
     app.append(_columns);
 
-    customAppendTo(app, Hook.FROM, " FROM ");
-
     SqlObjectList<SqlObject> joins = _joins;
     if(joins.isEmpty()) {
-        
       // auto generate the join tables from all the referenced columns
-      joins = SqlObjectList.create();
+      joins = buildJoins(newContext);
+    }
+    
+    // append the joins
+    maybeAppendTo(app, Hook.FROM, " FROM ", joins, !joins.isEmpty());
+
+    // append "where" condition(s)
+    maybeAppendTo(app, Hook.WHERE, " WHERE ", _condition, !_condition.isEmpty());
+
+    // append grouping clause
+    boolean hasGroupings = !_grouping.isEmpty();
+    maybeAppendTo(app, Hook.GROUP_BY, " GROUP BY ", _grouping, hasGroupings);
+    if(hasGroupings) {
+      // append having clause (which is considered a sub-clause of the GROUP
+      // BY clause)
+      maybeAppendTo(app, Hook.HAVING, " HAVING ", _having, !_having.isEmpty());
+    }
+    
+    // append ordering clause
+    maybeAppendTo(app, Hook.ORDER_BY, " ORDER BY ", _ordering, 
+                  !_ordering.isEmpty());
+
+    maybeAppendTo(app, Hook.FOR_UPDATE, " FOR UPDATE", _forUpdate);
+
+    customAppendTo(app, Hook.TRAILER);
+  }
+
+  private SqlObjectList<SqlObject> buildJoins(SqlContext newContext) {
+    
+      // auto generate the join tables from all the referenced columns
+    SqlObjectList<SqlObject> joins = SqlObjectList.create();
 
       // note, we don't cache this collection because we don't want the
       // appendTo() method to mutate object state.
@@ -611,6 +630,11 @@ public class SelectQuery extends Query<SelectQuery>
       ValidationContext tmpVContext = new ValidationContext(
           null, new LinkedHashSet<Column>());
       collectSchemaObjects(tmpVContext);
+
+      if(tmpVContext.getColumns().isEmpty()) {
+        // this is some sort of "constant" select, no columns/tables
+        return joins;
+      }
         
       Collection<Table> columnTables = tmpVContext.getColumnTables(
           new LinkedHashSet<Table>());
@@ -637,30 +661,8 @@ public class SelectQuery extends Query<SelectQuery>
       for(Table table : columnTables) {
         joins.addObject(Converter.toTableDefSqlObject(table));
       }
-    }
 
-    // append the joins
-    app.append(joins);
-
-    // append "where" condition(s)
-    maybeAppendTo(app, Hook.WHERE, " WHERE ", _condition, !_condition.isEmpty());
-
-    // append grouping clause
-    boolean hasGroupings = !_grouping.isEmpty();
-    maybeAppendTo(app, Hook.GROUP_BY, " GROUP BY ", _grouping, hasGroupings);
-    if(hasGroupings) {
-      // append having clause (which is considered a sub-clause of the GROUP
-      // BY clause)
-      maybeAppendTo(app, Hook.HAVING, " HAVING ", _having, !_having.isEmpty());
-    }
-    
-    // append ordering clause
-    maybeAppendTo(app, Hook.ORDER_BY, " ORDER BY ", _ordering, 
-                  !_ordering.isEmpty());
-
-    maybeAppendTo(app, Hook.FOR_UPDATE, " FOR UPDATE", _forUpdate);
-
-    customAppendTo(app, Hook.TRAILER);
+      return joins;
   }
 
   /**

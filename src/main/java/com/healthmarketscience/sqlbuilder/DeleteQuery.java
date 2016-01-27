@@ -26,7 +26,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  *  
  * @author James Ahlborn
  */
-public class DeleteQuery extends Query<DeleteQuery>
+public class DeleteQuery extends BaseCTEQuery<DeleteQuery>
 {
   private SqlObject _table;
   private ComboCondition _condition =

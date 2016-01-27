@@ -59,7 +59,7 @@ public class ValidationException extends RuntimeException
     if(getFailedVerifiable() != null) {
       Verifiable<?> verifiable = getFailedVerifiable().get1();
       try {
-        msg = msg + " [Failed clause:" + verifiable + "]";
+        msg = msg + " [Failed clause: " + verifiable + "]";
       } catch(Exception e) {
         msg = msg + " [Verifiable: " + verifiable.getClass().getName() + "@" +
           Integer.toHexString(System.identityHashCode(verifiable)) + "]";

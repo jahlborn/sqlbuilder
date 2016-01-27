@@ -29,7 +29,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Table;
  *
  * @author James Ahlborn
  */
-public class UpdateQuery extends Query<UpdateQuery>
+public class UpdateQuery extends BaseCTEQuery<UpdateQuery>
 {
   private SqlObject _table;
   private SqlObjectList<SetClauseObject> _sets = SqlObjectList.create();

@@ -125,6 +125,19 @@ public class ValidationContext {
       }
     }
   }
+
+  /**
+   * Handles schema object collection for nested queries.
+   */
+  public void collectNestedQuerySchemaObjects(SqlObject nestedQuery) {
+    // we do not collect into the subquery if this a "local only" collection
+    if((nestedQuery != null) && !isLocalOnly()) {
+      // subqueries need a nested validation context because their schema
+      // objects *do not* affect the outer query, but the outer query's
+      // schema objects *do* affect their query
+      nestedQuery.collectSchemaObjects(new ValidationContext(this));
+    }
+  }
   
   /**
    * Retrieves the tables referenced by the column objects.

@@ -50,13 +50,7 @@ public class Subquery extends Expression
   
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
-    // we do not collect into the subquery if this a "local only" collection
-    if((_query != null) && (!vContext.isLocalOnly())) {
-      // subqueries need a nested validation context because their schema
-      // objects *do not* affect the outer query, but the outer query's
-      // schema objects *do* affect their query
-      _query.collectSchemaObjects(new ValidationContext(vContext));
-    }
+    vContext.collectNestedQuerySchemaObjects(_query);
   }
     
   @Override

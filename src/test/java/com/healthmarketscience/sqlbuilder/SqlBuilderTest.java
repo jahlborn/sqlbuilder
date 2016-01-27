@@ -313,13 +313,6 @@ public class SqlBuilderTest extends BaseSqlTestCase
         .validate();
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
-      
-    try {
-      new SelectQuery()
-        .addCustomColumns(new CustomSql("col1"), new CustomSql("col2"))
-        .validate();
-      fail("ValidationException should have been thrown");
-    } catch(ValidationException e) {}
 
     try {
       new SelectQuery()
@@ -969,7 +962,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     assertSame(select, ve.getFailedVerifiable().get1());
 
     String msg = ve.getMessage();
-    checkResult(msg, "Columns used for unreferenced tables [Failed clause:SELECT t1.col_id FROM Schema1.Table1 t0]");
+    checkResult(msg, "Columns used for unreferenced tables [Failed clause: SELECT t1.col_id FROM Schema1.Table1 t0]");
 
     
     select.addCustomColumns(new SqlObject() {

@@ -87,10 +87,8 @@ public class CreateViewQuery extends BaseCreateQuery<CreateViewQuery>
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
 
-    if((_selectQuery != null) && !vContext.isLocalOnly()) {
-      // treat select query as a separate subquery
-      _selectQuery.collectSchemaObjects(new ValidationContext(vContext));
-    }
+    // treat select query as a separate subquery
+    vContext.collectNestedQuerySchemaObjects(_selectQuery);
   }
 
   @Override
