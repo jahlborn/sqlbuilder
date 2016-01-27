@@ -9,7 +9,7 @@
         New site style!
       </action>
       <action dev="jahlborn" type="update" system="SourceForge2Features"
-              issue="16">
+              issue="15">
         Initial foray into SQL99 syntax with Common Table Expression support.
       </action>
     </release>
