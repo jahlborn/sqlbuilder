@@ -22,16 +22,34 @@ import com.healthmarketscience.common.util.AppendableExt;
 
 
 /**
- * Outputs a boolean value as a number literal, where
- * {@code true} == {@code 1} and
- * {@code false} == {@code 0}.
+ * By default, outputs a boolean value as a number literal, where {@code true
+ * == 1} and {@code false == 0}.
+ * <p>
+ * Note, however, that the default values are <i>not</i> SQL 92 compliant
+ * boolean values (although they are preferred by many databases).  The values
+ * output by this class can be made SQL 92 compliant by setting the system
+ * property {@value #USE_BOOLEAN_LITERALS_PROPERTY} to {@code true}.  When
+ * this feature is enabled, the values output by this class will be {@code
+ * true == TRUE} and {@code false == FALSE}.
  *
  * @author James Ahlborn
  */
 public class BooleanValueObject extends Expression
 {
-  private static final Integer TRUE_NUMBER = 1;
-  private static final Integer FALSE_NUMBER = 0;
+  public static final String USE_BOOLEAN_LITERALS_PROPERTY = 
+    "com.healthmarketscience.sqlbuilder.useBooleanLiterals";
+
+  private static final boolean USE_LITERAL_VALUES = 
+    Boolean.getBoolean(USE_BOOLEAN_LITERALS_PROPERTY);
+  
+  private static final Object TRUE_VALUE = (USE_LITERAL_VALUES ? "TRUE" : 1);
+  private static final Object FALSE_VALUE = (USE_LITERAL_VALUES ? "FALSE" : 0);
+
+  /** BooleanValueObject representing "true" */
+  public static final BooleanValueObject TRUE = new BooleanValueObject(true);
+  /** BooleanValueObject representing "false" */
+  public static final BooleanValueObject FALSE = new BooleanValueObject(false);
+
 
   private Boolean _value;
 
@@ -41,6 +59,13 @@ public class BooleanValueObject extends Expression
 
   public BooleanValueObject(Boolean value) {
     _value = value;
+  }
+
+  /**
+   * Returns a BooleanValueObject for the given boolean value.
+   */
+  public static BooleanValueObject valueOf(Boolean value) {
+    return value ? TRUE : FALSE;
   }
 
   @Override
@@ -55,11 +80,7 @@ public class BooleanValueObject extends Expression
     app.append(toSqlValue(_value));
   }
 
-
-  private static Object toSqlValue(Boolean b)
-  {
-    return (b.booleanValue() ? TRUE_NUMBER : FALSE_NUMBER);
+  private static Object toSqlValue(Boolean b) {
+    return (b.booleanValue() ? TRUE_VALUE : FALSE_VALUE);
   }
-
-
 }

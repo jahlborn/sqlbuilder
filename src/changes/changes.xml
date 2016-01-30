@@ -12,6 +12,10 @@
               issue="15">
         Initial foray into SQL99 syntax with Common Table Expression support.
       </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features"
+              issue="16">
+        Add system property for using SQL boolean literals for boolean values.
+      </action>
     </release>
     <release version="2.1.1" date="2015-07-01">
       <action dev="jahlborn" type="update" system="SourceForge2Features"

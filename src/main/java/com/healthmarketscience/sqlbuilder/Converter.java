@@ -486,7 +486,7 @@ public abstract class Converter<SrcType, DstType>
     if(obj == null) {
       return SqlObject.NULL_VALUE;
     } else if(obj instanceof Boolean) {
-      return new BooleanValueObject((Boolean)obj);
+      return BooleanValueObject.valueOf((Boolean)obj);
     } else if(obj instanceof Number) {
       return new NumberValueObject((Number)obj);
     } else if(obj instanceof SqlObject) {
@@ -540,7 +540,7 @@ public abstract class Converter<SrcType, DstType>
     } else if(obj instanceof SqlObject) {
       rtnObj = (SqlObject)obj;
     } else if(obj instanceof Boolean) {
-      return new BooleanValueObject((Boolean)obj);
+      return BooleanValueObject.valueOf((Boolean)obj);
     } else if(obj instanceof Number) {
       rtnObj = new NumberValueObject((Number)obj);
     } else {
