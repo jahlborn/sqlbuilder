@@ -40,7 +40,10 @@ import com.healthmarketscience.sqlbuilder.custom.HookAnchor;
  * Query which generates a SELECT statement.  Supports arbitrary columns
  * (including "DISTINCT" modifier), "FOR UPDATE" clause, all join types,
  * "WHERE" clause, "GROUP BY" clause, "ORDER BY" clause, and "HAVING" clause.
- *<p/>
+ * <p/>
+ * Note that the "OFFSET" and "FETCH NEXT" clauses are supported from "SQL
+ * 2008".
+ * <p/>
  * If Columns are used for any referenced columns, and no complicated joins
  * are required, the table list may be left empty and it will be
  * auto-generated in the append call.  Note, that this is not the most
@@ -114,6 +117,8 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   private SqlObjectList<SqlObject> _grouping = SqlObjectList.create();
   private SqlObjectList<SqlObject> _ordering = SqlObjectList.create();
   private ComboCondition _having = ComboCondition.and();
+  private SqlObject _offset;
+  private SqlObject _fetchCount;
 
   public SelectQuery() {
     this(false);
@@ -431,6 +436,30 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     _having.addCondition(newCondition);
     return this;
   }
+
+  /**
+   * Sets the value for the "OFFSET" clause.  Note that this clause is defined
+   * in "SQL 2008".
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toValueSqlObject}.
+   */
+  public SelectQuery setOffset(Object offset) {
+    _offset = Converter.toValueSqlObject(offset);
+    return this;
+  }
+  
+  /**
+   * Sets the value for the "FETCH NEXT" clause.  Note that this clause is
+   * defined in "SQL 2008".
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toValueSqlObject}.
+   */
+  public SelectQuery setFetchNext(Object fetchCount) {
+    _fetchCount = Converter.toValueSqlObject(fetchCount);
+    return this;
+  }
   
   /**
    * Adds custom SQL to this query.  See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
@@ -468,6 +497,12 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     _grouping.collectSchemaObjects(vContext);
     _ordering.collectSchemaObjects(vContext);
     _having.collectSchemaObjects(vContext);
+    if(_offset != null) {
+      _offset.collectSchemaObjects(vContext);
+    }
+    if(_fetchCount != null) {
+      _fetchCount.collectSchemaObjects(vContext);
+    }
   }
 
   @Override
@@ -537,6 +572,9 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     }
     
     validateOrdering(_columns.size(), _ordering, hasAllColumns());
+
+    validateValue(_offset, "Offset", 0);
+    validateValue(_fetchCount, "Fetch", 1);
   }
 
   /**
@@ -570,6 +608,18 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
             "Ordering index '" + orderObj + "' must be integer in range: 1 to "
             + numColumns);
       }
+    }
+  }
+
+  private static void validateValue(SqlObject valueObj, String type, int minVal) {
+    if(!(valueObj instanceof NumberValueObject)) {
+      // nothing we can do, custom value
+      return;
+    }
+    if(!((NumberValueObject)valueObj).isIntegralInRange(minVal, Long.MAX_VALUE)) {
+        throw new ValidationException(
+          type + " value must be an integer >= " + minVal + ", given: " + 
+          valueObj);
     }
   }
 
@@ -612,6 +662,13 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     // append ordering clause
     maybeAppendTo(app, Hook.ORDER_BY, " ORDER BY ", _ordering, 
                   !_ordering.isEmpty());
+
+    if(_offset != null) {
+      app.append(" OFFSET ").append(_offset).append(" ROWS");
+    }
+    if(_fetchCount != null) {
+      app.append(" FETCH NEXT ").append(_fetchCount).append(" ROWS ONLY");
+    }     
 
     maybeAppendTo(app, Hook.FOR_UPDATE, " FOR UPDATE", _forUpdate);
 

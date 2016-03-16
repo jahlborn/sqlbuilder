@@ -297,6 +297,21 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(selectStr10,
                 "SELECT t0.col1,t1.col2 FROM Schema1.Table1 t0 CROSS JOIN Table1 t1");
     
+    String selectStr11 = new SelectQuery()
+      .addAllTableColumns(_table1)
+      .setOffset(0)
+      .validate().toString();
+    checkResult(selectStr11,
+                "SELECT t0.* FROM Schema1.Table1 t0 OFFSET 0 ROWS");
+
+    String selectStr12 = new SelectQuery()
+      .addAllTableColumns(_table1)
+      .addOrdering(_table1_col1, OrderObject.Dir.DESCENDING)
+      .setOffset(0)
+      .setFetchNext(25)
+      .validate().toString();
+    checkResult(selectStr12,
+                "SELECT t0.* FROM Schema1.Table1 t0 ORDER BY t0.col1 DESC OFFSET 0 ROWS FETCH NEXT 25 ROWS ONLY");
     
     try {
       new SelectQuery()
@@ -346,7 +361,15 @@ public class SqlBuilderTest extends BaseSqlTestCase
         .validate();
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
-      
+
+    try {
+      new SelectQuery()
+        .addAllTableColumns(_table1)
+        .setOffset(-1)
+        .validate();
+      fail("ValidationException should have been thrown");
+    } catch(ValidationException e) {}
+    
   }
 
   public void testSelectNoAlias()
