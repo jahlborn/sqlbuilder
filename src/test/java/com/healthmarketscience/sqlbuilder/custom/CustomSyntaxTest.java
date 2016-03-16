@@ -29,6 +29,7 @@ import com.healthmarketscience.sqlbuilder.custom.oracle.OraTableSpaceClause;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgLimitClause;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgOffsetClause;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgObjects;
+import com.healthmarketscience.sqlbuilder.custom.sqlserver.MssTopClause;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbIndex;
 
 /**
@@ -205,4 +206,21 @@ public class CustomSyntaxTest extends BaseSqlTestCase
                 "SELECT t0.col1 FROM Schema1.Table1 t0 WHERE (ROWNUM < 100)");
   }
 
+  public void testSQLServerTopClause()
+  {
+    String selectQuery1 = new SelectQuery()
+      .addColumns(_table1_col1)
+      .addCustomization(new MssTopClause(10))
+      .validate().toString();
+    checkResult(selectQuery1,
+                "SELECT TOP 10 t0.col1 FROM Schema1.Table1 t0");
+
+    String selectQuery2 = new SelectQuery()
+      .addColumns(_table1_col1)
+      .setIsDistinct(true)
+      .addCustomization(new MssTopClause(30, true))
+      .validate().toString();
+    checkResult(selectQuery2,
+                "SELECT DISTINCT TOP 30 PERCENT t0.col1 FROM Schema1.Table1 t0");
+  }
 }

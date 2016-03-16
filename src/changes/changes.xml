@@ -4,6 +4,14 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.1.3" date="TBD">
+      <action dev="jahlborn" type="update" issue="18">
+        Add support for sqlserver TOP syntax as custom SQL.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add support for SQL 2008 OFFSET and FETCH NEXT clauses in SELECT queries.
+      </action>
+    </release>
     <release version="2.1.2" date="2016-01-30">
       <action dev="jahlborn" type="update">
         New site style!

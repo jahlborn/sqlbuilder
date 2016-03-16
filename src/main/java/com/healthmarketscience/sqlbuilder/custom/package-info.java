@@ -68,6 +68,7 @@ limitations under the License.
  * <li>Oracle {@link com.healthmarketscience.sqlbuilder.custom.oracle}</li>
  * <li>MySQL {@link com.healthmarketscience.sqlbuilder.custom.mysql}</li>
  * <li>PostreSQL {@link com.healthmarketscience.sqlbuilder.custom.postgresql}</li>
+ * <li>SQLServer {@link com.healthmarketscience.sqlbuilder.custom.sqlserver}</li>
  * </ul>
  * <p/>
  * <h3>Customizable Queries</h3>

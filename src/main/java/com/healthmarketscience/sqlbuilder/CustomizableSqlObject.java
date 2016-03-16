@@ -81,7 +81,8 @@ public abstract class CustomizableSqlObject extends SqlObject
   }
 
   /**
-   * Appends any {@link HookType#BEFORE} customizations for the given anchor.
+   * Appends any {@link HookType#BEFORE} or {@link HookType#AFTER}
+   * customizations for the given anchor.
    */
   protected AppendableExt customAppendTo(AppendableExt app, HookAnchor anchor)
     throws IOException
@@ -90,6 +91,7 @@ public abstract class CustomizableSqlObject extends SqlObject
     if((_customizations != null) &&
        ((custs = findCustomizations(anchor)) != null)) {
       appendCustomizations(app, custs, HookType.BEFORE);
+      appendCustomizations(app, custs, HookType.AFTER);
     }
     return app;
   }
@@ -113,6 +115,7 @@ public abstract class CustomizableSqlObject extends SqlObject
       app.append(str);
     }
     appendCustomizations(app, custs, HookType.SUFFIX);
+    appendCustomizations(app, custs, HookType.AFTER);
     return app;
   }
 

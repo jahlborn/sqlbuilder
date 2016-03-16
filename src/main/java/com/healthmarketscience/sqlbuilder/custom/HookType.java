@@ -26,10 +26,10 @@ package com.healthmarketscience.sqlbuilder.custom;
  * REPLACEMENT} type is used, the anchor text itself will <i>not</i> be
  * inserted.
  * <p/>
- * The {@code BEFORE} type, while similar in location to the {@code PREFIX}
- * type, is included regardless of whether or not the anchor clause itself is
- * included (it is more related to the surrounding clause than the anchor
- * clause itself).
+ * The {@code BEFORE} and {@code AFTER} types, while similar in location to
+ * the {@code PREFIX} and {@code SUFFIX} types (respectively), are included
+ * regardless of whether or not the anchor clause itself is included (they are
+ * more related to the surrounding clause than the anchor clause itself).
  * <p>
  * Note that customizable queries support multiple instances of each type for
  * a given anchor.  Multiple customizations of the same type will be inserted
@@ -61,5 +61,12 @@ public enum HookType
    * Customization which is inserted after the anchor clause, but only if the
    * anchor clause itself is included in the query.
    */
-  SUFFIX;
+  SUFFIX,
+  /**
+   * Customization which is inserted after the anchor clause.  Unlike the
+   * {@code SUFFIX} type, this type of customization will <i>always</i> be
+   * inserted regardless of whether or not the related anchor clause itself is
+   * included in the query.
+   */
+  AFTER;
 }
