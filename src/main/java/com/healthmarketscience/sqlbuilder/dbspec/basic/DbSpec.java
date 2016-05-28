@@ -272,12 +272,45 @@ public class DbSpec {
    * given parameters.
    * <p>
    * This method can be overriden to utilize custom model subclasses.
+   * @deprecated use {@link #createColumnForeignKeyConstraint(DbColumn,String,DbTable,DbColumn)} instead
    */
+  @Deprecated
   public DbForeignKeyConstraint createColumnForeignKeyConstraint(
       DbColumn parent, String name, DbTable referencedTable, String refColName)
   {
+    return createColumnForeignKeyConstraint(
+        parent, name, referencedTable, referencedTable.findColumn(refColName));
+  }
+
+  /**
+   * Creates and returns a new column {@link DbForeignKeyConstraint} with the
+   * given parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   */
+  public DbForeignKeyConstraint createColumnForeignKeyConstraint(
+      DbColumn parent, String name, DbTable referencedTable, 
+      DbColumn referencedColumn)
+  {
     return new DbForeignKeyConstraint(parent, name, referencedTable,
-                                      refColName);
+                                      referencedColumn);
+  }
+
+  /**
+   * Creates and returns a new table {@link DbForeignKeyConstraint} with the
+   * given parameters.
+   * <p>
+   * This method can be overriden to utilize custom model subclasses.
+   * @deprecated use {@link #createTableForeignKeyConstraint(DbTable,String,DbTable,DbColumn[],DbColumn[])} instead
+   */
+  @Deprecated
+  public DbForeignKeyConstraint createTableForeignKeyConstraint(
+      DbTable parent, String name, DbTable referencedTable,
+      String[] colNames, String[] refColNames)
+  {
+    return createTableForeignKeyConstraint(
+        parent, name, referencedTable, parent.findColumns(colNames),
+        referencedTable.findColumns(refColNames));
   }
 
   /**
@@ -288,10 +321,10 @@ public class DbSpec {
    */
   public DbForeignKeyConstraint createTableForeignKeyConstraint(
       DbTable parent, String name, DbTable referencedTable,
-      String[] colNames, String[] refColNames)
+      DbColumn[] columns, DbColumn[] refColumns)
   {
     return new DbForeignKeyConstraint(parent, name, referencedTable,
-                                      colNames, refColNames);
+                                      columns, refColumns);
   }
 
   /**

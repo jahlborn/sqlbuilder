@@ -45,6 +45,8 @@ public abstract class BaseSqlTestCase extends TestCase
   protected DbColumn _defTable2_col_id;
   protected DbColumn _defTable2_col4;
   protected DbColumn _defTable2_col5;
+  protected DbTable _defTable3;
+  protected DbColumn _defTable3_col_id;
 
   protected DbJoin _idJoin;    
   protected DbJoin _col4Join;
@@ -89,6 +91,10 @@ public abstract class BaseSqlTestCase extends TestCase
                               null, "Table1",
                               new String[]{"col4"},
                               new String[]{"altCol4"});
+
+    _defTable3 = _defSchema.addTable("DefTable3");
+    _defTable3_col_id = _defTable3.addColumn("col_id", "NUMBER", null);
+    _defTable3_col_id.references("t2_id_fk", _table1, _table1_col2);
   }
 
   protected static void checkResult(String result, String expected)

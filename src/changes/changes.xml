@@ -11,6 +11,9 @@
       <action dev="jahlborn" type="update">
         Add support for SQL 2008 OFFSET and FETCH NEXT clauses in SELECT queries.
       </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features" issue="17">
+        Add support for cross schema foreign key column references.
+      </action>
     </release>
     <release version="2.1.2" date="2016-01-30">
       <action dev="jahlborn" type="update">

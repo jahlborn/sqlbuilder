@@ -204,6 +204,25 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    * Note, no effort is made to make sure the given name is unique.
    * @param name the name of the new constraint
    * @param colNames the name of the constrained columns
+   * @param referencedTableName the name of the referenced table
+   * @param referencedColNames the names of the referenced columns
+   */
+  public DbForeignKeyConstraint foreignKey(String name, String[] colNames, 
+                                           String referencedTableName,
+                                           String[] referencedColNames)
+  {
+    DbTable referencedTable = getParent().findTable(referencedTableName);
+    return foreignKey(name, findColumns(colNames), referencedTable,
+                      referencedTable.findColumns(referencedColNames));
+  }
+
+  /**
+   * Creates and adds foreign key constraint with the given parameters to this
+   * table.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new constraint
+   * @param colNames the name of the constrained columns
    * @param referencedSchemaName the name of the referenced schema
    * @param referencedTableName the name of the referenced table
    * @param referencedColNames the names of the referenced columns
@@ -215,9 +234,27 @@ public class DbTable extends DbObject<DbSchema> implements Table {
   {
     DbTable referencedTable = getSpec().findSchema(referencedSchemaName)
       .findTable(referencedTableName);
+    return foreignKey(name, findColumns(colNames), referencedTable,
+                      referencedTable.findColumns(referencedColNames));
+  }
+
+  /**
+   * Creates and adds foreign key constraint with the given parameters to this
+   * table.
+   * <p>
+   * Note, no effort is made to make sure the given name is unique.
+   * @param name the name of the new constraint
+   * @param columns the constrained columns
+   * @param referencedTable the referenced table
+   * @param refColumns the referenced columns
+   */
+  public DbForeignKeyConstraint foreignKey(String name, DbColumn[] columns, 
+                                           DbTable referencedTable,
+                                           DbColumn[] refColumns)
+  {
     DbForeignKeyConstraint fkConstraint =
       getSpec().createTableForeignKeyConstraint(
-        this, name, referencedTable, colNames, referencedColNames);
+        this, name, referencedTable, columns, refColumns);
     return addConstraint(fkConstraint);
   }
 

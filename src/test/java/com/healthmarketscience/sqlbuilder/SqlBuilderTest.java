@@ -1071,5 +1071,13 @@ public class SqlBuilderTest extends BaseSqlTestCase
     } catch(ValidationException e) {}
 
   }
+
+  public void testCrossSchemaFK() throws Exception
+  {
+    String createStr = new CreateTableQuery(_defTable3, true)
+      .validate().toString();
+
+    checkResult(createStr, "CREATE TABLE DefTable3 (col_id NUMBER CONSTRAINT t2_id_fk REFERENCES Schema1.Table1 (col2))");
+  }
   
 }

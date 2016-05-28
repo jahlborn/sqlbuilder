@@ -37,10 +37,14 @@ public class DbForeignKeyConstraint extends DbConstraint
 
   public DbForeignKeyConstraint(DbColumn parent, String name, 
                                 DbTable referencedTable, String refColName) {
+    this(parent, name, referencedTable, referencedTable.findColumn(refColName));
+  }
+
+  public DbForeignKeyConstraint(DbColumn parent, String name, 
+                                DbTable referencedTable, DbColumn refColumn) {
     super(parent, name, Type.FOREIGN_KEY);
     _referencedTable = referencedTable;
-    addObjects(_referencedColumns, _referencedTable,
-               _referencedTable.findColumn(refColName));
+    addObjects(_referencedColumns, _referencedTable, refColumn);
   }
 
   public DbForeignKeyConstraint(DbTable parent, String name,
