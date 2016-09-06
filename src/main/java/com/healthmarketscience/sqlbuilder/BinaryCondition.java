@@ -98,14 +98,17 @@ public class BinaryCondition extends Condition
     _rightValue.collectSchemaObjects(vContext);
   }
 
+  protected boolean supportsEscape(Object binaryOp) {
+    return ((binaryOp == Op.LIKE) || (binaryOp == Op.NOT_LIKE));
+  }
+
   /**
    * Sets the escape charactor for a [NOT] LIKE condition pattern.
    */
-  public BinaryCondition setLikeEscapeChar(Character escapeChar)
-  {
-    if((_binaryOp != Op.LIKE) && (_binaryOp != Op.NOT_LIKE)) {
+  public BinaryCondition setLikeEscapeChar(Character escapeChar) {
+    if(!supportsEscape(_binaryOp)) {
       throw new IllegalArgumentException(
-          "Escape char only valid for [NOT] LIKE");
+          "Escape char is not valid for '" + _binaryOp + "' operator");
     }
 
     _escapeChar = ((escapeChar != null) ?
@@ -131,8 +134,7 @@ public class BinaryCondition extends Condition
    * @param escapeChar escape character to use to escape the literal
    * @return the escaped string
    */
-  public static String escapeLikeLiteral(String literal, char escapeChar)
-  {
+  public static String escapeLikeLiteral(String literal, char escapeChar) {
     // escape instances of the escape char, '%' or '_'
     String escapeStr = String.valueOf(escapeChar);
     return literal.replaceAll("([%_" + Pattern.quote(escapeStr) + "])",
@@ -146,14 +148,12 @@ public class BinaryCondition extends Condition
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toColumnSqlObject(Object)}.
    */
-  public static BinaryCondition lessThan(Object value1,
-                                         Object value2,
+  public static BinaryCondition lessThan(Object value1, Object value2,
                                          boolean inclusive) {
     return new BinaryCondition((inclusive ?
                                 Op.LESS_THAN_OR_EQUAL_TO :
                                 Op.LESS_THAN),
-                               Converter.toColumnSqlObject(value1),
-                               Converter.toColumnSqlObject(value2));
+                               value1, value2);
   }
     
   /**
@@ -163,14 +163,12 @@ public class BinaryCondition extends Condition
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toColumnSqlObject(Object)}.
    */
-  public static BinaryCondition greaterThan(Object value1,
-                                            Object value2,
+  public static BinaryCondition greaterThan(Object value1, Object value2,
                                             boolean inclusive) {
     return new BinaryCondition((inclusive ?
                                 Op.GREATER_THAN_OR_EQUAL_TO :
                                 Op.GREATER_THAN),
-                               Converter.toColumnSqlObject(value1),
-                               Converter.toColumnSqlObject(value2));
+                               value1, value2);
   }
     
   /**
@@ -180,11 +178,8 @@ public class BinaryCondition extends Condition
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toColumnSqlObject(Object)}.
    */
-  public static BinaryCondition equalTo(Object value1,
-                                        Object value2) {
-    return new BinaryCondition(Op.EQUAL_TO,
-                               Converter.toColumnSqlObject(value1),
-                               Converter.toColumnSqlObject(value2));
+  public static BinaryCondition equalTo(Object value1, Object value2) {
+    return new BinaryCondition(Op.EQUAL_TO, value1, value2);
   }
     
   /**
@@ -194,11 +189,8 @@ public class BinaryCondition extends Condition
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toColumnSqlObject(Object)}.
    */
-  public static BinaryCondition notEqualTo(Object value1,
-                                           Object value2) {
-    return new BinaryCondition(Op.NOT_EQUAL_TO,
-                               Converter.toColumnSqlObject(value1),
-                               Converter.toColumnSqlObject(value2));
+  public static BinaryCondition notEqualTo(Object value1, Object value2) {
+    return new BinaryCondition(Op.NOT_EQUAL_TO, value1, value2);
   }
     
   /**
@@ -208,11 +200,8 @@ public class BinaryCondition extends Condition
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toColumnSqlObject(Object)}.
    */
-  public static BinaryCondition like(Object value1,
-                                     Object value2) {
-    return new BinaryCondition(Op.LIKE,
-                               Converter.toColumnSqlObject(value1),
-                               Converter.toColumnSqlObject(value2));
+  public static BinaryCondition like(Object value1, Object value2) {
+    return new BinaryCondition(Op.LIKE, value1, value2);
   }
     
   /**
@@ -222,11 +211,8 @@ public class BinaryCondition extends Condition
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toColumnSqlObject(Object)}.
    */
-  public static BinaryCondition notLike(Object value1,
-                                        Object value2) {
-    return new BinaryCondition(Op.NOT_LIKE,
-                               Converter.toColumnSqlObject(value1),
-                               Converter.toColumnSqlObject(value2));
+  public static BinaryCondition notLike(Object value1, Object value2) {
+    return new BinaryCondition(Op.NOT_LIKE, value1, value2);
   }
     
 }

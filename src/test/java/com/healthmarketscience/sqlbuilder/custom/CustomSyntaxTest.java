@@ -26,6 +26,7 @@ import com.healthmarketscience.sqlbuilder.custom.mysql.MysLimitClause;
 import com.healthmarketscience.sqlbuilder.custom.mysql.MysObjects;
 import com.healthmarketscience.sqlbuilder.custom.oracle.OraObjects;
 import com.healthmarketscience.sqlbuilder.custom.oracle.OraTableSpaceClause;
+import com.healthmarketscience.sqlbuilder.custom.postgresql.PgBinaryCondition;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgLimitClause;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgOffsetClause;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgObjects;
@@ -177,6 +178,17 @@ public class CustomSyntaxTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(createTableStr,
                 "CREATE TABLE IF NOT EXISTS Schema1.Table1 (col1 VARCHAR(213),col2 NUMBER(7),col3 DECIMAL(4,8),col4 VARCHAR(255))");
+  }
+
+  public void testPostgresqlBinaryCondition()
+  {
+    String selectQuery1 = new SelectQuery()
+      .addColumns(_table1_col1)
+      .addCondition(PgBinaryCondition.iLike(_table1_col1, "foo%")
+                    .setLikeEscapeChar('\\'))
+      .validate().toString();
+    checkResult(selectQuery1,
+                "SELECT t0.col1 FROM Schema1.Table1 t0 WHERE (t0.col1 ILIKE 'foo%' ESCAPE '\\')");
   }
 
   public void testOracleTablespace()

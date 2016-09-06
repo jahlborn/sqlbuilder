@@ -8,6 +8,10 @@
       <action dev="jahlborn" type="update">
         Add a few convenience methods for RejoinTable and table aliases.
       </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features" issue="18">
+        Add support for some custom postgresql binary conditions (ilike,
+        similar to, and posix regex matching).
+      </action>
     </release>
     <release version="2.1.4" date="2016-07-01">
       <action dev="jahlborn" type="update" system="SourceForge2" issue="20">
