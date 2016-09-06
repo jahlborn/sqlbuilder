@@ -37,6 +37,11 @@ import com.healthmarketscience.sqlbuilder.Condition;
  */
 public class DbSpec {
 
+  /** the default alias prefix used by a db spec if none is specified */
+  public static final String DEFAULT_ALIAS_PREFIX = "t";
+
+  /** the alias prefix for this db spec */
+  private final String _aliasPrefix;
   /** schemas currently created for this db spec */
   private final List<DbSchema> _schemas = new ArrayList<DbSchema>();
   /** joins currently created for this db spec */
@@ -45,6 +50,11 @@ public class DbSpec {
   private int _nextAliasNum;
 
   public DbSpec() {
+    this(DEFAULT_ALIAS_PREFIX);
+  }
+
+  public DbSpec(String aliasPrefix) {
+    _aliasPrefix = aliasPrefix;
   }
 
   public List<DbSchema> getSchemas() {
@@ -59,7 +69,7 @@ public class DbSpec {
    * @return the next unused alias for this group of db objects
    */
   public String getNextAlias() {
-    return "t" + _nextAliasNum++;
+    return _aliasPrefix + _nextAliasNum++;
   }
 
   /**

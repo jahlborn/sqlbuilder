@@ -56,10 +56,25 @@ public class RejoinTable implements Table
 
   public List<? extends Constraint> getConstraints() { return _table.getConstraints(); }
 
+  /**
+   * Finds the RejoinColumn in this table with the given name.
+   */
   public RejoinColumn findColumnByName(String name) {
     for(RejoinColumn col : getColumns()) {
       if((name == col.getColumnNameSQL()) ||
          ((name != null) && name.equals(col.getColumnNameSQL()))) {
+        return col;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Finds the RejoinColumn in this table for the given original column.
+   */
+  public RejoinColumn findColumn(Column origCol) {
+    for(RejoinColumn col : getColumns()) {
+      if(origCol == col.getOriginalColumn()) {
         return col;
       }
     }

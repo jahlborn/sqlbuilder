@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.healthmarketscience.sqlbuilder.Condition;
 import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
+import com.healthmarketscience.sqlbuilder.dbspec.RejoinTable;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
 
 /**
@@ -281,6 +282,14 @@ public class DbTable extends DbObject<DbSchema> implements Table {
   public <T extends DbConstraint> T addConstraint(T constraint) {
     _constraints.add(checkOwnership(constraint));
     return constraint;
+  }
+
+  /**
+   * Convenience method for creating a new RejoinTable instance for this table
+   * with the given alias.
+   */
+  public RejoinTable rejoin(String newAlias) {
+    return new RejoinTable(this, newAlias);
   }
   
   @Override

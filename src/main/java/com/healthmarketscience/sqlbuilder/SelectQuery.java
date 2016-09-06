@@ -87,25 +87,25 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
         HookType#BEFORE} */
     HEADER, 
     /** Anchor for the "SELECT " clause */
-    SELECT, 
+      SELECT, 
     /** Anchor for the "DISTINCT " clause */
-    DISTINCT, 
+      DISTINCT, 
     /** Anchor for the " FROM " clause */
-    FROM,
+      FROM,
     /** Anchor for the " WHERE " clause */
-    WHERE, 
+      WHERE, 
     /** Anchor for the " GROUP BY " clause */
-    GROUP_BY, 
+      GROUP_BY, 
     /** Anchor for the " HAVING " sub-clause (only possible if there is a
         GROUP BY clause) */
-    HAVING, 
+      HAVING, 
     /** Anchor for the " ORDER BY " clause */
-    ORDER_BY, 
+      ORDER_BY, 
     /** Anchor for the " FOR UPDATE " clause */
-    FOR_UPDATE, 
+      FOR_UPDATE, 
     /** Anchor for the end of the query, only supports {@link
         HookType#BEFORE} */
-    TRAILER;
+      TRAILER;
   }
 
   private boolean _isDistinct;
@@ -308,7 +308,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
                              Column toColumn)
   {
     return addJoin(joinType, fromTable, toTable, 
-        Collections.singletonList(fromColumn), Collections.singletonList(toColumn));
+                   Collections.singletonList(fromColumn), Collections.singletonList(toColumn));
   }
     
   /** Adds all of the joins of the given join type where each join is from
@@ -489,7 +489,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   }
 
   @Override
-  protected void collectSchemaObjects(ValidationContext vContext) {
+    protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
     _joins.collectSchemaObjects(vContext);
     _columns.collectSchemaObjects(vContext);
@@ -506,7 +506,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   }
 
   @Override
-  public void validate(ValidationContext vContext)
+    public void validate(ValidationContext vContext)
     throws ValidationException
   { 
     // if we have joins, check the tables, otherwise, the join tables will
@@ -617,14 +617,14 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
       return;
     }
     if(!((NumberValueObject)valueObj).isIntegralInRange(minVal, Long.MAX_VALUE)) {
-        throw new ValidationException(
+      throw new ValidationException(
           type + " value must be an integer >= " + minVal + ", given: " + 
           valueObj);
     }
   }
 
   @Override
-  protected void appendTo(AppendableExt app, SqlContext newContext)
+    protected void appendTo(AppendableExt app, SqlContext newContext)
     throws IOException
   {
     newContext.setUseTableAliases(true);
@@ -677,49 +677,49 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
 
   private SqlObjectList<SqlObject> buildJoins(SqlContext newContext) {
     
-      // auto generate the join tables from all the referenced columns
+    // auto generate the join tables from all the referenced columns
     SqlObjectList<SqlObject> joins = SqlObjectList.create();
 
-      // note, we don't cache this collection because we don't want the
-      // appendTo() method to mutate object state.
-      // note, we use LinkedHashSet to preserve the order that the tables were
-      // referenced (for lack of a better choice of ordering)
-      ValidationContext tmpVContext = new ValidationContext(
-          null, new LinkedHashSet<Column>());
-      collectSchemaObjects(tmpVContext);
+    // note, we don't cache this collection because we don't want the
+    // appendTo() method to mutate object state.
+    // note, we use LinkedHashSet to preserve the order that the tables were
+    // referenced (for lack of a better choice of ordering)
+    ValidationContext tmpVContext = new ValidationContext(
+        null, new LinkedHashSet<Column>());
+    collectSchemaObjects(tmpVContext);
 
-      if(tmpVContext.getColumns().isEmpty()) {
-        // this is some sort of "constant" select, no columns/tables
-        return joins;
-      }
-        
-      Collection<Table> columnTables = tmpVContext.getColumnTables(
-          new LinkedHashSet<Table>());
-
-      if(newContext.getParent() != null) {
-
-        // this query is nested.  some of the column refs may be from tables
-        // in the outer queries.  note, we do "local only" collection as we
-        // are going up the nesting chain and do not need to descend past the
-        // relevant local context
-        ValidationContext outerVContext = new ValidationContext(true);
-        SqlContext tmpContext = newContext;
-        while((tmpContext = tmpContext.getParent()) != null) {
-          Query<?> parentQuery = tmpContext.getQuery();
-          if(parentQuery != null) {
-            parentQuery.collectSchemaObjects(outerVContext);
-          }
-        }
-        
-        // remove any outer tables from the columnTables collection
-        columnTables.removeAll(outerVContext.getColumnTables());
-      }
-      
-      for(Table table : columnTables) {
-        joins.addObject(Converter.toTableDefSqlObject(table));
-      }
-
+    if(tmpVContext.getColumns().isEmpty()) {
+      // this is some sort of "constant" select, no columns/tables
       return joins;
+    }
+        
+    Collection<Table> columnTables = tmpVContext.getColumnTables(
+        new LinkedHashSet<Table>());
+
+    if(newContext.getParent() != null) {
+
+      // this query is nested.  some of the column refs may be from tables
+      // in the outer queries.  note, we do "local only" collection as we
+      // are going up the nesting chain and do not need to descend past the
+      // relevant local context
+      ValidationContext outerVContext = new ValidationContext(true);
+      SqlContext tmpContext = newContext;
+      while((tmpContext = tmpContext.getParent()) != null) {
+        Query<?> parentQuery = tmpContext.getQuery();
+        if(parentQuery != null) {
+          parentQuery.collectSchemaObjects(outerVContext);
+        }
+      }
+        
+      // remove any outer tables from the columnTables collection
+      columnTables.removeAll(outerVContext.getColumnTables());
+    }
+      
+    for(Table table : columnTables) {
+      joins.addObject(Converter.toTableDefSqlObject(table));
+    }
+
+    return joins;
   }
 
   /**
@@ -763,7 +763,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
       ComboCondition onCondition = (ComboCondition)_onCondition;
       for(int i = 0; i < fromColumns.size(); ++i) {
         onCondition.addCondition(
-          BinaryCondition.equalTo(fromColumns.get(i), toColumns.get(i)));
+            BinaryCondition.equalTo(fromColumns.get(i), toColumns.get(i)));
       }
     }
 

@@ -4,6 +4,11 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.1.5" date="TBD">
+      <action dev="jahlborn" type="update">
+        Add a few convenience methods for RejoinTable and table aliases.
+      </action>
+    </release>
     <release version="2.1.4" date="2016-07-01">
       <action dev="jahlborn" type="update" system="SourceForge2" issue="20">
         Add OSGi support to jar manifest.

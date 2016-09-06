@@ -29,6 +29,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbFunction;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbFunctionPackage;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbIndex;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
 
@@ -732,7 +733,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
   public void testRejoinTable()
   {
-    RejoinTable rejoinTable1 = new RejoinTable(_table1, "t5");
+    RejoinTable rejoinTable1 = _table1.rejoin("t5");
     assertSame(_table1, rejoinTable1.getOriginalTable());
     assertSame(_table1_col1,
                rejoinTable1.getColumns().get(0).getOriginalColumn());
@@ -741,6 +742,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     RejoinTable.RejoinColumn rejoinCol2 = rejoinTable1.findColumnByName("col2");
     assertSame(_table1_col2, rejoinCol2.getOriginalColumn());
+    assertSame(rejoinCol2, rejoinTable1.findColumn(_table1_col2));
     assertSame(_table1_col2.getTypeNameSQL(), rejoinCol2.getTypeNameSQL());
     assertSame(_table1_col2.getTypeLength(), rejoinCol2.getTypeLength());
     assertSame(_table1_col2.getConstraints(), rejoinCol2.getConstraints());
@@ -750,7 +752,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addColumns(_table1_col1, _table1_col2)
       .addFromTable(rejoinTable1)
       .addColumns(rejoinTable1.getColumns().get(0),
-                  rejoinTable1.getColumns().get(1))
+                  rejoinTable1.findColumn(_table1_col2))
       .validate().toString();
 
     checkResult(rejoinQuery,
@@ -1079,5 +1081,15 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     checkResult(createStr, "CREATE TABLE DefTable3 (col_id NUMBER CONSTRAINT t2_id_fk REFERENCES Schema1.Table1 (col2))");
   }
-  
+
+  public void testCustomPrefix() throws Exception
+  {
+    DbTable table = new DbSpec("pre_").addDefaultSchema().addTable("NewTable");
+    table.addColumn("col1");
+    table.addColumn("col2");
+
+    String sqlStr = new SelectQuery().addAllTableColumns(table)
+      .validate().toString();
+    checkResult(sqlStr, "SELECT pre_0.* FROM NewTable pre_0");
+  }
 }
