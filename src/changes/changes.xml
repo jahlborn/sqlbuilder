@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.1.5" date="TBD">
+    <release version="2.1.5" date="2016-09-20">
       <action dev="jahlborn" type="update">
         Add a few convenience methods for RejoinTable and table aliases.
       </action>
