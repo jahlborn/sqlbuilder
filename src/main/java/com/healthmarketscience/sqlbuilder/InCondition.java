@@ -1,4 +1,3 @@
-//
 /*
 Copyright (c) 2008 Health Market Science, Inc.
 
@@ -14,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-//
+
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
@@ -27,7 +26,7 @@ import com.healthmarketscience.common.util.AppendableExt;
 
 /**
  * Outputs an "IN" condition
- * <code>"(&lt;column&gt; IN (&lt;rightObj1&gt;, &lt;rightObj2&gt;, ...) )"</code>
+ * <code>"(&lt;column&gt; [NOT] IN (&lt;rightObj1&gt;, &lt;rightObj2&gt;, ...) )"</code>
  * 
  * @author Eric Bernstein
  */

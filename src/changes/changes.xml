@@ -4,6 +4,11 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.1.6" date="TBD">
+      <action dev="jahlborn" type="update" system="SourceForge2Features" issue="19">
+        Add the BETWEEN condition.
+      </action>
+    </release>
     <release version="2.1.5" date="2016-09-20">
       <action dev="jahlborn" type="update">
         Add a few convenience methods for RejoinTable and table aliases.

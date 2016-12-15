@@ -1092,4 +1092,18 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(sqlStr, "SELECT pre_0.* FROM NewTable pre_0");
   }
+
+  public void testBetweenCondition()
+  {
+    String conditionStr = ComboCondition.and(
+      BinaryCondition.lessThan(_table1_col1, "FOO", false),
+      ComboCondition.or(),
+      new BetweenCondition(_defTable2_col4,
+                      "this string",
+                      new NumberValueObject(37)))
+      .toString();
+    checkResult(conditionStr,
+                "((t0.col1 < 'FOO') AND (t2.col4 BETWEEN 'this string' AND 37))");
+  }
+
 }
