@@ -158,6 +158,28 @@ public class BinaryCondition extends Condition
     
   /**
    * Convenience method for generating a Condition for testing if a column
+   * is strictly less than another column.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toColumnSqlObject(Object)}.
+   */
+  public static BinaryCondition lessThan(Object value1, Object value2) {
+    return new BinaryCondition(Op.LESS_THAN, value1, value2);
+  }
+    
+  /**
+   * Convenience method for generating a Condition for testing if a column
+   * is less than or equal to another column.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toColumnSqlObject(Object)}.
+   */
+  public static BinaryCondition lessThanOrEq(Object value1, Object value2) {
+    return new BinaryCondition(Op.LESS_THAN_OR_EQUAL_TO, value1, value2);
+  }
+    
+  /**
+   * Convenience method for generating a Condition for testing if a column
    * is greater than a given value (inclusive or exclusive).
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
@@ -169,6 +191,28 @@ public class BinaryCondition extends Condition
                                 Op.GREATER_THAN_OR_EQUAL_TO :
                                 Op.GREATER_THAN),
                                value1, value2);
+  }
+    
+  /**
+   * Convenience method for generating a Condition for testing if a column
+   * is strictly greater than a given value.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toColumnSqlObject(Object)}.
+   */
+  public static BinaryCondition greaterThan(Object value1, Object value2) {
+    return new BinaryCondition(Op.GREATER_THAN, value1, value2);
+  }
+    
+  /**
+   * Convenience method for generating a Condition for testing if a column
+   * is greater than or equal to a given value.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toColumnSqlObject(Object)}.
+   */
+  public static BinaryCondition greaterThanOrEq(Object value1, Object value2) {
+    return new BinaryCondition(Op.GREATER_THAN_OR_EQUAL_TO, value1, value2);
   }
     
   /**
