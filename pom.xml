@@ -9,7 +9,7 @@
   <artifactId>sqlbuilder</artifactId>
   <name>SQL Query Builders</name>
   <description>Builder style classes for creating SQL queries</description>
-  <version>2.1.6-SNAPSHOT</version>
+  <version>2.1.6</version>
   <url>http://openhms.sourceforge.net/sqlbuilder</url>
   <inceptionYear>2006</inceptionYear>
   <developers>
@@ -49,10 +49,10 @@
     </contributor>
   </contributors>
   <scm>
-    <connection>scm:svn:svn://svn.code.sf.net/p/openhms/code/sqlbuilder/trunk/</connection>
+    <connection>scm:svn:svn://svn.code.sf.net/p/openhms/code/sqlbuilder/tags/sqlbuilder-2.1.6</connection>
     <!-- read/write svn connection -->
-    <developerConnection>scm:svn:svn+ssh://svn.code.sf.net/p/openhms/code/sqlbuilder/trunk/</developerConnection>
-    <url>http://svn.code.sf.net/p/openhms/code/sqlbuilder/trunk/</url>
+    <developerConnection>scm:svn:svn+ssh://svn.code.sf.net/p/openhms/code/sqlbuilder/tags/sqlbuilder-2.1.6</developerConnection>
+    <url>http://svn.code.sf.net/p/openhms/code/sqlbuilder/tags/sqlbuilder-2.1.6</url>
   </scm>
   <build>
     <pluginManagement>
