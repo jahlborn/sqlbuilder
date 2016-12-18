@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.1.6" date="TBD">
+    <release version="2.1.6" date="2016-12-18">
       <action dev="jahlborn" type="update" system="SourceForge2Features" issue="19">
         Add the BETWEEN condition.
       </action>
