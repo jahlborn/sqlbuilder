@@ -1106,4 +1106,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
                 "((t0.col1 < 'FOO') AND (t2.col4 BETWEEN 'this string' AND 37))");
   }
 
+  public void testExtractExpression()
+  {
+    String exprStr = BinaryCondition.equalTo(
+        "2016",
+        new ExtractExpression(ExtractExpression.DatePart.YEAR, "2016-01-01"))
+      .toString();
+    checkResult(exprStr, "('2016' = EXTRACT(YEAR FROM '2016-01-01'))");
+  }
 }

@@ -4,6 +4,11 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="2.1.7" date="TBD">
+      <action dev="jahlborn" type="add" system="SourceForge2Patches" issue="4">
+        Add the EXTRACT expression (thanks to Andrey Karepin).
+      </action>
+    </release>
     <release version="2.1.6" date="2016-12-18">
       <action dev="jahlborn" type="update" system="SourceForge2Features" issue="19">
         Add the BETWEEN condition.

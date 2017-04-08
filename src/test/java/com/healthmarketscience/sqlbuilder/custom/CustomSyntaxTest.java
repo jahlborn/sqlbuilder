@@ -20,16 +20,20 @@ import com.healthmarketscience.sqlbuilder.BaseSqlTestCase;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.CreateIndexQuery;
 import com.healthmarketscience.sqlbuilder.CreateTableQuery;
+import com.healthmarketscience.sqlbuilder.ExtractExpression;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.ValidationException;
+import com.healthmarketscience.sqlbuilder.custom.mysql.MysExtractDatePart;
 import com.healthmarketscience.sqlbuilder.custom.mysql.MysLimitClause;
 import com.healthmarketscience.sqlbuilder.custom.mysql.MysObjects;
+import com.healthmarketscience.sqlbuilder.custom.oracle.OraExtractDatePart;
 import com.healthmarketscience.sqlbuilder.custom.oracle.OraObjects;
 import com.healthmarketscience.sqlbuilder.custom.oracle.OraTableSpaceClause;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgBinaryCondition;
+import com.healthmarketscience.sqlbuilder.custom.postgresql.PgExtractDatePart;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgLimitClause;
-import com.healthmarketscience.sqlbuilder.custom.postgresql.PgOffsetClause;
 import com.healthmarketscience.sqlbuilder.custom.postgresql.PgObjects;
+import com.healthmarketscience.sqlbuilder.custom.postgresql.PgOffsetClause;
 import com.healthmarketscience.sqlbuilder.custom.sqlserver.MssTopClause;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbIndex;
 
@@ -101,6 +105,15 @@ public class CustomSyntaxTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(createTableStr,
                 "CREATE TABLE IF NOT EXISTS Schema1.Table1 (col1 VARCHAR(213),col2 NUMBER(7),col3 DECIMAL(4,8) AUTO_INCREMENT,col4 VARCHAR(255))");
+  }
+
+  public void testMysqlExtractExpression()
+  {
+    String exprStr = BinaryCondition.equalTo(
+        "2016",
+        new ExtractExpression(MysExtractDatePart.MICROSECOND, "2016-01-01"))
+      .toString();
+    checkResult(exprStr, "('2016' = EXTRACT(MICROSECOND FROM '2016-01-01'))");
   }
 
   public void testPostgresqlLimitClause()
@@ -191,6 +204,15 @@ public class CustomSyntaxTest extends BaseSqlTestCase
                 "SELECT t0.col1 FROM Schema1.Table1 t0 WHERE (t0.col1 ILIKE 'foo%' ESCAPE '\\')");
   }
 
+  public void testPostgresqlExtractExpression()
+  {
+    String exprStr = BinaryCondition.equalTo(
+        "2016",
+        new ExtractExpression(PgExtractDatePart.CENTURY, "2016-01-01"))
+      .toString();
+    checkResult(exprStr, "('2016' = EXTRACT(CENTURY FROM '2016-01-01'))");
+  }
+
   public void testOracleTablespace()
   {
     String createTableStr = new CreateTableQuery(_table1, true)
@@ -216,6 +238,15 @@ public class CustomSyntaxTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(selectQuery1,
                 "SELECT t0.col1 FROM Schema1.Table1 t0 WHERE (ROWNUM < 100)");
+  }
+
+  public void testOracleExtractExpression()
+  {
+    String exprStr = BinaryCondition.equalTo(
+        "2016",
+        new ExtractExpression(OraExtractDatePart.TIMEZONE_ABBR, "2016-01-01"))
+      .toString();
+    checkResult(exprStr, "('2016' = EXTRACT(TIMEZONE_ABBR FROM '2016-01-01'))");
   }
 
   public void testSQLServerTopClause()
