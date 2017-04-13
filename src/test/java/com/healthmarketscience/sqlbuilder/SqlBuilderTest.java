@@ -686,11 +686,13 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     unionQuery = UnionQuery.union(q1, q2)
       .addIndexedOrdering(1, OrderObject.Dir.DESCENDING)
-      .addCustomOrdering(_table1_col1, OrderObject.Dir.ASCENDING);
+      .addCustomOrderings(
+          new OrderObject(OrderObject.Dir.ASCENDING, _table1_col1)
+          .setNullOrder(OrderObject.NullOrder.FIRST));
     
     String unionQuery3 = unionQuery.validate().toString();
     checkResult(unionQuery3,
-                "SELECT t0.* FROM Schema1.Table1 t0 UNION SELECT * FROM Table2 t2 ORDER BY 1 DESC,col1 ASC");
+                "SELECT t0.* FROM Schema1.Table1 t0 UNION SELECT * FROM Table2 t2 ORDER BY 1 DESC,col1 ASC NULLS FIRST");
   }
 
   public void testSetOperationQueries()
