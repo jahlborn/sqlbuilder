@@ -25,7 +25,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Column;
 /**
  * Base query for queries which generate a series of SELECT queries joined by
  * one or more "set operations", such as UNION [ALL], EXCEPT [ALL], and
- * INSERSECT [ALL].
+ * INTERSECT [ALL].
  *
  * @author James Ahlborn
  */

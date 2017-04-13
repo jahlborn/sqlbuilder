@@ -1116,4 +1116,69 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .toString();
     checkResult(exprStr, "('2016' = EXTRACT(YEAR FROM '2016-01-01'))");
   }
+
+  public void testWindowFunctions()
+  {
+    String exprStr = FunctionCall.avg()
+      .setWindow(new WindowDefinitionClause())
+      .toString();
+    
+    checkResult(exprStr, "AVG() OVER ()");
+
+    exprStr = FunctionCall.avg()
+      .setWindow(new WindowDefinitionClause()
+                 .addPartitionColumns(_defTable1_col_id))
+      .toString();
+    
+    checkResult(exprStr, "AVG() OVER (PARTITION BY t1.col_id)");
+
+    exprStr = FunctionCall.avg()
+      .setWindow(new WindowDefinitionClause()
+                 .addPartitionColumns(_defTable1_col_id)
+                 .addOrderings(_defTable1_col2))
+      .toString();
+    
+    checkResult(exprStr, "AVG() OVER (PARTITION BY t1.col_id ORDER BY t1.col2)");
+
+    exprStr = FunctionCall.avg()
+      .setWindow(new WindowDefinitionClause()
+                 .addPartitionColumns(_defTable1_col_id)
+                 .addOrderings(_defTable1_col2)
+                 .setFrame(
+                     WindowDefinitionClause.FrameUnits.ROWS,
+                     WindowDefinitionClause.FrameBound.CURRENT_ROW))
+      .toString();
+    
+    checkResult(exprStr, "AVG() OVER (PARTITION BY t1.col_id ORDER BY t1.col2 ROWS CURRENT ROW)");
+
+
+    exprStr = FunctionCall.avg()
+      .setWindow(new WindowDefinitionClause()
+                 .addPartitionColumns(_defTable1_col_id)
+                 .addOrderings(_defTable1_col2)
+                 .setFrameBetween(
+                     WindowDefinitionClause.FrameUnits.ROWS,
+                     WindowDefinitionClause.FrameBound.UNBOUNDED_PRECEDING,
+                     WindowDefinitionClause.FrameBound.boundedFollowing(5)))
+      .toString();
+    
+    checkResult(exprStr, "AVG() OVER (PARTITION BY t1.col_id ORDER BY t1.col2 ROWS BETWEEN UNBOUNDED PRECEDING AND 5 FOLLOWING)");
+
+    String queryStr = new SelectQuery()
+      .addColumns(_table1_col1, _table1_col2) 
+      .addAliasedColumn(FunctionCall.avg().setWindowByName("w"), "average")
+      .addWindowDefinition(
+          "w", new WindowDefinitionClause()
+          .addPartitionColumns(_defTable1_col_id)
+          .addOrderings(_defTable1_col2)
+          .setFrameBetween(
+              WindowDefinitionClause.FrameUnits.ROWS,
+              WindowDefinitionClause.FrameBound.UNBOUNDED_PRECEDING,
+              WindowDefinitionClause.FrameBound.boundedFollowing(5),
+              WindowDefinitionClause.FrameExclusion.CURRENT_ROW))
+      .validate()
+      .toString();
+
+    checkResult(queryStr, "SELECT t0.col1,t0.col2,AVG() OVER w AS average FROM Schema1.Table1 t0,Table1 t1 WINDOW w AS (PARTITION BY t1.col_id ORDER BY t1.col2 ROWS BETWEEN UNBOUNDED PRECEDING AND 5 FOLLOWING EXCLUDE CURRENT ROW)");
+  }
 }

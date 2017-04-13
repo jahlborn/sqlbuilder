@@ -33,6 +33,7 @@ public class FunctionCall extends Expression
   private boolean _isDistinct;
   private SqlObject _functionName;
   private SqlObjectList<SqlObject> _params = SqlObjectList.create();
+  private SqlObject _window;
 
   public FunctionCall(Function function) {
     this((Object)function);
@@ -82,11 +83,31 @@ public class FunctionCall extends Expression
   public FunctionCall addNumericValueParam(Object obj) {
     return addCustomParams(obj);
   }
+
+  /**
+   * Sets the window clause for this function call, like
+   * <code>"OVER (&lt;windowClause&gt;)"</code>.
+   * @see WindowDefinitionClause
+   */
+  public FunctionCall setWindow(Object window) {
+    _window = Converter.toCustomColumnSqlObject(window);
+    return this;
+  }
+    
+  /**
+   * Sets the window clause for this function call to a reference to the named
+   * window definition, like <code>"OVER &lt;windowClauseName&gt;"</code>.
+   */
+  public FunctionCall setWindowByName(String windowName) {
+    _window = new CustomSql(windowName);
+    return this;
+  }
     
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     _functionName.collectSchemaObjects(vContext);
     _params.collectSchemaObjects(vContext);
+    collectSchemaObjects(_window, vContext);
   }
     
   @Override
@@ -96,6 +117,9 @@ public class FunctionCall extends Expression
       app.append("DISTINCT ");
     }
     app.append(_params).append(")");
+    if(_window != null) {
+      app.append(" OVER ").append(_window);
+    } 
   }
 
   /**
@@ -145,6 +169,36 @@ public class FunctionCall extends Expression
   public static FunctionCall countAll() {
     return (new FunctionCall(new CustomSql("COUNT")))
       .addCustomParams(ALL_SYMBOL);
+  }
+  
+  /**
+   * Convenience method for generating a FunctionCall using the ROW_NUMBER
+   * aggregate function.
+   *
+   * @see "SQL 2003"
+   */
+  public static FunctionCall rowNumber() {
+    return (new FunctionCall(new CustomSql("ROW_NUMBER")));
+  }
+  
+  /**
+   * Convenience method for generating a FunctionCall using the RANK
+   * aggregate function.
+   *
+   * @see "SQL 2003"
+   */
+  public static FunctionCall rank() {
+    return (new FunctionCall(new CustomSql("RANK")));
+  }
+  
+  /**
+   * Convenience method for generating a FunctionCall using the DENSE_RANK
+   * aggregate function.
+   *
+   * @see "SQL 2003"
+   */
+  public static FunctionCall denseRank() {
+    return (new FunctionCall(new CustomSql("DENSE_RANK")));
   }
   
 }

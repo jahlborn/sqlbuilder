@@ -99,6 +99,8 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     /** Anchor for the " HAVING " sub-clause (only possible if there is a
         GROUP BY clause) */
       HAVING, 
+    /** Anchor for the " WINDOW " clause */
+      WINDOW, 
     /** Anchor for the " ORDER BY " clause */
       ORDER_BY, 
     /** Anchor for the " FOR UPDATE " clause */
@@ -117,6 +119,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   private SqlObjectList<SqlObject> _grouping = SqlObjectList.create();
   private SqlObjectList<SqlObject> _ordering = SqlObjectList.create();
   private ComboCondition _having = ComboCondition.and();
+  private SqlObjectList<SqlObject> _windows = SqlObjectList.create();
   private SqlObject _offset;
   private SqlObject _fetchCount;
 
@@ -424,8 +427,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   /** 
    * Adds a condition to the HAVING clause for the select query (AND'd with
    * any other HAVING conditions).  Note that the HAVING clause will only be
-   * generated if some conditions have
-   been added.
+   * generated if some conditions have been added.
    * <p>
    * For convenience purposes, the SelectQuery generates it's own
    * ComboCondition allowing multiple HAVING conditions to be AND'd together.
@@ -438,11 +440,25 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   }
 
   /**
+   * Adds a named window definition to the select query's WINDOW definitions
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toCustomSqlObject}.
+   * @see "SQL 2003"
+   */
+  public SelectQuery addWindowDefinition(String name, Object window) {
+    _windows.addObject(new NamedWindowDefinition(
+                           name, Converter.toCustomSqlObject(window)));
+    return this;
+  }
+
+  /**
    * Sets the value for the "OFFSET" clause.  Note that this clause is defined
    * in "SQL 2008".
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toValueSqlObject}.
+   * @see "SQL 2008"
    */
   public SelectQuery setOffset(Object offset) {
     _offset = Converter.toValueSqlObject(offset);
@@ -455,6 +471,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toValueSqlObject}.
+   * @see "SQL 2008"
    */
   public SelectQuery setFetchNext(Object fetchCount) {
     _fetchCount = Converter.toValueSqlObject(fetchCount);
@@ -489,7 +506,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   }
 
   @Override
-    protected void collectSchemaObjects(ValidationContext vContext) {
+  protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
     _joins.collectSchemaObjects(vContext);
     _columns.collectSchemaObjects(vContext);
@@ -497,6 +514,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     _grouping.collectSchemaObjects(vContext);
     _ordering.collectSchemaObjects(vContext);
     _having.collectSchemaObjects(vContext);
+    _windows.collectSchemaObjects(vContext);
     if(_offset != null) {
       _offset.collectSchemaObjects(vContext);
     }
@@ -506,7 +524,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   }
 
   @Override
-    public void validate(ValidationContext vContext)
+  public void validate(ValidationContext vContext)
     throws ValidationException
   { 
     // if we have joins, check the tables, otherwise, the join tables will
@@ -624,7 +642,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   }
 
   @Override
-    protected void appendTo(AppendableExt app, SqlContext newContext)
+  protected void appendTo(AppendableExt app, SqlContext newContext)
     throws IOException
   {
     newContext.setUseTableAliases(true);
@@ -658,6 +676,9 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
       // BY clause)
       maybeAppendTo(app, Hook.HAVING, " HAVING ", _having, !_having.isEmpty());
     }
+
+    // append window definition clauses
+    maybeAppendTo(app, Hook.WINDOW, " WINDOW ", _windows, !_windows.isEmpty());
     
     // append ordering clause
     maybeAppendTo(app, Hook.ORDER_BY, " ORDER BY ", _ordering, 
@@ -742,7 +763,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
    * Outputs the right side of a join clause
    * <code>"&lt;joinType&gt; &lt;toTable&gt; ON &lt;joinCondition&gt;"</code>.
    */
-  private static class JoinTo extends SqlObject
+  private static final class JoinTo extends SqlObject
   {
     private SqlObject _toTable;
     private JoinType _joinType;
@@ -793,7 +814,30 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
         app.append(", ").append(_toTable);
       }
     }
-    
   }
 
+  /**
+   * Outputs a named window definition clause like
+   * <code>"&lt;name&gt; AS &lt;windowDefinition&gt;"</code>.
+   */
+  private static final class NamedWindowDefinition extends SqlObject
+  {
+    private final String _name;
+    private final SqlObject _definition;
+
+    private NamedWindowDefinition(String name, SqlObject definition) {
+      _name = name;
+      _definition = definition;
+    }
+
+    @Override
+    protected void collectSchemaObjects(ValidationContext vContext) {
+      _definition.collectSchemaObjects(vContext);
+    }
+
+    @Override
+    public void appendTo(AppendableExt app) throws IOException {
+      app.append(_name).append(" AS ").append(_definition);
+    }
+  }
 }

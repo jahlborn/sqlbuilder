@@ -8,6 +8,9 @@
       <action dev="jahlborn" type="add" system="SourceForge2Patches" issue="4">
         Add the EXTRACT expression (thanks to Andrey Karepin).
       </action>
+      <action dev="jahlborn" type="add" system="SourceForge2Patches" issue="3">
+        Add support for window functions (ideas from Andrey Karepin).
+      </action>
     </release>
     <release version="2.1.6" date="2016-12-18">
       <action dev="jahlborn" type="update" system="SourceForge2Features" issue="19">

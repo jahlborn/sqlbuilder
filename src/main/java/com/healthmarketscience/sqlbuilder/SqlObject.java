@@ -104,10 +104,14 @@ public abstract class SqlObject extends AppendeeObject
   /**
    * Utility method for classes which may not be in this package to invoke
    * {@link #collectSchemaObjects(ValidationContext)} on a SqlObject.
+   * @param obj relevant sql object, may be {@code null}
+   * @param vContext current ValidationContext
    */
   public static void collectSchemaObjects(
       SqlObject obj, ValidationContext vContext) {
-    obj.collectSchemaObjects(vContext);
+    if(obj != null) {
+      obj.collectSchemaObjects(vContext);
+    }
   }
     
   /**
