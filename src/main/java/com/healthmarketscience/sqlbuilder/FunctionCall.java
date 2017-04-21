@@ -24,7 +24,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Function;
 
 /**
  * Outputs a function call
- * <code>"&lt;name&gt;([&lt;param1&gt;, ... &lt;paramN&gt;])"</code>.
+ * <code>"&lt;name&gt;([&lt;param1&gt;, ... &lt;paramN&gt;]) [OVER (<window>)]"</code>.
  *
  * @author James Ahlborn
  */
