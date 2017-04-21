@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="2.1.7" date="TBD">
+    <release version="2.1.7" date="2017-04-21">
       <action dev="jahlborn" type="add" system="SourceForge2Patches" issue="4">
         Add the EXTRACT expression (thanks to Andrey Karepin).
       </action>
