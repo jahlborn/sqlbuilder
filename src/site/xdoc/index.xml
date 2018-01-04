@@ -122,7 +122,7 @@ String selectQuery =
         <li><a href="example.html">Basic examples</a></li>
         <li>Additional code examples in the <a href="apidocs/overview-summary.html#overview_description">sqlbuilder overview javadocs</a></li>
         <li>Major highlights of the supported syntax in the <a href="syntax_reference.html">Syntax Reference</a></li>
-        <li>Examples for all the classes in the <a href="xref-test/com/healthmarketscience/sqlbuilder/SqlBuilderTest.html">unit tests</a></li>
+        <li>Examples for all the classes in the <a href="xref-test/index.html">unit tests</a></li>
         <li><a href="apidocs/index.html">Javadoc API documentation</a></li>
         <li><a href="xref/index.html">Complete source code (with cross references)</a></li>
       </ul>
