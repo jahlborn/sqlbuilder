@@ -3,14 +3,14 @@
   <parent>
     <groupId>com.healthmarketscience</groupId>
     <artifactId>openhms-parent</artifactId>
-    <version>1.1.8</version>
+    <version>1.1.9</version>
   </parent>
   <groupId>com.healthmarketscience.sqlbuilder</groupId>
   <artifactId>sqlbuilder</artifactId>
   <name>SQL Query Builders</name>
   <description>Builder style classes for creating SQL queries</description>
   <version>2.1.8-SNAPSHOT</version>
-  <url>http://openhms.sourceforge.net/sqlbuilder</url>
+  <url>https://openhms.sourceforge.io/sqlbuilder</url>
   <inceptionYear>2006</inceptionYear>
   <developers>
     <developer>
@@ -128,8 +128,8 @@
         <artifactId>maven-changes-plugin</artifactId>
         <configuration>
           <issueLinkTemplatePerSystem>
-            <SourceForge2Features>http://sourceforge.net/p/openhms/feature-requests/%ISSUE%</SourceForge2Features>
-            <SourceForge2Patches>http://sourceforge.net/p/openhms/patches/%ISSUE%</SourceForge2Patches>
+            <SourceForge2Features>https://sourceforge.net/p/openhms/feature-requests/%ISSUE%</SourceForge2Features>
+            <SourceForge2Patches>https://sourceforge.net/p/openhms/patches/%ISSUE%</SourceForge2Patches>
           </issueLinkTemplatePerSystem>
         </configuration>
         <reportSets>
@@ -147,7 +147,7 @@
           <maxmemory>512</maxmemory>
           <links>
             <list>http://docs.oracle.com/javase/1.5.0/docs/api/</list>
-            <list>http://openhms.sourceforge.net/common-util/apidocs</list>
+            <list>https://openhms.sourceforge.io/common-util/apidocs</list>
           </links>
           <source>1.5</source>
           <stylesheetfile>${basedir}/src/site/javadoc/stylesheet.css</stylesheetfile>

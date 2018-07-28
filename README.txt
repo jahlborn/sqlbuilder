@@ -18,6 +18,6 @@ errors into Java compile-time errors!
 Please note that the GitHub repository is a mirror of the main project
 repository which is hosted on SourceForge:
 
-Homepage: http://openhms.sourceforge.net/sqlbuilder/
+Homepage: https://openhms.sourceforge.io/sqlbuilder/
 
 Project: https://sourceforge.net/projects/openhms/
