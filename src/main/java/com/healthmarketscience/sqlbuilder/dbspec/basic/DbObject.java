@@ -24,7 +24,7 @@ import java.util.Collection;
  *
  * @author James Ahlborn
  */
-public class DbObject<ParentType extends DbObject>
+public class DbObject<ParentType extends DbObject<?>>
 {
   /** parent object for this db object */
   private final ParentType _parent;
@@ -80,18 +80,19 @@ public class DbObject<ParentType extends DbObject>
     }
     return obj;
   }
-  
+
   /**
    * @throws IllegalArgumentException if the parent of the given object is not
    *         this object
    */
+  @SuppressWarnings("unchecked")
   protected <T extends DbObject<?>> T[] checkOwnership(T... objs) {
     for(DbObject<?> obj : objs) {
       checkOwnership(obj);
     }
     return objs;
   }
-  
+
   /**
    * @param objects collection to search
    * @param name name of the object to find
@@ -108,7 +109,7 @@ public class DbObject<ParentType extends DbObject>
     }
     return null;
   }
-  
+
   /**
    * Adds the given objects to the given collection after verifying that they
    * are owned by the given parent.
@@ -117,6 +118,7 @@ public class DbObject<ParentType extends DbObject>
    * @param parent the expected owner of the objects
    * @param objArr the objects to be added, may be {@code null}
    */
+  @SuppressWarnings("unchecked")
   protected static <T extends DbObject<?>> void addObjects(
       Collection<T> objs, DbObject<?> parent, T... objArr)
   {
@@ -124,10 +126,10 @@ public class DbObject<ParentType extends DbObject>
       objs.addAll(Arrays.asList(parent.checkOwnership(objArr)));
     }
   }
-  
+
   @Override
   public String toString() {
     return getAbsoluteName();
   }
-  
+
 }

@@ -47,7 +47,7 @@ public class QueryPreparerTest extends BaseSqlTestCase {
     Object obj1 = new Object();
     Object obj2 = new Object();
     Object obj3 = new Object();
-    
+
     QueryPreparer prep = new QueryPreparer(startIndex);
     QueryPreparer.PlaceHolder ph1 = prep.getNewPlaceHolder();
     QueryPreparer.PlaceHolder ph2 = prep.getNewPlaceHolder();
@@ -114,7 +114,7 @@ public class QueryPreparerTest extends BaseSqlTestCase {
     MockPreparedStatement mockStmt = new MockPreparedStatement();
     PreparedStatement stmt = (PreparedStatement)
       Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-                             new Class[]{PreparedStatement.class},
+                             new Class<?>[]{PreparedStatement.class},
                              mockStmt);
 
     prep.setStaticValues(stmt);
@@ -155,18 +155,18 @@ public class QueryPreparerTest extends BaseSqlTestCase {
       query.toString();
       fail("IllegalStateException should have been thrown");
     } catch(IllegalStateException e) {}
-    
+
   }
 
   private void checkIndexes(List<Integer> idxs, Integer... expectedIdxs) {
     assertEquals(Arrays.asList(expectedIdxs), idxs);
   }
-  
+
   private static class MockPreparedStatement
     implements InvocationHandler
   {
     private final List<List<Object>> _calls = new ArrayList<List<Object>>();
-    
+
     public Object invoke(Object proxy, Method method, Object[] args)
       throws Throwable
     {

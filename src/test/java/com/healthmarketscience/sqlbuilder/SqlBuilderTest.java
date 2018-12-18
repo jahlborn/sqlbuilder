@@ -38,7 +38,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
  */
 public class SqlBuilderTest extends BaseSqlTestCase
 {
-  
+
   public SqlBuilderTest(String name) {
     super(name);
   }
@@ -49,7 +49,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addColumns(_table1_col1, _table1_col3).validate().toString();
     checkResult(createStr1,
                 "CREATE TABLE Schema1.Table1 (col1 VARCHAR(213),col3 DECIMAL(4,8))");
-    
+
     String createStr2 = new CreateTableQuery(_table1, true)
       .validate().toString();
     checkResult(createStr2,
@@ -66,7 +66,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .setColumnConstraint(_defTable1_col_id,
                            CreateTableQuery.ColumnConstraint.PRIMARY_KEY)
       .addColumn(_defTable1_col3, CreateTableQuery.ColumnConstraint.NOT_NULL)
-      .addColumnConstraint(_defTable1_col3, 
+      .addColumnConstraint(_defTable1_col3,
                            ConstraintClause.foreignKey("col3_fk", _table1)
                            .addRefColumns(_table1_col3))
       .addCustomColumn("col4 NUMBER", CreateTableQuery.ColumnConstraint.NOT_NULL)
@@ -86,7 +86,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addColumnConstraint(_defTable1_col3,
                            ConstraintClause.notNull())
       .setColumnDefaultValue(_defTable1_col3, new CustomSql("CURRENT_DATE"))
-      .addCustomConstraints(ConstraintClause.unique() 
+      .addCustomConstraints(ConstraintClause.unique()
                             .addColumns(_defTable1_col2, _defTable1_col3))
       .validate().toString();
     checkResult(createStr5,
@@ -113,7 +113,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(createStr1,
                 "CREATE INDEX Schema1.Index1 ON Schema1.Table1 (col1,col2)");
 
-    
+
     String createStr2 = query.setIndexType(CreateIndexQuery.IndexType.UNIQUE)
       .validate().toString();
     checkResult(createStr2,
@@ -123,7 +123,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(dropStr1,
                 "DROP INDEX Schema1.Index1");
   }
-  
+
   public void testDropTable()
   {
     String dropStr1 = DropQuery.dropTable(_table1).validate().toString();
@@ -137,7 +137,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addColumns(_table1_col1, _table1_col3)
       .getDropQuery().validate().toString();
     checkResult(dropStr3, "DROP TABLE Schema1.Table1");
-    
+
     String dropStr4 = new CreateTableQuery(_defTable1, true)
       .getDropQuery().validate().toString();
     checkResult(dropStr4, "DROP TABLE Table1");
@@ -151,7 +151,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(insertStr1,
                 "INSERT INTO Schema1.Table1 (col1,col3,col2) VALUES (13,'feed me seymor',1)");
-    
+
     String insertStr2 = new InsertQuery(_table1)
       .addColumns(new DbColumn[]{_table1_col1},
                   new Object[]{"13"})
@@ -167,7 +167,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(insertStr3,
                 "INSERT INTO Table1 (col_id,col2,col3) VALUES (13,?,?)");
-    
+
     try {
       new InsertQuery(_table1)
         .addColumns(new DbColumn[]{_table1_col1, _table1_col3},
@@ -249,7 +249,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       String selectStr7 = selectQuery1.addHaving(BinaryCondition.greaterThan(_defTable1_col2, new NumberValueObject(1), false)).toString();
       checkResult(selectStr7,
                   "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= 42) ORDER BY t1.col2,t2.col5 DESC");
-      
+
       String selectStr8 = selectQuery1.addGroupings(_defTable1_col2,
                                                     _defTable2_col5)
         .validate().toString();
@@ -297,7 +297,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(selectStr10,
                 "SELECT t0.col1,t1.col2 FROM Schema1.Table1 t0 CROSS JOIN Table1 t1");
-    
+
     String selectStr11 = new SelectQuery()
       .addAllTableColumns(_table1)
       .setOffset(0)
@@ -313,14 +313,14 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(selectStr12,
                 "SELECT t0.* FROM Schema1.Table1 t0 ORDER BY t0.col1 DESC OFFSET 0 ROWS FETCH NEXT 25 ROWS ONLY");
-    
+
     try {
       new SelectQuery()
         .addColumns(_table1_col1, _defTable1_col2, _defTable2_col5)
         .addFromTable(_defTable1).validate();
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
-      
+
     try {
       new SelectQuery()
         .addColumns(_defTable1_col2)
@@ -350,7 +350,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     try {
       DbTable table3 = _schema1.addTable("Table3");
-      
+
       new SelectQuery()
         .addColumns(_table1_col1)
         .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1,
@@ -370,14 +370,14 @@ public class SqlBuilderTest extends BaseSqlTestCase
         .validate();
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
-    
+
   }
 
   public void testSelectNoAlias()
   {
     RejoinTable noAliasTable = new RejoinTable(_table1, null);
     Column col1 = noAliasTable.findColumnByName("col1");
-    
+
     SelectQuery selectQuery1 = new SelectQuery()
       .addColumns(col1, _defTable1_col2, _defTable2_col5);
 
@@ -397,7 +397,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       checkResult(selectStr2,
                   "SELECT col1,t1.col2,t2.col5 FROM Schema1.Table1 INNER JOIN Table1 t1 ON (col1 = t1.col2) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE ((t2.col4 >= 42) AND (col1 = 'foo'))");
   }
-  
+
   public void testCondition()
   {
     SelectQuery sq = new SelectQuery().addColumns(_table1_col1);
@@ -470,7 +470,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(reallyComplicatedConditionStr,
                 "((t0.col1 < 'FOO') AND (t1.col_id IS NOT NULL) AND IM REALLY SNAZZY OR (NOT (t2.col5 LIKE 'BUZ%')) OR (YOU = 'ME') AND (t0.col2 IS NULL) AND t2.col4 IN ('this string',37,42) AND t0.col2 NOT LIKE '\\_%' ESCAPE '\\' AND (EXISTS (SELECT t0.col1 FROM Schema1.Table1 t0)))");
   }
-  
+
   public void testExpression()
   {
     Expression expr = ComboExpression.add(
@@ -488,7 +488,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addCustomColumns(expr, _table1_col2)
       .validate().toString();
     checkResult(exprQuery, "SELECT (37 + t2.col5 + (- (t0.col1 * 4.7)) + 'PI' + (8 - 3)),t0.col2 FROM Table2 t2,Schema1.Table1 t0");
-    
+
     String concatExpression = ComboExpression.concatenate(
         "The answer is ", ComboExpression.add(40, 2), ".")
       .toString();
@@ -505,7 +505,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     DbFunction func2 = funcPack2.addFunction("Func2");
     DbFunctionPackage funcPack3 = _defSchema.addDefaultFunctionPackage();
     DbFunction func3 = funcPack3.addFunction("func3");
-    
+
     String funcStr1 = new FunctionCall(func1).toString();
     checkResult(funcStr1, "Schema1.fpkg.func1()");
 
@@ -513,19 +513,19 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addColumnParams(_table1_col1)
       .toString();
     checkResult(funcStr2, "Schema1.Func2(t0.col1)");
-    
+
     String funcStr3 = new FunctionCall(func2)
       .setIsDistinct(true)
       .addColumnParams(_table1_col1)
       .toString();
     checkResult(funcStr3, "Schema1.Func2(DISTINCT t0.col1)");
-    
+
     String funcStr4 = new FunctionCall(func3)
       .addColumnParams(_table1_col1)
       .addCustomParams("42")
       .toString();
     checkResult(funcStr4, "func3(t0.col1,'42')");
-    
+
     String funcStr5 = new FunctionCall(func3)
       .addCustomParams(new String("HAPPY"), _table1_col1)
       .toString();
@@ -545,7 +545,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addNumericValueParam(42)
       .toString();
     checkResult(funcStr8, "func3(t0.col1,42)");
-    
+
   }
 
   public void testCustom()
@@ -579,7 +579,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addWhen(BinaryCondition.equalTo(_table1_col2, "13"), _table1_col3)
       .addWhen(BinaryCondition.equalTo(_table1_col2, "14"), "14")
       .addElseNull().validate().toString();
-    
+
     checkResult(caseClause2,
                 "(CASE WHEN (t0.col2 = '13') THEN t0.col3 WHEN (t0.col2 = '14') THEN '14' ELSE NULL END)");
 
@@ -596,24 +596,24 @@ public class SqlBuilderTest extends BaseSqlTestCase
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
 
-    
+
     SimpleCaseStatement invalidCase = new SimpleCaseStatement(_table1_col1)
       .addNumericWhen(1, "one")
       .addElse("three")
       .addNumericWhen(2, "two");
-    
+
     try {
       invalidCase.validate();
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
-    
+
     try {
       new SelectQuery()
         .addCustomColumns(invalidCase)
         .validate();
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
-    
+
   }
 
   public void testDelete()
@@ -624,7 +624,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     checkResult(deleteQuery1,
                 "DELETE FROM Schema1.Table1 WHERE (col2 = '13')");
-    
+
   }
 
   public void testUpdate()
@@ -637,7 +637,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     checkResult(updateQuery1,
                 "UPDATE Schema1.Table1 SET col1 = 47,col3 = 'foo' WHERE (col2 = '13')");
-    
+
   }
 
   public void testUnion()
@@ -689,7 +689,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addCustomOrderings(
           new OrderObject(OrderObject.Dir.ASCENDING, _table1_col1)
           .setNullOrder(OrderObject.NullOrder.FIRST));
-    
+
     String unionQuery3 = unionQuery.validate().toString();
     checkResult(unionQuery3,
                 "SELECT t0.* FROM Schema1.Table1 t0 UNION SELECT * FROM Table2 t2 ORDER BY 1 DESC,col1 ASC NULLS FIRST");
@@ -705,7 +705,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     SelectQuery q3 = new SelectQuery()
       .addFromTable(_defTable1)
       .addAllColumns();
-    
+
     SetOperationQuery<?> setOpQuery = SetOperationQuery.except(q1, q2)
       .addQueries(SetOperationQuery.Type.INTERSECT_ALL, q3);
 
@@ -730,7 +730,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String condStr2 = cond.toString(32, context);
     checkResult(condStr2,
                 "((col3 = 'foo') AND (col1 <= 13))");
-    
+
   }
 
   public void testRejoinTable()
@@ -748,7 +748,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     assertSame(_table1_col2.getTypeNameSQL(), rejoinCol2.getTypeNameSQL());
     assertSame(_table1_col2.getTypeLength(), rejoinCol2.getTypeLength());
     assertSame(_table1_col2.getConstraints(), rejoinCol2.getConstraints());
-    
+
     String rejoinQuery = (new SelectQuery())
       .addFromTable(_table1)
       .addColumns(_table1_col1, _table1_col2)
@@ -760,7 +760,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(rejoinQuery,
                 "SELECT t0.col1,t0.col2,t5.col1,t5.col2 FROM Schema1.Table1 t0, Schema1.Table1 t5");
   }
-  
+
   public void testJdbcEscape()
   {
     String escapeStr1 = new InsertQuery(_table1)
@@ -769,7 +769,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(escapeStr1,
                 "INSERT INTO Schema1.Table1 (col1,col3) VALUES (13,{fn NOW()})");
-    
+
     Date d = new Date(1204909500692L);
     String dateStr = JdbcEscape.date(d).toString();
     String date = new SimpleDateFormat("yyyy-MM-dd").format(d);
@@ -781,7 +781,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(d);
     checkResult(timestampStr, "{ts '"+timestamp+"'}");
   }
-  
+
   public void testGrantRevoke()
   {
     String grantStr1 = new GrantQuery()
@@ -807,7 +807,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
         .addGrantees("bob")
         .validate();
       fail("ValidationException should have been thrown");
-    } catch(ValidationException e) {}      
+    } catch(ValidationException e) {}
   }
 
   public void testSubquery()
@@ -828,7 +828,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addCondition(BinaryCondition.equalTo(_table1_col1, _defTable2_col_id));
     innerSelect.validate();
     String queryStr2 = innerSelect.toString();
-    checkResult(queryStr2, "SELECT t2.col4 FROM Table2 t2,Schema1.Table1 t0 WHERE (t0.col1 = t2.col_id)");    
+    checkResult(queryStr2, "SELECT t2.col4 FROM Table2 t2,Schema1.Table1 t0 WHERE (t0.col1 = t2.col_id)");
     SelectQuery outerSelect = new SelectQuery()
       .addCustomColumns(_table1_col1, _table1_col2)
       .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1,
@@ -844,12 +844,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
     try {
       innerSelect.validate();
       fail("ValidationException should have been thrown");
-    } catch(ValidationException e) {}      
-      
+    } catch(ValidationException e) {}
+
     try {
       outerSelect.validate();
       fail("ValidationException should have been thrown");
-    } catch(ValidationException e) {}      
+    } catch(ValidationException e) {}
 
     innerSelect = new SelectQuery()
       .addCustomColumns(_defTable2_col4)
@@ -862,7 +862,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     try {
       innerSelect.validate();
       fail("ValidationException should have been thrown");
-    } catch(ValidationException e) {}      
+    } catch(ValidationException e) {}
 
     outerSelect = new SelectQuery()
       .addCustomColumns(_table1_col1, _table1_col2)
@@ -898,7 +898,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .setAction(new AlterTableQuery.AddForeignConstraintAction(_defTable2)
                  .addPrimaryKeyReference(_defTable1_col_id))
       .validate().toString();
-    checkResult(queryStr3, 
+    checkResult(queryStr3,
                 "ALTER TABLE Table1 ADD FOREIGN KEY (col_id) REFERENCES Table2");
 
     @SuppressWarnings("deprecation")
@@ -908,7 +908,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                  .addReference(_defTable1_col_id, _defTable2_col4)
                  .addReference(_defTable1_col2, _defTable2_col5))
       .validate().toString();
-    checkResult(queryStr4, 
+    checkResult(queryStr4,
                 "ALTER TABLE Table1 ADD FOREIGN KEY (col_id,col2) " +
                 "REFERENCES Table2 (col4,col5)");
 
@@ -916,7 +916,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       new AlterTableQuery(_defTable2)
       .setAddConstraint(_defTable2.getConstraints().get(0))
       .validate().toString();
-    checkResult(queryStr5, 
+    checkResult(queryStr5,
                 "ALTER TABLE Table2 ADD CONSTRAINT t2_fk FOREIGN KEY (col4,col5) REFERENCES Table1 (col2,col3)");
 
     DbColumn toAdd = _defTable1.addColumn("col5", Types.VARCHAR, 255);
@@ -959,7 +959,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                         .validate().toString() +
       new Comment("My coolest query ever");
     checkResult(queryStr2, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 -- My coolest query ever\n");
-    
+
   }
 
   public void testEscapeLiteral()
@@ -986,12 +986,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     assertNotNull(ve);
     assertNotNull(ve.getFailedVerifiable());
-    assertSame(select, ve.getFailedVerifiable().get1());
+    assertSame(select, ve.getFailedVerifiable().getValue());
 
     String msg = ve.getMessage();
     checkResult(msg, "Columns used for unreferenced tables [Failed clause: SELECT t1.col_id FROM Schema1.Table1 t0]");
 
-    
+
     select.addCustomColumns(new SqlObject() {
         @Override
         public void appendTo(AppendableExt app) throws IOException {
@@ -1007,7 +1007,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     }
 
     assertNotNull(ve);
-    
+
     msg = ve.getMessage();
     assertTrue(msg.matches("Columns used for unreferenced tables \\[Verifiable: com.healthmarketscience.sqlbuilder.SelectQuery@[0-9a-f]+\\]"));
 
@@ -1019,14 +1019,14 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addColumns(_defTable1_col_id, _defTable1_col2)
       .addCondition(UnaryCondition.isNotNull(_defTable1_col_id));
     SelectQuery query2 = new SelectQuery().addAllTableColumns(_defTable2);
-    
+
     String createStr1 = new CreateViewQuery(_table1)
       .setSelectQuery(query1)
       .validate().toString();
     checkResult(createStr1,
                 "CREATE VIEW Schema1.Table1 AS SELECT t1.col_id,t1.col2 FROM Table1 t1 WHERE (t1.col_id IS NOT NULL)");
 
-    
+
     String createStr2 = new CreateViewQuery(_table1)
       .addColumns(_table1_col1, _table1_col3)
       .setSelectQuery(query1)
@@ -1044,7 +1044,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     CreateViewQuery viewQuery = new CreateViewQuery(_table1)
       .setSelectQuery(query2);
-    
+
     String createStr4 = viewQuery.validate().toString();
     checkResult(createStr4,
                 "CREATE VIEW Schema1.Table1 AS SELECT t2.* FROM Table2 t2");
@@ -1052,12 +1052,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String dropStr1 = viewQuery.getDropQuery().validate().toString();
     checkResult(dropStr1,
                 "DROP VIEW Schema1.Table1");
-    
+
     try {
       new CreateViewQuery(_table1).validate();
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
-    
+
     try {
       new CreateViewQuery(_table1)
         .addColumns(_table1_col1)
@@ -1065,7 +1065,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
         .validate();
       fail("ValidationException should have been thrown");
     } catch(ValidationException e) {}
-    
+
     try {
       new CreateViewQuery(_table1)
         .addCustomColumns(SqlObject.ALL_SYMBOL)
@@ -1122,14 +1122,14 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String exprStr = FunctionCall.avg()
       .setWindow(new WindowDefinitionClause())
       .toString();
-    
+
     checkResult(exprStr, "AVG() OVER ()");
 
     exprStr = FunctionCall.avg()
       .setWindow(new WindowDefinitionClause()
                  .addPartitionColumns(_defTable1_col_id))
       .toString();
-    
+
     checkResult(exprStr, "AVG() OVER (PARTITION BY t1.col_id)");
 
     exprStr = FunctionCall.avg()
@@ -1137,7 +1137,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                  .addPartitionColumns(_defTable1_col_id)
                  .addOrderings(_defTable1_col2))
       .toString();
-    
+
     checkResult(exprStr, "AVG() OVER (PARTITION BY t1.col_id ORDER BY t1.col2)");
 
     exprStr = FunctionCall.avg()
@@ -1148,7 +1148,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                      WindowDefinitionClause.FrameUnits.ROWS,
                      WindowDefinitionClause.FrameBound.CURRENT_ROW))
       .toString();
-    
+
     checkResult(exprStr, "AVG() OVER (PARTITION BY t1.col_id ORDER BY t1.col2 ROWS CURRENT ROW)");
 
 
@@ -1161,11 +1161,11 @@ public class SqlBuilderTest extends BaseSqlTestCase
                      WindowDefinitionClause.FrameBound.UNBOUNDED_PRECEDING,
                      WindowDefinitionClause.FrameBound.boundedFollowing(5)))
       .toString();
-    
+
     checkResult(exprStr, "AVG() OVER (PARTITION BY t1.col_id ORDER BY t1.col2 ROWS BETWEEN UNBOUNDED PRECEDING AND 5 FOLLOWING)");
 
     String queryStr = new SelectQuery()
-      .addColumns(_table1_col1, _table1_col2) 
+      .addColumns(_table1_col1, _table1_col2)
       .addAliasedColumn(FunctionCall.avg().setWindowByName("w"), "average")
       .addWindowDefinition(
           "w", new WindowDefinitionClause()
