@@ -154,6 +154,14 @@
               <title>Database Specification Packages</title>
               <packages>com.healthmarketscience.sqlbuilder.dbspec*</packages>
             </group>
+            <group>
+              <title>Custom Database Packages</title>
+              <packages>com.healthmarketscience.sqlbuilder.custom*</packages>
+            </group>
+            <group>
+              <title>Utility Package</title>
+              <packages>com.healthmarketscience.common*</packages>
+            </group>
           </groups>
           <quiet>true</quiet>
         </configuration>

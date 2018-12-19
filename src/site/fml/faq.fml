@@ -6,7 +6,7 @@
     <title>General</title>
 
     <faq id="customdb">
-      <question>How can I get Oracle (DB2, SqlServer, MySql...) specific syntax?</question>
+      <question>How can I get Oracle (DB2, SQL Server, MySQL...) specific syntax?</question>
       <answer>
         <p>
           In general, the SqlBuilder package has strived to use ANSI SQL92
@@ -36,32 +36,6 @@
           methods.  In most cases these converters "do the right thing", but
           if they do not, you generally just need to wrap your custom object
           in a CustomSql object.
-        </p>
-      </answer>
-    </faq>
-    
-    <faq id="dependencies">
-      <question>Why do I get a NoClassDefFoundError?</question>
-      <answer>
-        <p>
-          Probably because you're missing a jar that SqlBuilder depends on from
-          your classpath.  Take a look at the <a href="dependencies.html">dependencies list</a>.  The "compile" and
-          "runtime" dependencies are necessary for using SqlBuilder in your
-          application.  One great place to track down these dependencies is in
-          the <a href="http://repo1.maven.org/maven2/">Ibiblio Maven
-          Repository</a>.
-        </p>
-      </answer>
-    </faq>
-
-    <faq id="hms">
-      <question>Who is Health Market Science?</question>
-      <answer>
-        <p>
-          HMS is a small company located in suburban Philadelphia.
-          Using proprietary matching and consolidation software,
-          HMS scientifically manufactures the most comprehensive
-          and accurate healthcare data sets in the market today.
         </p>
       </answer>
     </faq>

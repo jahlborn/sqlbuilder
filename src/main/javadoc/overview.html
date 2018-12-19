@@ -7,7 +7,7 @@ with simple SQL strings (or a combination thereof).  Has validation for
 checking internal consistency of the statements (more effective when using the
 {@code dbspec} utilities).  Note that although the objects are not built for
 concurrent construction, once a query object has been created, all append
-methods are thread-safe.  See the 
+methods are thread-safe.  See the
 <a href="{@docRoot}/../syntax_reference.html" target="_top">Syntax Reference</a> for a list
 of the major highlights.
 </p>
@@ -16,13 +16,13 @@ This package will <em>not</em> help you write SQL if you do not already know
 how to write SQL and use JDBC.  It does not abstract away the knowledge
 necessary to deal with a database, but instead provides tools for avoiding the
 more error-prone parts of generating SQL queries.
-If you want a tool to completely abstract away the database, check out 
+If you want a tool to completely abstract away the database, check out
 <a href="http://www.hibernate.org" target="_top">Hibernate</a> instead.
 </p>
 <p>
 Although this facility has full support for "custom" sql (arbitrary strings
 inserted using the {@link com.healthmarketscience.sqlbuilder.CustomSql}
-object), it is highly recommended that the 
+object), it is highly recommended that the
 {@link com.healthmarketscience.sqlbuilder.dbspec} utilities be used in
 conjunction with this package (there are very basic implementations in the
 {@link com.healthmarketscience.sqlbuilder.dbspec.basic dbspec.basic} package).
@@ -39,7 +39,8 @@ building a prepared statement (see that class for examples).
 
 <p>
 Examples:
-<pre>
+</p>
+ <pre>
 
 //
 // CreateTableQuery
@@ -109,11 +110,13 @@ SELECT T1.COL1,T1.COL2,T2.COL1 FROM TABLE1 T1 INNER JOIN TABLE2 T2 ON (T1.IDCOL 
 
 <h2>JMS</h2>
 
+<p>
 Since the syntax for JMS message selectors is a subset of SQL92, many of the
 expression related classes in this package can be used to create JMS message
-selectors.  
+selectors.
+</p>
 
-<pre>
+ <pre>
 
 String selector = ComboCondition.and(
   BinaryCondition.equalTo(new CustomSql("field1"),

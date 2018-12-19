@@ -4,6 +4,21 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="3.0.0" date="TBD" description="Update to Java 8">
+      <action dev="jahlborn" type="update">
+        SqlBuilder now requires a Java 8+ runtime.  As part of this update,
+        all dependencies have been updated to their latest versions.
+      </action>
+      <action dev="jahlborn" type="update">
+        The separate common-util dependency has been removed.  The few classes
+        which were utilized from that dependency are now included in this
+        project directly.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add convenience methods to convert Java 8 Temporal types into jdbc
+        date/time escape syntax.
+      </action>
+    </release>
     <release version="2.1.7" date="2017-04-21">
       <action dev="jahlborn" type="add" system="SourceForge2Patches" issue="4">
         Add the EXTRACT expression (thanks to Andrey Karepin).
