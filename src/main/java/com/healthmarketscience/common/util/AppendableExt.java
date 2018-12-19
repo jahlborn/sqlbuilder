@@ -37,11 +37,10 @@ import java.io.IOException;
  * <li>{@link #append(Iterable,Object)} - a method to append an iteration
  *     (collection, etc) of objects separated by a delimiter</li>
  * </ul>
- * This class acts like the 
- * {@link java.util.Formatter}/{@link java.util.Formattable} facility without 
+ * This class acts like the
+ * {@link java.util.Formatter}/{@link java.util.Formattable} facility without
  * the extra overhead of parsing the format strings.  If complicated formatting
  * is needed for the generated strings, Formatter should be used instead.
- * </p>
  * <p>
  * Examples:
  * </p>
@@ -68,7 +67,7 @@ import java.io.IOException;
  * // this will involve copying multiple strings before actual append!!!
  * sb.append(f);
  *
- * 
+ *
  * //
  * // *With* using this interface.
  * //
@@ -97,34 +96,34 @@ import java.io.IOException;
  */
 public class AppendableExt implements Appendable
 {
-  /** 
-   * The actual Appendable getting the chars 
+  /**
+   * The actual Appendable getting the chars
    */
   private final Appendable _baseApp;
 
-  /** 
+  /**
    * Working appendable which may be changed during certain operations
    */
   private Appendable _app;
 
-  /** 
-   * Custom context for the appendable 
+  /**
+   * Custom context for the appendable
    */
   private Object _context;
-    
-  /** 
+
+  /**
    * Initialize a new AppendableExt based on the given Appendable.
-   * 
+   *
    * @param app initial underlying Appendable
    */
   public AppendableExt(Appendable app) {
     this(app, null);
   }
 
-  /** 
+  /**
    * Initialize a new AppendableExt based on the given Appendable and
    * context.
-   * 
+   *
    * @param app initial underlying Appendable
    * @param context initial append context
    */
@@ -133,7 +132,7 @@ public class AppendableExt implements Appendable
     _app = app;
     _context = context;
   }
-  
+
   public AppendableExt append(char c)
     throws IOException
   {
@@ -157,7 +156,7 @@ public class AppendableExt implements Appendable
     _app.append(s);
     return this;
   }
-  
+
   /**
    * {@inheritDoc}
    * <p>
@@ -185,7 +184,7 @@ public class AppendableExt implements Appendable
         _app = oldApp;
       }
     }
-    
+
     _app.append(s, start, end);
     return this;
   }
@@ -293,7 +292,7 @@ public class AppendableExt implements Appendable
     private final int _start;
     private final int _end;
     private int _pos;
-    
+
     private SubRangeAppendable(Appendable delegate,
                                int start, int end) {
       _delegate = delegate;
@@ -325,7 +324,7 @@ public class AppendableExt implements Appendable
       }
       return this;
     }
-  
+
     public Appendable append(CharSequence csq, int start, int end)
       throws IOException
     {
@@ -339,7 +338,7 @@ public class AppendableExt implements Appendable
         // already past our target range, skip everything else
         return this;
       }
-      
+
       // skip any leading chars in the incoming range that are not within our
       // target range
       if(_pos < _start) {
@@ -365,5 +364,5 @@ public class AppendableExt implements Appendable
     }
 
   }
-  
+
 }

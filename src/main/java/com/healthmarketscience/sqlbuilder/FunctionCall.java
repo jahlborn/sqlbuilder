@@ -24,7 +24,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Function;
 
 /**
  * Outputs a function call
- * <code>"&lt;name&gt;([&lt;param1&gt;, ... &lt;paramN&gt;]) [OVER (<window>)]"</code>.
+ * <code>"&lt;name&gt;([&lt;param1&gt;, ... &lt;paramN&gt;]) [OVER (&lt;window&gt;)]"</code>.
  *
  * @author James Ahlborn
  */
@@ -56,7 +56,7 @@ public class FunctionCall extends Expression
     _isDistinct = isDistinct;
     return this;
   }
-    
+
   /**
    * Adds custom parameters to the function call.
    * <p>
@@ -67,13 +67,13 @@ public class FunctionCall extends Expression
     _params.addObjects(Converter.COLUMN_VALUE_TO_OBJ, params);
     return this;
   }
-    
+
   /** Adds column parameters to the function call as
       <code>"&lt;alias&gt;.&lt;column&gt;"</code>. */
   public FunctionCall addColumnParams(Column... columns) {
     return addCustomParams((Object[])columns);
   }
-    
+
   /**
    * Adds a numeric value parameter to the function call.
    * <p>
@@ -93,7 +93,7 @@ public class FunctionCall extends Expression
     _window = Converter.toCustomColumnSqlObject(window);
     return this;
   }
-    
+
   /**
    * Sets the window clause for this function call to a reference to the named
    * window definition, like <code>"OVER &lt;windowClauseName&gt;"</code>.
@@ -102,14 +102,14 @@ public class FunctionCall extends Expression
     _window = new CustomSql(windowName);
     return this;
   }
-    
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     _functionName.collectSchemaObjects(vContext);
     _params.collectSchemaObjects(vContext);
     collectSchemaObjects(_window, vContext);
   }
-    
+
   @Override
   public void appendTo(AppendableExt app) throws IOException {
     app.append(_functionName).append("(");
@@ -119,7 +119,7 @@ public class FunctionCall extends Expression
     app.append(_params).append(")");
     if(_window != null) {
       app.append(" OVER ").append(_window);
-    } 
+    }
   }
 
   /**
@@ -129,7 +129,7 @@ public class FunctionCall extends Expression
   public static FunctionCall avg() {
     return new FunctionCall(new CustomSql("AVG"));
   }
-  
+
   /**
    * Convenience method for generating a FunctionCall using the standard MIN
    * function.
@@ -137,7 +137,7 @@ public class FunctionCall extends Expression
   public static FunctionCall min() {
     return new FunctionCall(new CustomSql("MIN"));
   }
-  
+
   /**
    * Convenience method for generating a FunctionCall using the standard MAX
    * function.
@@ -145,7 +145,7 @@ public class FunctionCall extends Expression
   public static FunctionCall max() {
     return new FunctionCall(new CustomSql("MAX"));
   }
-  
+
   /**
    * Convenience method for generating a FunctionCall using the standard SUM
    * function.
@@ -153,7 +153,7 @@ public class FunctionCall extends Expression
   public static FunctionCall sum() {
     return new FunctionCall(new CustomSql("SUM"));
   }
-  
+
   /**
    * Convenience method for generating a FunctionCall using the standard COUNT
    * function.
@@ -161,7 +161,7 @@ public class FunctionCall extends Expression
   public static FunctionCall count() {
     return new FunctionCall(new CustomSql("COUNT"));
   }
-  
+
   /**
    * Convenience method for generating a FunctionCall using the standard COUNT
    * function with the single parameter '*'.
@@ -170,7 +170,7 @@ public class FunctionCall extends Expression
     return (new FunctionCall(new CustomSql("COUNT")))
       .addCustomParams(ALL_SYMBOL);
   }
-  
+
   /**
    * Convenience method for generating a FunctionCall using the ROW_NUMBER
    * aggregate function.
@@ -180,7 +180,7 @@ public class FunctionCall extends Expression
   public static FunctionCall rowNumber() {
     return (new FunctionCall(new CustomSql("ROW_NUMBER")));
   }
-  
+
   /**
    * Convenience method for generating a FunctionCall using the RANK
    * aggregate function.
@@ -190,7 +190,7 @@ public class FunctionCall extends Expression
   public static FunctionCall rank() {
     return (new FunctionCall(new CustomSql("RANK")));
   }
-  
+
   /**
    * Convenience method for generating a FunctionCall using the DENSE_RANK
    * aggregate function.
@@ -200,5 +200,5 @@ public class FunctionCall extends Expression
   public static FunctionCall denseRank() {
     return (new FunctionCall(new CustomSql("DENSE_RANK")));
   }
-  
+
 }

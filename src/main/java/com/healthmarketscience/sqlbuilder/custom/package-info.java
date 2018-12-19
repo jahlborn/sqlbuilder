@@ -26,7 +26,7 @@ limitations under the License.
  *     (and subpackages) enable this type of customization, read on for
  *     details.</li>
  * </ul>
- * <p>
+ *
  * <h2>Custom SQL Syntax</h2>
  * <p>
  * Inserting custom SQL syntax into queries involves a few different pieces
@@ -59,7 +59,7 @@ limitations under the License.
  *     However, any ad hoc custom syntax can be added to customizable queries
  *     by specifying the HookType and "hook anchor" when adding (e.g. {@link com.healthmarketscience.sqlbuilder.SelectQuery#addCustomization(Hook,HookType,Object)})</li>
  * </ul>
- * <p>
+ *
  * <h3>Supported Customizations</h3>
  * <p>
  * SqlBuilder currently has existing constructs for few common database
@@ -70,7 +70,7 @@ limitations under the License.
  * <li>PostreSQL {@link com.healthmarketscience.sqlbuilder.custom.postgresql}</li>
  * <li>SQL Server {@link com.healthmarketscience.sqlbuilder.custom.sqlserver}</li>
  * </ul>
- * <p>
+ *
  * <h3>Customizable Queries</h3>
  * <p>
  * Only a few SqlBuilder queryies are currently customizable:

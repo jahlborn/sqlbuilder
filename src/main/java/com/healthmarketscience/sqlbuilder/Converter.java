@@ -99,7 +99,7 @@ public abstract class Converter<SrcType, DstType>
         return toExpressionObject(obj);
       }
     };
-    
+
   /**
    * Converter which converts an Object to a Condition using
    * {@link #toConditionObject(Object)}
@@ -111,8 +111,8 @@ public abstract class Converter<SrcType, DstType>
         return toConditionObject(obj);
       }
     };
-  
-  
+
+
   /** Converter which converts a Column to a TypedColumnObject or a value
       object to a SqlObject using {@link #toCustomSqlObject(Object)} */
   public static final Converter<Object, SqlObject> TYPED_COLUMN_TO_OBJ =
@@ -153,17 +153,17 @@ public abstract class Converter<SrcType, DstType>
         return toCustomTableDefSqlObject(value);
       }
     };
-  
+
 
   /**
    * Converts the given src object to a SqlObject of the expected type.
-   * 
+   *
    * @param src object to be coerced
    * @return the src object coerced to the desired type
    */
   public abstract DstType convert(SrcType src);
 
-  
+
   /**
    * Converts a Column to a SqlObject.
    * <p>
@@ -171,7 +171,7 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
    * </ul>
-   * 
+   *
    * @param col object to coerce to a column SqlObject
    * @return a SqlObject for the given Column appropriate for referencing
    *         the column most anywhere in a query
@@ -179,7 +179,7 @@ public abstract class Converter<SrcType, DstType>
   public static SqlObject toColumnSqlObject(Column col) {
     return new ColumnObject(col);
   }
-  
+
   /**
    * Converts a Column to a SqlObject with the given alias.
    * <p>
@@ -190,7 +190,7 @@ public abstract class Converter<SrcType, DstType>
    * <p>
    * Result of previous conversion is wrapped as an {@link AliasedObject} if
    * the given alias is non-{@code null}.
-   * 
+   *
    * @param col object to coerce to a column SqlObject
    * @param alias optional column alias for the object
    * @return a SqlObject for the given Column with the given alias
@@ -199,7 +199,7 @@ public abstract class Converter<SrcType, DstType>
   public static SqlObject toColumnSqlObject(Column col, String alias) {
     return AliasedObject.toAliasedObject(toColumnSqlObject(col), alias);
   }
-  
+
   /**
    * Converts a Table to a SqlObject.
    * <p>
@@ -207,14 +207,14 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Table} -&gt; {@link TableObject}</li>
    * </ul>
-   * 
+   *
    * @param table object to coerce to a table SqlObject
    * @return a SqlObject for the given Table
    */
   public static SqlObject toTableSqlObject(Table table) {
     return new TableObject(table);
   }
-  
+
   /**
    * Converts a Constraint to a SqlObject.
    * <p>
@@ -222,14 +222,14 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Constraint} -&gt; {@link ConstraintObject}</li>
    * </ul>
-   * 
+   *
    * @param constraint object to coerce to a constraint SqlObject
    * @return a SqlObject for the given Constraint
    */
   public static SqlObject toConstraintSqlObject(Constraint constraint) {
     return new ConstraintObject(constraint);
   }
-  
+
   /**
    * Converts a Table to a table definition SqlObject.
    * <p>
@@ -237,14 +237,14 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Table} -&gt; {@link TableDefObject}</li>
    * </ul>
-   * 
+   *
    * @param table object to coerce to a table SqlObject
    * @return a SqlObject for the given Table
    */
   public static SqlObject toTableDefSqlObject(Table table) {
     return new TableDefObject(table);
   }
-  
+
   /**
    * Converts a Index to a SqlObject.
    * <p>
@@ -252,14 +252,14 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Index} -&gt; {@link IndexObject}</li>
    * </ul>
-   * 
+   *
    * @param index object to coerce to a index SqlObject
    * @return a SqlObject for the given Index
    */
   public static SqlObject toIndexSqlObject(Index index) {
     return new IndexObject(index);
   }
-  
+
   /**
    * Converts a Function to a SqlObject.
    * <p>
@@ -267,14 +267,14 @@ public abstract class Converter<SrcType, DstType>
    * <ul>
    * <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Function} -&gt; {@link FunctionObject}</li>
    * </ul>
-   * 
+   *
    * @param function object to coerce to a function SqlObject
    * @return a SqlObject for the given Function
    */
   public static SqlObject toFunctionSqlObject(Function function) {
     return new FunctionObject(function);
   }
-    
+
   /**
    * Converts a column Object to a SqlObject.
    * <p>
@@ -287,7 +287,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a column SqlObject
    * @return a SqlObject for the given Object.
    */
@@ -297,7 +297,7 @@ public abstract class Converter<SrcType, DstType>
     }
     return toValueSqlObject(obj);
   }
-  
+
   /**
    * Converts a column Object to a SqlObject with the given alias.
    * <p>
@@ -313,7 +313,7 @@ public abstract class Converter<SrcType, DstType>
    * <p>
    * Result of previous conversion is wrapped as an {@link AliasedObject} if
    * the given alias is non-{@code null}.
-   * 
+   *
    * @param obj object to coerce to a column SqlObject
    * @param alias optional column alias for the object
    * @return a SqlObject for the given Object with the given alias.
@@ -334,7 +334,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a custom column SqlObject
    * @return a SqlObject for the given Object.
    */
@@ -344,7 +344,7 @@ public abstract class Converter<SrcType, DstType>
     }
     return toCustomSqlObject(obj);
   }
-  
+
   /**
    * Converts a column Object to a SqlObject.
    * <p>
@@ -357,7 +357,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a custom column SqlObject
    * @param alias optional column alias for the object
    * @return a SqlObject for the given Object.
@@ -365,7 +365,7 @@ public abstract class Converter<SrcType, DstType>
   public static SqlObject toCustomColumnSqlObject(Object obj, String alias) {
     return AliasedObject.toAliasedObject(toCustomColumnSqlObject(obj), alias);
   }
-  
+
   /**
    * Converts a table Object to a SqlObject.
    * <p>
@@ -378,7 +378,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a custom table SqlObject
    * @return a SqlObject for the given Object.
    */
@@ -388,7 +388,7 @@ public abstract class Converter<SrcType, DstType>
     }
     return toCustomSqlObject(obj);
   }
-  
+
   /**
    * Converts a constraint Object to a SqlObject for use in a constraint
    * clause..
@@ -407,7 +407,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a custom constraint SqlObject
    * @return a SqlObject for the given Object.
    */
@@ -420,7 +420,7 @@ public abstract class Converter<SrcType, DstType>
     }
     return new ConstraintClause.Prefix(toCustomSqlObject(obj));
   }
-  
+
   /**
    * Converts a index Object to a SqlObject.
    * <p>
@@ -433,7 +433,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a custom index SqlObject
    * @return a SqlObject for the given Object.
    */
@@ -443,7 +443,7 @@ public abstract class Converter<SrcType, DstType>
     }
     return toCustomSqlObject(obj);
   }
-  
+
   /**
    * Converts a function Object to a SqlObject.
    * <p>
@@ -456,7 +456,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a custom function SqlObject
    * @return a SqlObject for the given Object.
    */
@@ -466,7 +466,7 @@ public abstract class Converter<SrcType, DstType>
     }
     return toCustomSqlObject(obj);
   }
-    
+
   /**
    * Converts a value Object to a SqlObject.
    * <p>
@@ -478,7 +478,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a value SqlObject
    * @return a SqlObject for the given Object.
    */
@@ -494,7 +494,7 @@ public abstract class Converter<SrcType, DstType>
     }
     return new ValueObject(obj);
   }
-    
+
   /**
    * Converts a value Object to a SqlObject with the given alias.
    * <p>
@@ -509,7 +509,7 @@ public abstract class Converter<SrcType, DstType>
    * <p>
    * Result of previous conversion is wrapped as an {@link AliasedObject} if
    * the given alias is non-{@code null}.
-   * 
+   *
    * @param obj object to coerce to a value SqlObject
    * @param alias optional column alias for the object
    * @return a SqlObject for the given Object with the given alias.
@@ -529,7 +529,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a custom SqlObject
    * @return a SqlObject for the given Object.
    */
@@ -563,7 +563,7 @@ public abstract class Converter<SrcType, DstType>
    * <p>
    * Result of previous conversion is wrapped as an {@link AliasedObject} if
    * the given alias is non-{@code null}.
-   * 
+   *
    * @param obj object to coerce to a custom SqlObject
    * @param alias optional column alias for the object
    * @return a SqlObject for the given Object with the given alias.
@@ -584,7 +584,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
-   * 
+   *
    * @param table object to coerce to a table definition SqlObject
    * @return the given table Object wrapped as a SqlObject.
    */
@@ -608,7 +608,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
-   * 
+   *
    * @param column object to coerce to a typed column definition SqlObject
    * @return the given table Object wrapped as a SqlObject.
    */
@@ -630,13 +630,13 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
-   * <li>Result of the conversions below wrapped as a {@link CustomExpression}</li>
+   * <li>Result of the conversions below wrapped as a {@link CustomExpression}
    *   <ul>
    *   <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    *   <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
    *   </ul>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to an Expression
    * @return the given Object as an Expression
    */
@@ -656,7 +656,7 @@ public abstract class Converter<SrcType, DstType>
    * Conversions (in order):
    * <ul>
    * <li>{@code Condition} -&gt; {@code Condition}</li>
-   * <li>Result of the conversions below wrapped as a {@link CustomCondition}</li>
+   * <li>Result of the conversions below wrapped as a {@link CustomCondition}
    *   <ul>
    *   <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
    *   <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
@@ -685,7 +685,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link Subquery} -&gt; {@link Subquery}</li>
    * <li>{@link java.lang.Object} -&gt; {@link Subquery}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a Subquery
    * @return a Subquery for the given Object.
    */
@@ -705,7 +705,7 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
-   * 
+   *
    * @param obj object to coerce to a constraint clause SqlObject
    * @return a SqlObject for the given Object.
    */
