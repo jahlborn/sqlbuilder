@@ -29,7 +29,7 @@ import com.healthmarketscience.sqlbuilder.custom.oracle.OraTableSpaceClause;
 
 /**
  * Query which generates a CREATE TABLE statement.
- * <p/>
+ * <p>
  * Note that this query supports custom SQL syntax, see {@link Hook} for more
  * details.
  *

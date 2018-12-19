@@ -49,7 +49,7 @@ abstract class NestableClause extends SqlObject
   /**
    * Controls whether or not this clause will wrap itself in parentheses (for
    * relevant clauses).
-   * <p/>
+   * <p>
    * Warning: you should generally <b>not</b> disable parentheses as this may
    * change the meaning of the SQL query.  However, sometimes non-standard SQL
    * queries may require direct control over the wrapping parentheses.

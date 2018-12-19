@@ -19,13 +19,13 @@ package com.healthmarketscience.sqlbuilder.custom;
 /**
  * Enum defining the type of customization relative to the HookAnchor
  * (which is typically a sub-clause within a query).
- * <p/>
+ * <p>
  * The {@code PREFIX}, {@code REPLACEMENT}, and {@code SUFFIX} types are all
  * dependent on the anchor clause itself.  These customizations will only be
  * inserted if the anchor clause itself is included.  Note that if any {@code
  * REPLACEMENT} type is used, the anchor text itself will <i>not</i> be
  * inserted.
- * <p/>
+ * <p>
  * The {@code BEFORE} and {@code AFTER} types, while similar in location to
  * the {@code PREFIX} and {@code SUFFIX} types (respectively), are included
  * regardless of whether or not the anchor clause itself is included (they are

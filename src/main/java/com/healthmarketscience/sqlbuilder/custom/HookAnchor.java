@@ -20,7 +20,7 @@ package com.healthmarketscience.sqlbuilder.custom;
  * Marker interface for the custom hook anchors use by specific SqlObjects.
  * The hook anchors typically refer to sub-clauses within the query, but may
  * also be absolute positions.
- * <p/>
+ * <p>
  * See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
  * custom SQL syntax.
  *
