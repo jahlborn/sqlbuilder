@@ -54,14 +54,17 @@ public class DbConstraint extends DbObject<DbObject<?>> implements Constraint {
     _type = type;
   }
 
+  @Override
   public Type getType() {
     return _type;
   }
 
+  @Override
   public String getConstraintNameSQL() {
     return getName();
   }
 
+  @Override
   public List<DbColumn> getColumns() {
     return _columns;
   }

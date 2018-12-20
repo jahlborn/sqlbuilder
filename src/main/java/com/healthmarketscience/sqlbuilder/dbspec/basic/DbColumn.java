@@ -78,18 +78,22 @@ public class DbColumn extends DbObject<DbTable>
     }
   }
 
+  @Override
   public DbTable getTable() {
     return getParent();
   }
     
+  @Override
   public String getColumnNameSQL() {
     return getName();
   }
     
+  @Override
   public String getTypeNameSQL() {
     return _typeName;
   }
     
+  @Override
   public Integer getTypeLength() {
     if(!_qualifiers.isEmpty()) {
       Object first = _qualifiers.get(0);
@@ -100,10 +104,12 @@ public class DbColumn extends DbObject<DbTable>
     return null;
   }
 
+  @Override
   public List<Object> getTypeQualifiers() {
     return _qualifiers;
   }
 
+  @Override
   public List<DbConstraint> getConstraints() {
     return _constraints;
   }
@@ -117,6 +123,7 @@ public class DbColumn extends DbObject<DbTable>
     return this;
   }
 
+  @Override
   public Object getDefaultValue() {
     return _defaultValue;
   }

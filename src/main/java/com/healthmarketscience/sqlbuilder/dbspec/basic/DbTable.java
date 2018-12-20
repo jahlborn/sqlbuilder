@@ -47,22 +47,26 @@ public class DbTable extends DbObject<DbSchema> implements Table {
     _alias = alias;
   }
 
+  @Override
   public String getAlias() {
     return _alias;
   }
-    
+
+  @Override
   public String getTableNameSQL() {
     return getAbsoluteName();
   }
 
+  @Override
   public List<DbColumn> getColumns() {
     return _columns;
   }
 
+  @Override
   public List<DbConstraint> getConstraints() {
     return _constraints;
   }
-    
+
   /**
    * @param name name of the column to find
    * @return the column previously added to this table with the given name, or
@@ -98,7 +102,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
   public DbColumn addColumn(String name) {
     return addColumn(name, null, null, null);
   }
-  
+
   /**
    * Creates and adds an typed column with the given parameters to this table.
    * <p>
@@ -110,7 +114,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    */
   public DbColumn addColumn(String name, String typeName, Integer typeLength) {
     return addColumn(name, typeName, typeLength, null);
-  }    
+  }
 
   /**
    * Creates and adds an typed column with the given parameters to this table.
@@ -122,12 +126,12 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    * @param typeScale optional scale specification for the column
    * @return the freshly created column
    */
-  public DbColumn addColumn(String name, String typeName, 
+  public DbColumn addColumn(String name, String typeName,
                             Integer typePrecision, Integer typeScale) {
     DbColumn column = getSpec().createColumn(this, name, typeName,
                                              typePrecision, typeScale);
     return addColumn(column);
-  }    
+  }
 
   /**
    * Creates and adds an typed column with the given parameters to this table.
@@ -140,7 +144,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    */
   public DbColumn addColumn(String name, int type, Integer typeLength) {
     return addColumn(name, type, typeLength, null);
-  }    
+  }
 
   /**
    * Creates and adds an typed column with the given parameters to this table.
@@ -152,11 +156,11 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    * @param typeScale optional scale specification for the column
    * @return the freshly created column
    */
-  public DbColumn addColumn(String name, int type, Integer typePrecision, 
+  public DbColumn addColumn(String name, int type, Integer typePrecision,
                             Integer typeScale) {
-    return addColumn(name, DbColumn.getTypeName(type), typePrecision, 
+    return addColumn(name, DbColumn.getTypeName(type), typePrecision,
                      typeScale);
-  }    
+  }
 
   /**
    * Adds the given column to this table.
@@ -169,7 +173,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
     _columns.add(checkOwnership(column));
     return column;
   }
-    
+
   /**
    * Creates and adds unique constraint with the given parameters to this
    * table.
@@ -208,7 +212,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    * @param referencedTableName the name of the referenced table
    * @param referencedColNames the names of the referenced columns
    */
-  public DbForeignKeyConstraint foreignKey(String name, String[] colNames, 
+  public DbForeignKeyConstraint foreignKey(String name, String[] colNames,
                                            String referencedTableName,
                                            String[] referencedColNames)
   {
@@ -228,7 +232,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    * @param referencedTableName the name of the referenced table
    * @param referencedColNames the names of the referenced columns
    */
-  public DbForeignKeyConstraint foreignKey(String name, String[] colNames, 
+  public DbForeignKeyConstraint foreignKey(String name, String[] colNames,
                                            String referencedSchemaName,
                                            String referencedTableName,
                                            String[] referencedColNames)
@@ -249,7 +253,7 @@ public class DbTable extends DbObject<DbSchema> implements Table {
    * @param referencedTable the referenced table
    * @param refColumns the referenced columns
    */
-  public DbForeignKeyConstraint foreignKey(String name, DbColumn[] columns, 
+  public DbForeignKeyConstraint foreignKey(String name, DbColumn[] columns,
                                            DbTable referencedTable,
                                            DbColumn[] refColumns)
   {
@@ -291,10 +295,10 @@ public class DbTable extends DbObject<DbSchema> implements Table {
   public RejoinTable rejoin(String newAlias) {
     return new RejoinTable(this, newAlias);
   }
-  
+
   @Override
   public String toString() {
     return super.toString() + "(" + getAlias() + ")";
   }
-  
+
 }

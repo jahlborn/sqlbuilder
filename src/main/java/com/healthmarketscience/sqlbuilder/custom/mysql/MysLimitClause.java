@@ -76,11 +76,13 @@ public class MysLimitClause extends CustomSyntax
     collectSchemaObjects(_rowCount, vContext);
   }
 
+  @Override
   public final MysLimitClause validate() throws ValidationException {
     doValidate();
     return this;
   }
 
+  @Override
   public void validate(ValidationContext vContext)
     throws ValidationException
   {

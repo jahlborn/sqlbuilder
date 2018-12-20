@@ -36,7 +36,7 @@ public abstract class Converter<SrcType, DstType>
   public static final Converter<Object, SqlObject> CUSTOM_TO_OBJ =
     new Converter<Object, SqlObject>() {
     @Override
-      public SqlObject convert(Object obj) {
+    public SqlObject convert(Object obj) {
         return toCustomSqlObject(obj);
       }
     };
@@ -95,7 +95,7 @@ public abstract class Converter<SrcType, DstType>
   public static final Converter<Object, Expression> CUSTOM_TO_EXPRESSION =
     new Converter<Object, Expression>() {
     @Override
-      public Expression convert(Object obj) {
+    public Expression convert(Object obj) {
         return toExpressionObject(obj);
       }
     };
@@ -107,7 +107,7 @@ public abstract class Converter<SrcType, DstType>
   public static final Converter<Object, Condition> CUSTOM_TO_CONDITION =
     new Converter<Object, Condition>() {
     @Override
-      public Condition convert(Object obj) {
+    public Condition convert(Object obj) {
         return toConditionObject(obj);
       }
     };
@@ -118,7 +118,7 @@ public abstract class Converter<SrcType, DstType>
   public static final Converter<Object, SqlObject> TYPED_COLUMN_TO_OBJ =
     new Converter<Object, SqlObject>() {
     @Override
-      public SqlObject convert(Object value) {
+    public SqlObject convert(Object value) {
         return toCustomTypedColumnSqlObject(value);
       }
     };
@@ -129,7 +129,7 @@ public abstract class Converter<SrcType, DstType>
   public static final Converter<Object, Subquery> CUSTOM_TO_SUBQUERY =
     new Converter<Object, Subquery>() {
     @Override
-      public Subquery convert(Object value) {
+    public Subquery convert(Object value) {
         return toSubquery(value);
       }
     };
@@ -139,7 +139,7 @@ public abstract class Converter<SrcType, DstType>
   public static final Converter<Object, SqlObject> CUSTOM_TO_CONSTRAINTCLAUSE =
     new Converter<Object, SqlObject>() {
     @Override
-      public SqlObject convert(Object value) {
+    public SqlObject convert(Object value) {
         return toCustomConstraintClause(value);
       }
     };
@@ -630,11 +630,11 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
-   * <li>Result of the conversions below wrapped as a {@link CustomExpression}
-   *   <ul>
+   * <li>Result of the conversions below wrapped as a {@link CustomExpression}</li>
+   *   <li><ul>
    *   <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    *   <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
-   *   </ul>
+   *   </ul></li>
    * </ul>
    *
    * @param obj object to coerce to an Expression
@@ -656,15 +656,15 @@ public abstract class Converter<SrcType, DstType>
    * Conversions (in order):
    * <ul>
    * <li>{@code Condition} -&gt; {@code Condition}</li>
-   * <li>Result of the conversions below wrapped as a {@link CustomCondition}
-   *   <ul>
+   * <li>Result of the conversions below wrapped as a {@link CustomCondition}</li>
+   *   <li><ul>
    *   <li>{@link com.healthmarketscience.sqlbuilder.dbspec.Column} -&gt; {@link ColumnObject}</li>
    *   <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    *   <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    *   <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    *   <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
    *   <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
-   *   </ul>
+   *   </ul></li>
    * </ul>
    *
    * @param obj object to coerce to a Condition

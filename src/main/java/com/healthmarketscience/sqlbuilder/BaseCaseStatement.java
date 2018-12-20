@@ -86,6 +86,7 @@ public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement<ThisT
     return getThisType();
   }
   
+  @Override
   public final ThisType validate()
     throws ValidationException
   {
@@ -93,6 +94,7 @@ public abstract class BaseCaseStatement<ThisType extends BaseCaseStatement<ThisT
     return getThisType();
   }
 
+  @Override
   public void validate(ValidationContext vContext)
     throws ValidationException
   {

@@ -139,6 +139,7 @@ public class CommonTableExpression extends SqlObject
     app.setContext(context);
   }
 
+  @Override
   public final CommonTableExpression validate()
     throws ValidationException
   {
@@ -146,6 +147,7 @@ public class CommonTableExpression extends SqlObject
     return this;
   }
 
+  @Override
   public void validate(ValidationContext vContext)
     throws ValidationException
   {
@@ -197,30 +199,37 @@ public class CommonTableExpression extends SqlObject
       _table = table;
     }
     
+    @Override
     public CTETable getTable() {
       return _table;
     }
   
+    @Override
     public String getColumnNameSQL() {
       return _name;
     }
 
+    @Override
     public String getTypeNameSQL() {
       return null;
     }
 
+    @Override
     public Integer getTypeLength() {
       return null;
     }
 
+    @Override
     public List<?> getTypeQualifiers() {
       return Collections.emptyList();
     }
 
+    @Override
     public List<? extends Constraint> getConstraints() {
       return Collections.emptyList();
     }
 
+    @Override
     public Object getDefaultValue() {
       return null;
     }
@@ -244,18 +253,22 @@ public class CommonTableExpression extends SqlObject
       _name = name;
     }
 
+    @Override
     public String getAlias() {
       return _alias;
     }
   
+    @Override
     public String getTableNameSQL() {
       return _name;
     }
 
+    @Override
     public List<? extends Column> getColumns() {
       return _columns;
     }
   
+    @Override
     public List<? extends Constraint> getConstraints() {
       return Collections.emptyList();
     }    

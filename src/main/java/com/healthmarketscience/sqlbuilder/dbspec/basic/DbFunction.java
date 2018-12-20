@@ -34,6 +34,7 @@ public class DbFunction extends DbObject<DbFunctionPackage>
     return getParent();
   }
 
+  @Override
   public String getFunctionNameSQL() {
     return getAbsoluteName();
   }

@@ -41,6 +41,7 @@ public class DbCheckConstraint extends DbConstraint
     _condition = condition;
   }
 
+  @Override
   public Condition getCondition() {
     return _condition;
   }

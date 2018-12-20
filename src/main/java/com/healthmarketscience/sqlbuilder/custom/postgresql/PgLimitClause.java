@@ -65,11 +65,13 @@ public class PgLimitClause extends CustomSyntax
     collectSchemaObjects(_value, vContext);
   }
 
+  @Override
   public final PgLimitClause validate() throws ValidationException {
     doValidate();
     return this;
   }
 
+  @Override
   public void validate(ValidationContext vContext)
     throws ValidationException
   {

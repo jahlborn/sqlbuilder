@@ -38,6 +38,7 @@ public abstract class Query<ThisType extends Query<ThisType>>
 {
   protected Query() {}
 
+  @Override
   public final ThisType validate()
     throws ValidationException
   {
@@ -45,6 +46,7 @@ public abstract class Query<ThisType extends Query<ThisType>>
     return getThisType();
   }
 
+  @Override
   public void validate(ValidationContext vContext)
     throws ValidationException
   {

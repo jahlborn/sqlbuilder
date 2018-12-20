@@ -49,14 +49,17 @@ public class DbIndex extends DbObject<DbSchema> implements Index {
     return getParent();
   }
     
+  @Override
   public String getIndexNameSQL() {
     return getAbsoluteName();
   }
 
+  @Override
   public DbTable getTable() {
     return _table;
   }
 
+  @Override
   public List<DbColumn> getColumns() {
     return _columns;
   }

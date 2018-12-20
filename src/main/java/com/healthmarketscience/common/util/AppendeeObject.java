@@ -34,6 +34,7 @@ public class AppendeeObject
 {
   public AppendeeObject() {}
 
+  @Override
   public void appendTo(AppendableExt a) throws IOException {
     // append Object.toString() to the AppendableExt
     a.append(super.toString());

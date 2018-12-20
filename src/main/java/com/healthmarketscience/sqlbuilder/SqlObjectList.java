@@ -104,6 +104,7 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
   /**
    * @return a mutable Iterator over the objects in the list
    */
+  @Override
   public Iterator<ObjType> iterator() { return _objects.iterator(); }
 
   /**

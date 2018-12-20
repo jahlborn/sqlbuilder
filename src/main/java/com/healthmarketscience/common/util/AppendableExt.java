@@ -133,6 +133,7 @@ public class AppendableExt implements Appendable
     _context = context;
   }
 
+  @Override
   public AppendableExt append(char c)
     throws IOException
   {
@@ -146,6 +147,7 @@ public class AppendableExt implements Appendable
    * Note that if the given CharSequence is also an Appendee, it will be
    * handled as an Appendee instead.
    */
+  @Override
   public AppendableExt append(CharSequence s)
     throws IOException
   {
@@ -163,6 +165,7 @@ public class AppendableExt implements Appendable
    * Note that if the given CharSequence is also an Appendee, it will be
    * handled as an Appendee instead (but the range will still be respected).
    */
+  @Override
   public AppendableExt append(CharSequence s, int start, int end)
     throws IOException
   {
@@ -300,6 +303,7 @@ public class AppendableExt implements Appendable
       _end = end;
     }
 
+    @Override
     public Appendable append(char c)
       throws IOException
     {
@@ -310,6 +314,7 @@ public class AppendableExt implements Appendable
       return this;
     }
 
+    @Override
     public Appendable append(CharSequence csq)
       throws IOException
     {
@@ -325,6 +330,7 @@ public class AppendableExt implements Appendable
       return this;
     }
 
+    @Override
     public Appendable append(CharSequence csq, int start, int end)
       throws IOException
     {
