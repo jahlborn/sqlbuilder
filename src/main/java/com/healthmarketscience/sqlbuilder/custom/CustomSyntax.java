@@ -26,7 +26,7 @@ import com.healthmarketscience.sqlbuilder.SqlObject;
  * pattern to enable custom instances to add themselves to the appropriate
  * locations in specific queries.  Subclasses only need to implement support
  * for queries to which they apply.
- * <p/>
+ * <p>
  * See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
  * custom SQL syntax.
  *

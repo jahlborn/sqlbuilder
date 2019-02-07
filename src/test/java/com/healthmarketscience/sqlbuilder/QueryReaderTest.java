@@ -61,27 +61,27 @@ public class QueryReaderTest extends BaseSqlTestCase {
     String selectStr = query.toString();
     checkResult(selectStr,
                 "SELECT t0.col1,t0.col3,foo,bar,t0.col2 FROM Schema1.Table1 t0");
-    
+
     assertEquals((0 + startIndex), col1.getIndex());
     assertEquals((1 + startIndex), col4.getIndex());
     assertEquals(false, col2.isInQuery());
     assertEquals((2 + startIndex), col3.getIndex());
-    
+
     MockResultSet mockRs = new MockResultSet();
     ResultSet rs = (ResultSet)
       Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
-                             new Class[]{ResultSet.class},
+                             new Class<?>[]{ResultSet.class},
                              mockRs);
 
     Object obj1 = new Object();
-    
+
     mockRs._startIndex = startIndex;
     mockRs._results.add("foo");
     mockRs._results.add(42);
     mockRs._results.add(obj1);
     mockRs._results.add(13L);
     mockRs._results.add(true);
-    
+
     assertEquals("foo", col1.getString(rs));
     assertNull(col2.getObject(rs));
     assertEquals(obj1, col3.getObject(rs));
@@ -92,8 +92,8 @@ public class QueryReaderTest extends BaseSqlTestCase {
     try {
       col2.getInt(rs);
       fail("SQLException should have been thrown");
-    } catch(SQLException e) {}      
-    
+    } catch(SQLException e) {}
+
     try {
       query.toString();
       fail("IllegalStateException should have been thrown");
@@ -110,14 +110,14 @@ public class QueryReaderTest extends BaseSqlTestCase {
                  mockRs._updateResults);
   }
 
-  
+
   private static class MockResultSet
     implements InvocationHandler
   {
     public int _startIndex;
     public List<Object> _results = new ArrayList<Object>();
     public List<Object> _updateResults = new ArrayList<Object>();
-    
+
     public Object invoke(Object proxy, Method method, Object[] args)
       throws Throwable
     {
@@ -153,5 +153,5 @@ public class QueryReaderTest extends BaseSqlTestCase {
       throw new UnsupportedOperationException();
     }
   }
-  
+
 }

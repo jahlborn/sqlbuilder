@@ -26,9 +26,9 @@ limitations under the License.
  *     (and subpackages) enable this type of customization, read on for
  *     details.</li>
  * </ul>
- * <p/>
+ *
  * <h2>Custom SQL Syntax</h2>
- * <p/>
+ * <p>
  * Inserting custom SQL syntax into queries involves a few different pieces
  * all working together.
  * <ul>
@@ -59,20 +59,20 @@ limitations under the License.
  *     However, any ad hoc custom syntax can be added to customizable queries
  *     by specifying the HookType and "hook anchor" when adding (e.g. {@link com.healthmarketscience.sqlbuilder.SelectQuery#addCustomization(Hook,HookType,Object)})</li>
  * </ul>
- * <p/>
+ *
  * <h3>Supported Customizations</h3>
- * <p/>
+ * <p>
  * SqlBuilder currently has existing constructs for few common database
  * specific customizations:
  * <ul>
  * <li>Oracle {@link com.healthmarketscience.sqlbuilder.custom.oracle}</li>
  * <li>MySQL {@link com.healthmarketscience.sqlbuilder.custom.mysql}</li>
  * <li>PostreSQL {@link com.healthmarketscience.sqlbuilder.custom.postgresql}</li>
- * <li>SQLServer {@link com.healthmarketscience.sqlbuilder.custom.sqlserver}</li>
+ * <li>SQL Server {@link com.healthmarketscience.sqlbuilder.custom.sqlserver}</li>
  * </ul>
- * <p/>
+ *
  * <h3>Customizable Queries</h3>
- * <p/>
+ * <p>
  * Only a few SqlBuilder queryies are currently customizable:
  * <ul>
  * <li>{@link com.healthmarketscience.sqlbuilder.SelectQuery}</li>
@@ -81,4 +81,3 @@ limitations under the License.
  * </ul>
  */
 package com.healthmarketscience.sqlbuilder.custom;
-

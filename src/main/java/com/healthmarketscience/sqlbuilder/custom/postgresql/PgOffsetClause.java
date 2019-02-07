@@ -64,11 +64,13 @@ public class PgOffsetClause extends CustomSyntax
     collectSchemaObjects(_value, vContext);
   }
 
+  @Override
   public final PgOffsetClause validate() throws ValidationException {
     doValidate();
     return this;
   }
 
+  @Override
   public void validate(ValidationContext vContext)
     throws ValidationException
   {

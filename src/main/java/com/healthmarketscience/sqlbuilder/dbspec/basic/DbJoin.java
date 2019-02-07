@@ -60,18 +60,22 @@ public class DbJoin extends DbObject<DbObject<?>> implements Join {
     return _spec;
   }
 
+  @Override
   public DbTable getFromTable() {
     return _fromTable;
   }
     
+  @Override
   public DbTable getToTable() {
     return _toTable;
   }
 
+  @Override
   public List<DbColumn> getFromColumns() {
     return _fromColumns;
   }
     
+  @Override
   public List<DbColumn> getToColumns() {
     return _toColumns;
   }

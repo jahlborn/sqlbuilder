@@ -85,7 +85,7 @@ public abstract class SqlObject extends AppendeeObject
     StringAppendableExt app = new StringAppendableExt(size);
     app.setContext(context);
     return app.append(this).toString();
-  }  
+  }
 
   /**
    * Utility method for implementing the {@link Verifiable#validate()} method.
@@ -100,7 +100,7 @@ public abstract class SqlObject extends AppendeeObject
     // validate everything that's verifiable
     vContext.validateAll();
   }
-  
+
   /**
    * Utility method for classes which may not be in this package to invoke
    * {@link #collectSchemaObjects(ValidationContext)} on a SqlObject.
@@ -113,7 +113,7 @@ public abstract class SqlObject extends AppendeeObject
       obj.collectSchemaObjects(vContext);
     }
   }
-    
+
   /**
    * Used during Query.validate() calls to collect the dbschema objects
    * referenced in a query.  Any subclass of this class should add all

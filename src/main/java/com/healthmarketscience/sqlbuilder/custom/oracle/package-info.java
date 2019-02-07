@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 James Ahlborn
+Copyright (c) 2018 James Ahlborn
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,19 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.healthmarketscience.sqlbuilder.custom;
-
 /**
- * Marker interface for the custom hook anchors use by specific SqlObjects.
- * The hook anchors typically refer to sub-clauses within the query, but may
- * also be absolute positions.
- * <p>
- * See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
- * custom SQL syntax.
- *
- * @author James Ahlborn
+ * SqlBuilder customizations specific to the Oracle database.
  */
-public interface HookAnchor 
-{
-
-}
+package com.healthmarketscience.sqlbuilder.custom.oracle;

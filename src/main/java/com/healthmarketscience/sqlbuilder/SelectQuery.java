@@ -40,16 +40,16 @@ import com.healthmarketscience.sqlbuilder.custom.HookAnchor;
  * Query which generates a SELECT statement.  Supports arbitrary columns
  * (including "DISTINCT" modifier), "FOR UPDATE" clause, all join types,
  * "WHERE" clause, "GROUP BY" clause, "ORDER BY" clause, and "HAVING" clause.
- * <p/>
+ * <p>
  * Note that the "OFFSET" and "FETCH NEXT" clauses are supported from "SQL
  * 2008".
- * <p/>
+ * <p>
  * If Columns are used for any referenced columns, and no complicated joins
  * are required, the table list may be left empty and it will be
  * auto-generated in the append call.  Note, that this is not the most
  * efficient method (as this list will not be cached for the future due to
  * mutability constraints on <code>appendTo</code>).
- * <p/>
+ * <p>
  * Note that this query supports custom SQL syntax, see {@link Hook} for more
  * details.
  *

@@ -16,13 +16,14 @@ limitations under the License.
 
 package com.healthmarketscience.sqlbuilder;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 
-import com.healthmarketscience.common.util.Tuple2;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
-import java.util.ArrayList;
 
 /**
  * Object used to accummulate state during query validation.
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 public class ValidationContext {
 
   public static final boolean DEFAULT_LOCAL_ONLY = false;
-  
+
   private final ValidationContext _parent;
 
   private Collection<Column> _columns;
@@ -40,7 +41,7 @@ public class ValidationContext {
   /** whether or not collection/validation should proceed into nested
       subqueries */
   private boolean _localOnly;
-  private Collection<Tuple2<ValidationContext,? extends Verifiable<?>>> _verifiables;
+  private Collection<Map.Entry<ValidationContext,? extends Verifiable<?>>> _verifiables;
 
   public ValidationContext() {
     this(null, null, null, DEFAULT_LOCAL_ONLY);
@@ -49,16 +50,16 @@ public class ValidationContext {
   public ValidationContext(ValidationContext parent) {
     this(parent, null, null, DEFAULT_LOCAL_ONLY);
   }
-  
+
   public ValidationContext(boolean localOnly) {
     this(null, null, null, localOnly);
   }
-  
+
   public ValidationContext(Collection<Table> tables,
                            Collection<Column> columns) {
     this(null, tables, columns, DEFAULT_LOCAL_ONLY);
   }
-  
+
   public ValidationContext(ValidationContext parent,
                            Collection<Table> tables,
                            Collection<Column> columns,
@@ -68,7 +69,7 @@ public class ValidationContext {
     _columns = ((columns != null) ? columns : new HashSet<Column>());
     _localOnly = localOnly;
     _verifiables = ((_parent != null) ? _parent._verifiables :
-                    new ArrayList<Tuple2<ValidationContext,? extends Verifiable<?>>>(2));
+                    new ArrayList<Map.Entry<ValidationContext,? extends Verifiable<?>>>(2));
   }
 
   public ValidationContext getParent() {
@@ -86,7 +87,7 @@ public class ValidationContext {
   public void addTable(Table table) {
     _tables.add(table);
   }
-  
+
   public Collection<Column> getColumns() {
     return _columns;
   }
@@ -94,7 +95,7 @@ public class ValidationContext {
   public void setColumns(Collection<Column> newColumns) {
     _columns = newColumns;
   }
-  
+
   public void addColumn(Column column) {
     _columns.add(column);
   }
@@ -112,13 +113,13 @@ public class ValidationContext {
     if(verifiable == null) {
       throw new IllegalArgumentException("verifiable was null");
     }
-    _verifiables.add(Tuple2.create(this, verifiable));
+    _verifiables.add(new AbstractMap.SimpleImmutableEntry<>(this, verifiable));
   }
 
   public void validateAll() throws ValidationException {
-    for(Tuple2<ValidationContext,? extends Verifiable<?>> verifiable : _verifiables) {
+    for(Map.Entry<ValidationContext,? extends Verifiable<?>> verifiable : _verifiables) {
       try {
-        verifiable.get1().validate(verifiable.get0());
+        verifiable.getValue().validate(verifiable.getKey());
       } catch(ValidationException e) {
         e.setFailedVerifiable(verifiable);
         throw e;
@@ -138,7 +139,7 @@ public class ValidationContext {
       nestedQuery.collectSchemaObjects(new ValidationContext(this));
     }
   }
-  
+
   /**
    * Retrieves the tables referenced by the column objects.
    *
@@ -148,7 +149,7 @@ public class ValidationContext {
   {
     return getColumnTables(null);
   }
-  
+
   /**
    * Retrieves the tables referenced by the column objects.
    *

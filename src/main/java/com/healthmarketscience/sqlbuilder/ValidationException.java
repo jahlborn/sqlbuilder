@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.healthmarketscience.sqlbuilder;
 
-import com.healthmarketscience.common.util.Tuple2;
+import java.util.Map;
 
 
 /**
@@ -28,28 +28,28 @@ import com.healthmarketscience.common.util.Tuple2;
  */
 public class ValidationException extends RuntimeException
 {
-  private static final long serialVersionUID = -2933877497839744427L;  
+  private static final long serialVersionUID = -2933877497839744427L;
 
-  private transient Tuple2<ValidationContext,? extends Verifiable<?>> _failedVerifiable;
-  
+  private transient Map.Entry<ValidationContext,? extends Verifiable<?>> _failedVerifiable;
+
   public ValidationException(String message) {
     super(message);
   }
-  
+
   public ValidationException(String message, Throwable cause) {
     super(message, cause);
   }
-  
+
   public ValidationException(Throwable cause) {
     super(cause);
   }
 
-  public Tuple2<ValidationContext,? extends Verifiable<?>> getFailedVerifiable() {
+  public Map.Entry<ValidationContext,? extends Verifiable<?>> getFailedVerifiable() {
     return _failedVerifiable;
   }
 
   public void setFailedVerifiable(
-      Tuple2<ValidationContext,? extends Verifiable<?>> newFailedVerifiable) {
+      Map.Entry<ValidationContext,? extends Verifiable<?>> newFailedVerifiable) {
     _failedVerifiable = newFailedVerifiable;
   }
 
@@ -57,7 +57,7 @@ public class ValidationException extends RuntimeException
   public String getMessage() {
     String msg = super.getMessage();
     if(getFailedVerifiable() != null) {
-      Verifiable<?> verifiable = getFailedVerifiable().get1();
+      Verifiable<?> verifiable = getFailedVerifiable().getValue();
       try {
         msg = msg + " [Failed clause: " + verifiable + "]";
       } catch(Exception e) {
@@ -67,5 +67,5 @@ public class ValidationException extends RuntimeException
     }
     return msg;
   }
-  
+
 }

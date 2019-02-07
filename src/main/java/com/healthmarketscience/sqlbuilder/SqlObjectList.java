@@ -35,14 +35,14 @@ import com.healthmarketscience.common.util.AppendableExt;
  * @author James Ahlborn
  */
 public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
-  implements Iterable<ObjType>                                   
+  implements Iterable<ObjType>
 {
   /** the default delimiter used by a SqlObjectList */
   public static final String DEFAULT_DELIMITER = ",";
 
   private final String _delimiter;
   private final List<ObjType> _objects;
-    
+
   public SqlObjectList() {
     this(DEFAULT_DELIMITER, new LinkedList<ObjType>());
   }
@@ -64,7 +64,7 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
   public static <ObjType extends SqlObject> SqlObjectList<ObjType> create() {
     return new SqlObjectList<ObjType>();
   }
-  
+
   /**
    * Constructs and returns a new SqlObjectList, conveniently allows
    * construction without respecifying generic param type.
@@ -104,6 +104,7 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
   /**
    * @return a mutable Iterator over the objects in the list
    */
+  @Override
   public Iterator<ObjType> iterator() { return _objects.iterator(); }
 
   /**
@@ -112,7 +113,7 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
   public ListIterator<ObjType> listIterator() {
     return _objects.listIterator();
   }
-  
+
   /**
    * Adds the given object to the list
    * @param obj the object to be added
@@ -126,6 +127,7 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
    * Adds the given objects to the list
    * @param objs the objects to be added, no-op if {@code null}
    */
+  @SuppressWarnings("unchecked")
   public SqlObjectList<ObjType> addObjects(ObjType... objs) {
     if(objs == null) {
       return this;
@@ -157,6 +159,7 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
    *                  from the given objects
    * @param objs the objects to be added, no-op if {@code null}
    */
+  @SuppressWarnings("unchecked")
   public <SrcType, DstType extends ObjType> SqlObjectList<ObjType> addObjects(
       Converter<SrcType, DstType> converter, SrcType... objs)
   {
@@ -195,7 +198,7 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
       obj.collectSchemaObjects(vContext);
     }
   }
-    
+
   @Override
   public void appendTo(AppendableExt app) throws IOException
   {

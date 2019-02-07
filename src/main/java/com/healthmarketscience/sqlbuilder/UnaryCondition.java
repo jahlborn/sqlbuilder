@@ -76,8 +76,10 @@ public class UnaryCondition extends Condition
       
     }
 
+    @Override
     public boolean isPrefixOp() { return _isPrefixOp; }
     
+    @Override
     public Converter<Object,? extends SqlObject> getConverter() {
       return _converter; 
     }

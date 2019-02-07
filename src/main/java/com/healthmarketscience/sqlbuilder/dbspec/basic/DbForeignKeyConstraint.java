@@ -62,10 +62,12 @@ public class DbForeignKeyConstraint extends DbConstraint
     addObjects(_referencedColumns, _referencedTable, refColumns);
   }
 
+  @Override
   public DbTable getReferencedTable() {
     return _referencedTable;
   }
 
+  @Override
   public List<DbColumn> getReferencedColumns() {
     return _referencedColumns;
   }

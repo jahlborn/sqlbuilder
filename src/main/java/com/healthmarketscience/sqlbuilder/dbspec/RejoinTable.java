@@ -48,12 +48,16 @@ public class RejoinTable implements Table
 
   public Table getOriginalTable() { return _table; }
   
+  @Override
   public String getAlias() { return _alias; }
   
+  @Override
   public String getTableNameSQL() { return _table.getTableNameSQL(); }
 
+  @Override
   public List<RejoinColumn> getColumns() { return _columns; }
 
+  @Override
   public List<? extends Constraint> getConstraints() { return _table.getConstraints(); }
 
   /**
@@ -103,18 +107,25 @@ public class RejoinTable implements Table
 
     public Column getOriginalColumn() { return _column; }
     
+    @Override
     public RejoinTable getTable() { return RejoinTable.this; }
   
+    @Override
     public String getColumnNameSQL() { return _column.getColumnNameSQL(); }
 
+    @Override
     public String getTypeNameSQL() { return _column.getTypeNameSQL(); }
 
+    @Override
     public Integer getTypeLength() { return _column.getTypeLength(); }
 
+    @Override
     public List<?> getTypeQualifiers() { return _column.getTypeQualifiers(); }
 
+    @Override
     public List<? extends Constraint> getConstraints() { return _column.getConstraints(); }
 
+    @Override
     public Object getDefaultValue() { return _column.getDefaultValue(); }
 
     @Override
