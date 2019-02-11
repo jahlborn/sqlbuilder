@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="3.0.0" date="TBD" description="Update to Java 8">
+    <release version="3.0.0" date="2019-02-10" description="Update to Java 8">
       <action dev="jahlborn" type="update">
         SqlBuilder now requires a Java 8+ runtime.  As part of this update,
         all dependencies have been updated to their latest versions.
