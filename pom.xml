@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.healthmarketscience</groupId>
     <artifactId>openhms-parent</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
   </parent>
   <groupId>com.healthmarketscience.sqlbuilder</groupId>
   <artifactId>sqlbuilder</artifactId>
@@ -92,6 +92,37 @@
           <archive>
             <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <minmemory>128m</minmemory>
+          <maxmemory>512</maxmemory>
+          <links>
+            <list>https://docs.oracle.com/javase/8/docs/api/</list>
+          </links>
+          <source>1.8</source>
+          <stylesheetfile>${basedir}/src/site/javadoc/stylesheet.css</stylesheetfile>
+          <groups>
+            <group>
+              <title>SqlBuilder Core Package</title>
+              <packages>com.healthmarketscience.sqlbuilder</packages>
+            </group>
+            <group>
+              <title>Database Specification Packages</title>
+              <packages>com.healthmarketscience.sqlbuilder.dbspec*</packages>
+            </group>
+            <group>
+              <title>Custom Database Packages</title>
+              <packages>com.healthmarketscience.sqlbuilder.custom*</packages>
+            </group>
+            <group>
+              <title>Utility Package</title>
+              <packages>com.healthmarketscience.common*</packages>
+            </group>
+          </groups>
+          <quiet>true</quiet>
         </configuration>
       </plugin>
       <plugin>
