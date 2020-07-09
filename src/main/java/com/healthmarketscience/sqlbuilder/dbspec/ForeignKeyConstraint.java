@@ -32,4 +32,9 @@ public interface ForeignKeyConstraint extends Constraint
 
   /** @return the columns in the referenced table, if not the primary key */
   public List<? extends Column> getReferencedColumns();
+
+  @Override
+  public default Type getType() {
+    return Type.FOREIGN_KEY;
+  }
 }
