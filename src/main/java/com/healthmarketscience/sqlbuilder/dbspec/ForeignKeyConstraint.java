@@ -25,8 +25,13 @@ import java.util.List;
  *
  * @author James Ahlborn
  */
-public interface ForeignKeyConstraint extends Constraint 
+public interface ForeignKeyConstraint extends Constraint
 {
+  @Override
+  default public Type getType() {
+    return Type.FOREIGN_KEY;
+  }
+
   /** @return the table which is referenced by this constraint */
   public Table getReferencedTable();
 

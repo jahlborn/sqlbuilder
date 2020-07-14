@@ -25,8 +25,13 @@ import com.healthmarketscience.sqlbuilder.Condition;
  *
  * @author James Ahlborn
  */
-public interface CheckConstraint extends Constraint 
+public interface CheckConstraint extends Constraint
 {
+  @Override
+  default public Type getType() {
+    return Type.CHECK;
+  }
+
   /**
    * @return the check condition for this constraint
    */
