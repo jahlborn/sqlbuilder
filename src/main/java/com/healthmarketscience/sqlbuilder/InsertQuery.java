@@ -32,7 +32,7 @@ import java.util.Collection;
 public class InsertQuery extends BaseInsertQuery<InsertQuery>
 {
   private SqlObjectList<SqlObject> _values = SqlObjectList.create();
-    
+
   /** @param table table into which to insert the values. */
   public InsertQuery(Table table) {
     this((Object)table);
@@ -47,7 +47,7 @@ public class InsertQuery extends BaseInsertQuery<InsertQuery>
   public InsertQuery(Object tableStr) {
     super(Converter.toCustomTableSqlObject(tableStr));
   }
-  
+
   /**
    * Adds the given column and its corresponding value to the query.
    * @param columnStr {@code Object} -&gt; {@code SqlObject} conversions
@@ -75,7 +75,7 @@ public class InsertQuery extends BaseInsertQuery<InsertQuery>
     _values.addObjects(Converter.VALUE_TO_OBJ, values);
     return this;
   }
-    
+
   /** Adds the given column and its corresponding value to the query. */
   public InsertQuery addColumn(Column column, Object value) {
     return addCustomColumn(column, value);
@@ -102,7 +102,7 @@ public class InsertQuery extends BaseInsertQuery<InsertQuery>
     }
     return addCustomColumns(columnStrs, values);
   }
-    
+
   /** Adds the given columns and an equal number of QUESTION_MARK values to
       the query. */
   public InsertQuery addPreparedColumns(Column... columns) {
@@ -121,7 +121,7 @@ public class InsertQuery extends BaseInsertQuery<InsertQuery>
     }
     return this;
   }
-  
+
   /**
    * Does Query.validate() and additionally verifies that there are an equal
    * number of columns and values.
@@ -132,9 +132,11 @@ public class InsertQuery extends BaseInsertQuery<InsertQuery>
   {
     // check super
     super.validate(vContext);
-      
+
     if(_columns.size() != _values.size()) {
-      throw new ValidationException("mismatched columns and values for insert");
+      throw new ValidationException("mismatched columns and values for insert, found " +
+                                    _columns.size() + " columns for " + _values.size() +
+                                    " values");
     }
   }
 
@@ -143,13 +145,13 @@ public class InsertQuery extends BaseInsertQuery<InsertQuery>
     super.collectSchemaObjects(vContext);
     _values.collectSchemaObjects(vContext);
   }
-  
+
   @Override
   protected void appendTo(AppendableExt app, SqlContext newContext)
     throws IOException
   {
     newContext.setUseTableAliases(false);
-    
+
     appendPrefixTo(app);
     app.append("VALUES (").append(_values).append(")");
   }

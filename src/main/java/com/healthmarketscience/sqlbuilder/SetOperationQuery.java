@@ -29,8 +29,8 @@ import com.healthmarketscience.sqlbuilder.dbspec.Column;
  *
  * @author James Ahlborn
  */
-public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>> 
-  extends Query<ThisType> 
+public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
+  extends Query<ThisType>
 {
 
   /** Enumeration representing the type of union to use */
@@ -56,7 +56,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
   private Type _defaultType;
   private SqlObjectList<RelateTo> _queries = SqlObjectList.create("");
   private SqlObjectList<SqlObject> _ordering = SqlObjectList.create();
-  
+
   public SetOperationQuery(Type type) {
     this(type, (Object[])null);
   }
@@ -79,7 +79,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
                           }
                         }, queries);
   }
-  
+
   /** Adds the given queries to the list of queries with the default set
       operation type (the one configured in the constructor). */
   public ThisType addQueries(SelectQuery... queries) {
@@ -140,7 +140,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
   public ThisType addOrderings(Column... columns) {
     return addCustomOrderings((Object[])columns);
   }
-  
+
   /** Adds the given column index with the given direction to the "ORDER BY"
       clause */
   public ThisType addIndexedOrdering(Integer columnIdx,
@@ -179,20 +179,21 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
 
           // can't validate if using the "*" syntax
           ignoreColumnCount = true;
-          
+
         } else {
-          
+
           if(currentCount < 0) {
-            
+
             // get expected column count
             currentCount = selectQuery.getColumns().size();
-            
+
           } else {
-            
+
             // validate current query against expected count
             if(currentCount != selectQuery.getColumns().size()) {
               throw new ValidationException(
-                  "mismatched number of columns in union statement");
+                  "mismatched number of columns in union statement, found " + currentCount +
+                  " while query has " + selectQuery.getColumns().size());
             }
           }
         }
@@ -214,7 +215,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
 
     _queries.collectSchemaObjects(vContext);
   }
-  
+
   @Override
   protected void appendTo(AppendableExt app, SqlContext newContext)
     throws IOException
@@ -222,7 +223,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
     // this will only really apply to the ordering not to the sub-queries, as
     // they may use a different value internally
     newContext.setUseTableAliases(false);
-    
+
     app.append(_queries);
 
     if(!_ordering.isEmpty()) {
@@ -234,7 +235,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
   SqlObject getFirstQuery() {
     return (!_queries.isEmpty() ? _queries.get(0).getQuery() : null);
   }
-  
+
   /**
    * Convenience method to create a UNION query.
    */
@@ -248,7 +249,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
   public static UnionQuery union(SelectQuery... queries) {
     return new UnionQuery(Type.UNION, queries);
   }
-  
+
   /**
    * Convenience method to create a UNION ALL query.
    */
@@ -276,7 +277,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
   public static ExceptQuery except(SelectQuery... queries) {
     return new ExceptQuery(Type.EXCEPT, queries);
   }
-  
+
   /**
    * Convenience method to create a EXCEPT ALL query.
    */
@@ -304,7 +305,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
   public static IntersectQuery intersect(SelectQuery... queries) {
     return new IntersectQuery(Type.INTERSECT, queries);
   }
-  
+
   /**
    * Convenience method to create a INTERSECT ALL query.
    */
@@ -344,7 +345,7 @@ public class SetOperationQuery<ThisType extends SetOperationQuery<ThisType>>
         app.append(_type);
       }
       app.append(getQuery());
-    }    
+    }
   }
 
 }

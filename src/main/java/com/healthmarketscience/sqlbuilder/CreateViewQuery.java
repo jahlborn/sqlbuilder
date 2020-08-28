@@ -30,7 +30,7 @@ public class CreateViewQuery extends BaseCreateQuery<CreateViewQuery>
 {
   private SelectQuery _selectQuery;
   private boolean _withCheckOption;
-  
+
   /**
    * @param table the view to create
    */
@@ -54,7 +54,7 @@ public class CreateViewQuery extends BaseCreateQuery<CreateViewQuery>
   public DropQuery getDropQuery() {
     return new DropQuery(DropQuery.Type.VIEW, _object);
   }
-  
+
   /**
    * {@inheritDoc}
    *
@@ -67,7 +67,7 @@ public class CreateViewQuery extends BaseCreateQuery<CreateViewQuery>
     _columns.addObjects(Converter.CUSTOM_COLUMN_TO_OBJ, columnStrs);
     return this;
   }
-  
+
   /** Sets the SELECT query which will generate the data in the view */
   public CreateViewQuery setSelectQuery(SelectQuery selectQuery) {
     _selectQuery = selectQuery;
@@ -110,16 +110,17 @@ public class CreateViewQuery extends BaseCreateQuery<CreateViewQuery>
        (_columns.size() != selectColumns.size()) &&
        !_selectQuery.hasAllColumns()) {
       throw new ValidationException(
-          "mismatched columns and select columns for view");
+          "mismatched columns and select columns for view, found " + _columns.size() +
+          " while query has " + selectColumns.size());
     }
   }
-  
+
   @Override
   protected void appendTo(AppendableExt app, SqlContext newContext)
     throws IOException
   {
     newContext.setUseTableAliases(false);
-    
+
     app.append("CREATE VIEW ").append(_object);
     if(!_columns.isEmpty()) {
       app.append(" (").append(_columns).append(")");
@@ -129,5 +130,5 @@ public class CreateViewQuery extends BaseCreateQuery<CreateViewQuery>
       app.append(" WITH CHECK OPTION");
     }
   }
-  
+
 }

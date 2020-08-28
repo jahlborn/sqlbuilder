@@ -75,8 +75,10 @@ public abstract class Query<ThisType extends Query<ThisType>>
     }
 
     // make sure all column tables are referenced by a table (if desired)
-    if(!allTables.containsAll(vContext.getColumnTables())) {
-      throw new ValidationException("Columns used for unreferenced tables");
+    Collection<Table> contextTables = vContext.getColumnTables();
+    if(!allTables.containsAll(contextTables)) {
+      contextTables.removeAll(allTables);
+      throw new ValidationException("Columns used for unreferenced tables " + contextTables);
     }
   }
 
@@ -86,7 +88,7 @@ public abstract class Query<ThisType extends Query<ThisType>>
     vContext.addVerifiable(this);
     super.collectSchemaObjects(vContext);
   }
-  
+
   @Override
   public final void appendTo(AppendableExt app) throws IOException {
     prependTo(app);
@@ -114,7 +116,7 @@ public abstract class Query<ThisType extends Query<ThisType>>
   protected void prependTo(AppendableExt app) throws IOException {
     // base does nothing
   }
-  
+
   /**
    * Appends the sql query to the given AppendableExt within the given,
    * modifiable SqlContext.  This method is invoked by the
@@ -127,5 +129,5 @@ public abstract class Query<ThisType extends Query<ThisType>>
   protected abstract void appendTo(AppendableExt app, SqlContext newContext)
     throws IOException;
 
-  
+
 }

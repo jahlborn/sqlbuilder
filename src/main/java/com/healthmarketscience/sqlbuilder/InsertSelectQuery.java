@@ -66,7 +66,7 @@ public class InsertSelectQuery extends BaseInsertQuery<InsertSelectQuery>
     _columns.addObjects(Converter.CUSTOM_COLUMN_TO_OBJ, columnStrs);
     return this;
   }
-    
+
   /** Adds the given columns to the query */
   public InsertSelectQuery addColumns(Column... columns) {
     return addCustomColumns((Object[])columns);
@@ -79,14 +79,14 @@ public class InsertSelectQuery extends BaseInsertQuery<InsertSelectQuery>
     // treat select query as a separate subquery
     vContext.collectNestedQuerySchemaObjects(_selectQuery);
   }
-    
+
   @Override
   public void validate(ValidationContext vContext)
     throws ValidationException
   {
     // check super
     super.validate(vContext);
-      
+
     if(_selectQuery == null) {
       throw new ValidationException("missing select query");
     }
@@ -97,7 +97,8 @@ public class InsertSelectQuery extends BaseInsertQuery<InsertSelectQuery>
     if((_columns.size() != selectColumns.size()) &&
        !_selectQuery.hasAllColumns()) {
       throw new ValidationException(
-          "mismatched columns and select columns for insert");
+          "mismatched columns and select columns for insert, found " + _columns.size() +
+          " while query has " + selectColumns.size());
     }
   }
 
@@ -106,9 +107,9 @@ public class InsertSelectQuery extends BaseInsertQuery<InsertSelectQuery>
     throws IOException
   {
     newContext.setUseTableAliases(false);
-    
+
     appendPrefixTo(app);
     app.append(_selectQuery);
   }
-  
+
 }

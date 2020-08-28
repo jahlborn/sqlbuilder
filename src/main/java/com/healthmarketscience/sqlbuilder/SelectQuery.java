@@ -17,6 +17,7 @@ limitations under the License.
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -27,12 +28,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.healthmarketscience.common.util.AppendableExt;
+import com.healthmarketscience.sqlbuilder.custom.CustomSyntax;
+import com.healthmarketscience.sqlbuilder.custom.HookAnchor;
+import com.healthmarketscience.sqlbuilder.custom.HookType;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Join;
 import com.healthmarketscience.sqlbuilder.dbspec.Table;
-import com.healthmarketscience.sqlbuilder.custom.CustomSyntax;
-import com.healthmarketscience.sqlbuilder.custom.HookType;
-import com.healthmarketscience.sqlbuilder.custom.HookAnchor;
 
 
 
@@ -72,7 +73,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     private JoinType(String joinClause) {
       _joinClause = joinClause;
     }
-    
+
     @Override
     public String toString() { return _joinClause; }
   }
@@ -85,26 +86,26 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   {
     /** Anchor for the beginning of the query, only supports {@link
         HookType#BEFORE} */
-    HEADER, 
+    HEADER,
     /** Anchor for the "SELECT " clause */
-      SELECT, 
+      SELECT,
     /** Anchor for the "DISTINCT " clause */
-      DISTINCT, 
+      DISTINCT,
     /** Anchor for the " FROM " clause */
       FROM,
     /** Anchor for the " WHERE " clause */
-      WHERE, 
+      WHERE,
     /** Anchor for the " GROUP BY " clause */
-      GROUP_BY, 
+      GROUP_BY,
     /** Anchor for the " HAVING " sub-clause (only possible if there is a
         GROUP BY clause) */
-      HAVING, 
+      HAVING,
     /** Anchor for the " WINDOW " clause */
-      WINDOW, 
+      WINDOW,
     /** Anchor for the " ORDER BY " clause */
-      ORDER_BY, 
+      ORDER_BY,
     /** Anchor for the " FOR UPDATE " clause */
-      FOR_UPDATE, 
+      FOR_UPDATE,
     /** Anchor for the end of the query, only supports {@link
         HookType#BEFORE} */
       TRAILER;
@@ -136,7 +137,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
 
   /** Returns the ordering in this select query. */
   SqlObjectList<SqlObject> getOrdering() { return _ordering; }
-  
+
   /**
    * Returns <code>true</code> iff this select query is using some sort of
    * "*" syntax as a column placeholder.
@@ -162,7 +163,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     // track all join from tables in case the user does validation
     _joinFromTables.add(fromTable);
   }
-  
+
   /** Iff isDistinct is <code>true</code>, adds the DISTINCT keyword to the
       SELECT clause so that only unique rows are returned */
   public SelectQuery setIsDistinct(boolean isDistinct) {
@@ -176,7 +177,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     _forUpdate = forUpdate;
     return this;
   }
-  
+
   /**
    * Adds the given columns to the SELECT column list.
    * <p>
@@ -187,13 +188,13 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     _columns.addObjects(Converter.COLUMN_VALUE_TO_OBJ, columnStrs);
     return this;
   }
-    
+
   /** Adds the ALL_SYMBOL to the select column list. */
   public SelectQuery addAllColumns() {
     _columns.addObject(ALL_SYMBOL);
     return this;
   }
-    
+
   /** Adds a <code>"&lt;alias&gt;.*"</code> column to the select column
       list. */
   public SelectQuery addAllTableColumns(Table table) {
@@ -264,7 +265,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
                                    Object toTableStr, Condition joinCond)
   {
     addJoinFromTable(Converter.toCustomTableDefSqlObject(fromTableStr));
-    
+
     // add to table
     _joins.addObject(
         new JoinTo(joinType,
@@ -293,14 +294,14 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
                              List<? extends Column> fromColumns,
                              List<? extends Column> toColumns) {
     addJoinFromTable(Converter.toTableDefSqlObject(fromTable));
-    
+
     // add to table
     _joins.addObject(new JoinTo(joinType,
                                 Converter.toTableDefSqlObject(toTable),
                                 fromColumns, toColumns));
     return this;
   }
-  
+
   /**
    * Adds a join of the given type from fromTable to toTable with a join
    * condition requiring fromColumn to equal toColumn.
@@ -310,10 +311,10 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
                              Column fromColumn,
                              Column toColumn)
   {
-    return addJoin(joinType, fromTable, toTable, 
+    return addJoin(joinType, fromTable, toTable,
                    Collections.singletonList(fromColumn), Collections.singletonList(toColumn));
   }
-    
+
   /** Adds all of the joins of the given join type where each join is from
       join.getFromTable() to join.getToTable() with a join condition
       requiring each column in join.getFromColumns() to equal the
@@ -389,7 +390,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   /** Adds the given columns to the "GROUP BY" clause */
   public SelectQuery addGroupings(Column... columns) {
     return addCustomGroupings((Object[])columns);
-  }    
+  }
 
   /**
    * Allows access to the AND ComboCondition of the where clause to facilitate
@@ -399,8 +400,8 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   public ComboCondition getWhereClause() {
     return _condition;
   }
-  
-  /** 
+
+  /**
    * Adds a condition to the WHERE clause for the select query (AND'd with any
    * other WHERE conditions).  Note that the WHERE clause will only be
    * generated if some conditions have been added.
@@ -423,8 +424,8 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   public ComboCondition getHavingClause() {
     return _having;
   }
-  
-  /** 
+
+  /**
    * Adds a condition to the HAVING clause for the select query (AND'd with
    * any other HAVING conditions).  Note that the HAVING clause will only be
    * generated if some conditions have been added.
@@ -464,7 +465,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     _offset = Converter.toValueSqlObject(offset);
     return this;
   }
-  
+
   /**
    * Sets the value for the "FETCH NEXT" clause.  Note that this clause is
    * defined in "SQL 2008".
@@ -477,7 +478,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     _fetchCount = Converter.toValueSqlObject(fetchCount);
     return this;
   }
-  
+
   /**
    * Adds custom SQL to this query.  See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
    * custom SQL syntax.
@@ -490,11 +491,11 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     super.addCustomization(hook, type, obj);
     return this;
   }
-  
+
   /**
    * Adds custom SQL to this query.  See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
    * custom SQL syntax.
-   * @param obj the custom sql syntax on which the 
+   * @param obj the custom sql syntax on which the
    *            {@link CustomSyntax#apply(SelectQuery)} method will be
    *            invoked (may be {@code null}).
    */
@@ -526,7 +527,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   @Override
   public void validate(ValidationContext vContext)
     throws ValidationException
-  { 
+  {
     // if we have joins, check the tables, otherwise, the join tables will
     // be auto generated during output (so don't bother checking them)
     boolean checkTables = !(_joins.isEmpty());
@@ -540,28 +541,28 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     // the _joins collection (using add*FromTable() methods), and no
     // extended validation needs to be done
     if(checkTables && !_joinFromTables.isEmpty()) {
-      
+
       // verify that all the "from" tables not added to the _joins list
       // actually show up where they should.
-      // 
+      //
       // Given (join F0 to T0), (join F1 to T1), (join F2 to T2), ... :
       // Each table F<N> must show up among (F<0> U F<0..N-1> U T<0..N-1>)
       //
       // _joins  = F0, T0, T1, T2 ...
       // _joinFromTables = F0, F1, F2 ...
-      // 
+      //
       Set<Table> joinTables = new HashSet<Table>();
       Set<Table> fromTable = new HashSet<Table>();
       Set<Column> joinColumns = new HashSet<Column>();
       Iterator<SqlObject> fromIter = _joinFromTables.iterator();
       Iterator<SqlObject> toIter = _joins.iterator();
-      
+
       // the first toIter table is actually F0 (see comment above)
       toIter.next().collectSchemaObjects(
           new ValidationContext(fromTable, joinColumns));
 
       while(fromIter.hasNext() && toIter.hasNext()) {
-        
+
         // add the previous from table to the common from/to tables collection
         joinTables.addAll(fromTable);
 
@@ -584,11 +585,20 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
       }
       if(fromIter.hasNext() || toIter.hasNext()) {
         // mismatched tables?
-        throw new ValidationException("Mismatched tables in joins");
+        String type = "from";
+        Collection<SqlObject> extras = null;
+        if(fromIter.hasNext()) {
+          extras = getAll(fromIter);
+        } else {
+          type = "to";
+          extras = getAll(toIter);
+        }
+        throw new ValidationException("Mismatched tables in joins, found extra " + type +
+                                      " tables " + extras);
       }
-      
+
     }
-    
+
     validateOrdering(_columns.size(), _ordering, hasAllColumns());
 
     validateValue(_offset, "Offset", 0);
@@ -613,7 +623,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     if(ignoreColumnCount) {
       numColumns = Integer.MAX_VALUE;
     }
-    
+
     // check that any ordering indexes are valid
     for(SqlObject orderObj : ordering) {
       if(orderObj instanceof OrderObject) {
@@ -636,7 +646,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     }
     if(!((NumberValueObject)valueObj).isIntegralInRange(minVal, Long.MAX_VALUE)) {
       throw new ValidationException(
-          type + " value must be an integer >= " + minVal + ", given: " + 
+          type + " value must be an integer >= " + minVal + ", given: " +
           valueObj);
     }
   }
@@ -646,14 +656,14 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     throws IOException
   {
     newContext.setUseTableAliases(true);
-    
+
     customAppendTo(app, Hook.HEADER);
 
     // append basic select
     customAppendTo(app, Hook.SELECT, "SELECT ");
 
     maybeAppendTo(app, Hook.DISTINCT, "DISTINCT ", _isDistinct);
-      
+
     app.append(_columns);
 
     SqlObjectList<SqlObject> joins = _joins;
@@ -661,7 +671,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
       // auto generate the join tables from all the referenced columns
       joins = buildJoins(newContext);
     }
-    
+
     // append the joins
     maybeAppendTo(app, Hook.FROM, " FROM ", joins, !joins.isEmpty());
 
@@ -679,9 +689,9 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
 
     // append window definition clauses
     maybeAppendTo(app, Hook.WINDOW, " WINDOW ", _windows, !_windows.isEmpty());
-    
+
     // append ordering clause
-    maybeAppendTo(app, Hook.ORDER_BY, " ORDER BY ", _ordering, 
+    maybeAppendTo(app, Hook.ORDER_BY, " ORDER BY ", _ordering,
                   !_ordering.isEmpty());
 
     if(_offset != null) {
@@ -689,7 +699,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     }
     if(_fetchCount != null) {
       app.append(" FETCH NEXT ").append(_fetchCount).append(" ROWS ONLY");
-    }     
+    }
 
     maybeAppendTo(app, Hook.FOR_UPDATE, " FOR UPDATE", _forUpdate);
 
@@ -697,7 +707,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   }
 
   private SqlObjectList<SqlObject> buildJoins(SqlContext newContext) {
-    
+
     // auto generate the join tables from all the referenced columns
     SqlObjectList<SqlObject> joins = SqlObjectList.create();
 
@@ -713,7 +723,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
       // this is some sort of "constant" select, no columns/tables
       return joins;
     }
-        
+
     Collection<Table> columnTables = tmpVContext.getColumnTables(
         new LinkedHashSet<Table>());
 
@@ -731,11 +741,11 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
           parentQuery.collectSchemaObjects(outerVContext);
         }
       }
-        
+
       // remove any outer tables from the columnTables collection
       columnTables.removeAll(outerVContext.getColumnTables());
     }
-      
+
     for(Table table : columnTables) {
       joins.addObject(Converter.toTableDefSqlObject(table));
     }
@@ -758,7 +768,15 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
     }
     return false;
   }
-  
+
+  private static final <T> Collection<T> getAll(Iterator<T> iter) {
+    Collection<T> list = new ArrayList<>();
+    while(iter.hasNext()) {
+      list.add(iter.next());
+    }
+    return list;
+  }
+
   /**
    * Outputs the right side of a join clause
    * <code>"&lt;joinType&gt; &lt;toTable&gt; ON &lt;joinCondition&gt;"</code>.
@@ -779,7 +797,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
                    List<? extends Column> toColumns)
     {
       this(joinType, toTable, ComboCondition.and());
-      
+
       // create join condition
       ComboCondition onCondition = (ComboCondition)_onCondition;
       for(int i = 0; i < fromColumns.size(); ++i) {

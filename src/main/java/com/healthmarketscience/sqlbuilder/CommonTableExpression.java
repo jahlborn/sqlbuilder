@@ -99,7 +99,7 @@ public class CommonTableExpression extends SqlObject
 
   /**
    * Sets the CTE definition query.
-   * 
+   *
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#toCustomSqlObject(Object)}.
    */
@@ -160,7 +160,7 @@ public class CommonTableExpression extends SqlObject
     if(query instanceof SetOperationQuery<?>) {
       query = ((SetOperationQuery<?>)_query).getFirstQuery();
     }
-    
+
     if(query instanceof SelectQuery) {
 
       SelectQuery selectQuery = (SelectQuery)query;
@@ -179,7 +179,8 @@ public class CommonTableExpression extends SqlObject
         // col count should match query
         if(numCTECols != selectQuery.getColumns().size()) {
           throw new ValidationException(
-              "Mismatched number of columns in common table expression");
+              "Mismatched number of columns in common table expression, found " + numCTECols +
+              " while query has " + selectQuery.getColumns().size());
         }
       }
     }
@@ -193,17 +194,17 @@ public class CommonTableExpression extends SqlObject
   {
     private final String _name;
     private final CTETable _table;
-    
+
     private CTEColumn(String name, CTETable table) {
       _name = name;
       _table = table;
     }
-    
+
     @Override
     public CTETable getTable() {
       return _table;
     }
-  
+
     @Override
     public String getColumnNameSQL() {
       return _name;
@@ -237,7 +238,7 @@ public class CommonTableExpression extends SqlObject
     @Override
     public String toString() {
       return getColumnNameSQL();
-    } 
+    }
   }
 
   /**
@@ -257,7 +258,7 @@ public class CommonTableExpression extends SqlObject
     public String getAlias() {
       return _alias;
     }
-  
+
     @Override
     public String getTableNameSQL() {
       return _name;
@@ -267,16 +268,16 @@ public class CommonTableExpression extends SqlObject
     public List<? extends Column> getColumns() {
       return _columns;
     }
-  
+
     @Override
     public List<? extends Constraint> getConstraints() {
       return Collections.emptyList();
-    }    
+    }
 
     @Override
     public String toString() {
       return getTableNameSQL();
-    } 
+    }
   }
 
 }

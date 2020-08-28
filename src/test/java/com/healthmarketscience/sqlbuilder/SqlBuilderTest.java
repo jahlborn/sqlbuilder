@@ -989,7 +989,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     assertSame(select, ve.getFailedVerifiable().getValue());
 
     String msg = ve.getMessage();
-    checkResult(msg, "Columns used for unreferenced tables [Failed clause: SELECT t1.col_id FROM Schema1.Table1 t0]");
+    checkResult(msg, "Columns used for unreferenced tables [Table1(t1)] [Failed clause: SELECT t1.col_id FROM Schema1.Table1 t0]");
 
 
     select.addCustomColumns(new SqlObject() {
@@ -1009,7 +1009,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     assertNotNull(ve);
 
     msg = ve.getMessage();
-    assertTrue(msg.matches("Columns used for unreferenced tables \\[Verifiable: com.healthmarketscience.sqlbuilder.SelectQuery@[0-9a-f]+\\]"));
+    assertTrue(msg.matches("Columns used for unreferenced tables \\[Table1\\(t1\\)\\] \\[Verifiable: com.healthmarketscience.sqlbuilder.SelectQuery@[0-9a-f]+\\]"));
 
   }
 

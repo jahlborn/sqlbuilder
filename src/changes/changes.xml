@@ -4,6 +4,11 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="3.0.1" date="TBD">
+      <action dev="jahlborn" type="update" system="SourceForge2Features" issue="26">
+        Add more useful info to some validation failures.
+      </action>
+    </release>
     <release version="3.0.0" date="2019-02-10" description="Update to Java 8">
       <action dev="jahlborn" type="update">
         SqlBuilder now requires a Java 8+ runtime.  As part of this update,
