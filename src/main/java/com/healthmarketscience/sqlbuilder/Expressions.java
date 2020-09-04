@@ -217,14 +217,14 @@ public class Expressions
   /**
    * Convenience method for generating a CASE statement.
    */
-  public static CaseStatement caseExpr() {
+  public static CaseStatement caseStmt() {
     return new CaseStatement();
   }
 
   /**
    * Convenience method for generating a simple CASE statement.
    */
-  public static SimpleCaseStatement caseExpr(Object columnObj) {
+  public static SimpleCaseStatement caseStmt(Object columnObj) {
     return new SimpleCaseStatement(columnObj);
   }
 

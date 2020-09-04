@@ -567,7 +567,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
   }
 
   public void testCaseStatement() {
-    String caseClause1 = new SimpleCaseStatement(_table1_col1)
+    String caseClause1 = caseStmt(_table1_col1)
       .addNumericWhen(1, "one")
       .addNumericWhen(2, "two")
       .addElse("three").validate().toString();
@@ -575,7 +575,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(caseClause1,
                 "(CASE t0.col1 WHEN 1 THEN 'one' WHEN 2 THEN 'two' ELSE 'three' END)");
 
-    String caseClause2 = new CaseStatement()
+    String caseClause2 = caseStmt()
       .addWhen(equalTo(_table1_col2, "13"), _table1_col3)
       .addWhen(equalTo(_table1_col2, "14"), "14")
       .addElseNull().validate().toString();
@@ -583,7 +583,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     checkResult(caseClause2,
                 "(CASE WHEN (t0.col2 = '13') THEN t0.col3 WHEN (t0.col2 = '14') THEN '14' ELSE NULL END)");
 
-    String caseClause3 = new SimpleCaseStatement(_table1_col2).validate()
+    String caseClause3 = caseStmt(_table1_col2).validate()
       .toString();
     checkResult(caseClause3, "");
 
