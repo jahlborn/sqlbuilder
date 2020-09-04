@@ -18,6 +18,9 @@ package com.healthmarketscience.sqlbuilder;
 
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 
+import static com.healthmarketscience.sqlbuilder.Conditions.*;
+import static com.healthmarketscience.sqlbuilder.Expressions.*;
+
 /**
  *
  * @author James Ahlborn
@@ -30,41 +33,41 @@ public class CTETest extends BaseSqlTestCase
 
   public void testBasicCTE() throws Exception
   {
-    CommonTableExpression cte = new CommonTableExpression("cte_expr");
+    CommonTableExpression cte = cte("cte_expr");
     Column cteCol = cte.addColumn("col1");
     cte.setQuery(new SelectQuery().addColumns(_defTable2_col_id));
 
     SelectQuery selectQuery1 = new SelectQuery()
       .addCommonTableExpression(cte)
       .addColumns(_table1_col1, _defTable1_col2, _defTable2_col5, cteCol);
-    
+
     String selectStr1 = selectQuery1.validate().toString();
     assertEquals("WITH cte_expr (col1) AS (SELECT t2.col_id FROM Table2 t2) SELECT t0.col1,t1.col2,t2.col5,cte0.col1 FROM Schema1.Table1 t0,Table1 t1,Table2 t2,cte_expr cte0", selectStr1);
 
-    cte = new CommonTableExpression("sales")
+    cte = cte("sales")
       .setQuery(new SelectQuery().addAliasedColumn(_defTable2_col_id, "id"));
 
     SelectQuery selectQuery2 = new SelectQuery()
       .addCommonTableExpression(cte)
-      .addCustomColumns(new CustomSql("id"))
+      .addCustomColumns(customSql("id"))
       .addCustomFromTable("sales");
 
     String selectStr2 = selectQuery2.validate().toString();
     assertEquals("WITH sales AS (SELECT t2.col_id AS id FROM Table2 t2) SELECT id FROM sales", selectStr2);
 
-    CommonTableExpression cte1 = new CommonTableExpression("cte_expr");
+    CommonTableExpression cte1 = cte("cte_expr");
     Column cteCol1 = cte1.addColumn("col1");
     cte1.setQuery(new SelectQuery().addColumns(_defTable2_col_id));
 
-    CommonTableExpression cte2 = new CommonTableExpression("cte_expr2");
+    CommonTableExpression cte2 = cte("cte_expr2");
     cte2.addColumn("col2");
     cte2.setQuery(new SelectQuery().addColumns(_table1_col1)
-                  .addCondition(BinaryCondition.equalTo(_table1_col2, cteCol1)));
+                  .addCondition(equalTo(_table1_col2, cteCol1)));
 
     DeleteQuery deleteQuery1 = new DeleteQuery(cte2.getTable())
       .addCommonTableExpression(cte1)
       .addCommonTableExpression(cte2)
-      .addCondition(BinaryCondition.greaterThan(cte2.findColumn("col2"), 10, false));
+      .addCondition(greaterThan(cte2.findColumn("col2"), 10, false));
 
     String deleteStr1 = deleteQuery1.validate().toString();
     assertEquals("WITH cte_expr (col1) AS (SELECT t2.col_id FROM Table2 t2),cte_expr2 (col2) AS (SELECT t0.col1 FROM Schema1.Table1 t0,cte_expr cte0 WHERE (t0.col2 = cte0.col1)) DELETE FROM cte_expr2 WHERE (col2 > 10)", deleteStr1);
@@ -72,7 +75,7 @@ public class CTETest extends BaseSqlTestCase
 
   public void testRecursiveCTE() throws Exception
   {
-    CommonTableExpression cte = new CommonTableExpression("temp");
+    CommonTableExpression cte = cte("temp");
     Column nCol = cte.addColumn("n");
     Column factCol = cte.addColumn("fact");
 
@@ -84,11 +87,11 @@ public class CTETest extends BaseSqlTestCase
               SetOperationQuery.unionAll(
                   new SelectQuery().addCustomColumns(0, 1),
                   new SelectQuery().addCustomColumns(
-                      ComboExpression.add(nCol, 1),
-                      ComboExpression.multiply(
-                          ComboExpression.add(nCol, 1),
+                      add(nCol, 1),
+                      multiply(
+                          add(nCol, 1),
                           factCol))
-                  .addCondition(BinaryCondition.lessThan(nCol, 9, false)))));
+                  .addCondition(lessThan(nCol, 9, false)))));
 
     String selectStr1 = selectQuery1.validate().toString();
     assertEquals("WITH RECURSIVE temp (n,fact) AS (SELECT 0,1 UNION ALL SELECT (cte0.n + 1),((cte0.n + 1) * cte0.fact) FROM temp cte0 WHERE (cte0.n < 9)) SELECT cte0.* FROM temp cte0", selectStr1);

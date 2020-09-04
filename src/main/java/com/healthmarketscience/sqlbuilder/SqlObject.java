@@ -37,7 +37,7 @@ public abstract class SqlObject extends AppendeeObject
 {
   /** SqlObject which represents a <code>?</code> string for generating
       prepared statements. */
-  public static final Expression QUESTION_MARK = new Expression()
+  public static final SqlObject QUESTION_MARK = new Expression()
     {
       @Override
       public void appendTo(AppendableExt app) throws IOException {
@@ -60,7 +60,7 @@ public abstract class SqlObject extends AppendeeObject
     };
 
   /** SqlObject which represents a <code>NULL</code> value string */
-  public static final Expression NULL_VALUE = new Expression()
+  public static final SqlObject NULL_VALUE = new Expression()
     {
       @Override
       public void appendTo(AppendableExt app) throws IOException {
