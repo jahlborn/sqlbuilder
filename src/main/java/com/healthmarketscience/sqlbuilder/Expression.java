@@ -28,7 +28,7 @@ import com.healthmarketscience.common.util.AppendableExt;
  */
 public abstract class Expression extends NestableClause
 {
-  /** a Expression object which will always return <code>true</code> for
+  /** an Expression object which will always return <code>true</code> for
       {@link Expression#isEmpty}.  useful for selectively including expression
       blocks */
   public static final Expression EMPTY = new Expression() {
@@ -42,12 +42,12 @@ public abstract class Expression extends NestableClause
       }
     };
 
-  
+
   protected Expression() {}
-  
+
   @Override
   public Expression setDisableParens(boolean disableParens) {
     super.setDisableParens(disableParens);
     return this;
-  }  
+  }
 }

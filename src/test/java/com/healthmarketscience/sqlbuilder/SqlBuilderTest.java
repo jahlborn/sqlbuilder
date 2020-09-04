@@ -32,6 +32,8 @@ import com.healthmarketscience.sqlbuilder.dbspec.basic.DbIndex;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
+import static com.healthmarketscience.sqlbuilder.Conditions.*;
+import static com.healthmarketscience.sqlbuilder.Expressions.*;
 
 /**
  * @author James Ahlborn
@@ -82,7 +84,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                            ConstraintClause.primaryKey("id_pk"))
       .setColumnTypeName(_defTable1_col_id, "BIGINT")
       .addColumnConstraint(_defTable1_col_id, ConstraintClause.checkCondition(
-                               BinaryCondition.greaterThan(_defTable1_col_id, 10, false)))
+                               greaterThan(_defTable1_col_id, 10, false)))
       .addColumnConstraint(_defTable1_col3,
                            ConstraintClause.notNull())
       .setColumnDefaultValue(_defTable1_col3, new CustomSql("CURRENT_DATE"))
@@ -235,7 +237,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                   "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) ORDER BY t1.col2");
 
       String selectStr5 = selectQuery1.addCondition(
-        BinaryCondition.greaterThan(_defTable2_col4, 42, true))
+        greaterThan(_defTable2_col4, 42, true))
         .validate().toString();
       checkResult(selectStr5,
                   "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= 42) ORDER BY t1.col2");
@@ -246,7 +248,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       checkResult(selectStr6,
                   "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= 42) ORDER BY t1.col2,t2.col5 DESC");
 
-      String selectStr7 = selectQuery1.addHaving(BinaryCondition.greaterThan(_defTable1_col2, new NumberValueObject(1), false)).toString();
+      String selectStr7 = selectQuery1.addHaving(greaterThan(_defTable1_col2, new NumberValueObject(1), false)).toString();
       checkResult(selectStr7,
                   "SELECT DISTINCT t0.col1,t1.col2,t2.col5 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col4 = t1.altCol4) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE (t2.col4 >= 42) ORDER BY t1.col2,t2.col5 DESC");
 
@@ -391,8 +393,8 @@ public class SqlBuilderTest extends BaseSqlTestCase
                   "SELECT col1,t1.col2,t2.col5 FROM Schema1.Table1 INNER JOIN Table1 t1 ON (col1 = t1.col2) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id)");
 
       String selectStr2 = selectQuery1
-        .addCondition(BinaryCondition.greaterThan(_defTable2_col4, 42, true))
-        .addCondition(BinaryCondition.equalTo(col1, "foo"))
+        .addCondition(greaterThan(_defTable2_col4, 42, true))
+        .addCondition(equalTo(col1, "foo"))
         .validate().toString();
       checkResult(selectStr2,
                   "SELECT col1,t1.col2,t2.col5 FROM Schema1.Table1 INNER JOIN Table1 t1 ON (col1 = t1.col2) LEFT OUTER JOIN Table2 t2 ON (t1.col_id = t2.col_id) WHERE ((t2.col4 >= 42) AND (col1 = 'foo'))");
@@ -402,27 +404,27 @@ public class SqlBuilderTest extends BaseSqlTestCase
   {
     SelectQuery sq = new SelectQuery().addColumns(_table1_col1);
 
-    String reallyComplicatedConditionStr = ComboCondition.and(
-      BinaryCondition.lessThan(_table1_col1, "FOO", false),
-      ComboCondition.or(),
-      UnaryCondition.isNotNull(_defTable1_col_id),
+    String reallyComplicatedConditionStr = and(
+      lessThan(_table1_col1, "FOO", false),
+      or(),
+      isNotNull(_defTable1_col_id),
       new ComboCondition(ComboCondition.Op.OR,
                          new CustomCondition("IM REALLY SNAZZY"),
                          new NotCondition(
-                           BinaryCondition.like(_defTable2_col5,
+                           like(_defTable2_col5,
                                                 "BUZ%")),
                          new BinaryCondition(BinaryCondition.Op.EQUAL_TO,
-                                             new CustomSql("YOU"),
+                                             customSql("YOU"),
                                              "ME")),
-      ComboCondition.or(
+      or(
         new UnaryCondition(UnaryCondition.Op.IS_NULL,
                            _table1_col2)),
       new InCondition(_defTable2_col4,
                       "this string",
                       new NumberValueObject(37))
       .addObject(new NumberValueObject(42)),
-      BinaryCondition.notLike(_table1_col2, "\\_%").setLikeEscapeChar('\\'),
-      UnaryCondition.exists(sq))
+      notLike(_table1_col2, "\\_%").setLikeEscapeChar('\\'),
+      exists(sq))
       .toString();
     checkResult(reallyComplicatedConditionStr,
                 "((t0.col1 < 'FOO') AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE 'BUZ%')) OR (YOU = 'ME')) AND (t0.col2 IS NULL) AND (t2.col4 IN ('this string',37,42) ) AND (t0.col2 NOT LIKE '\\_%' ESCAPE '\\') AND (EXISTS (SELECT t0.col1 FROM Schema1.Table1 t0)))");
@@ -432,7 +434,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
                 "(t2.col4 IN (37) )");
 
     try {
-      BinaryCondition.equalTo(_table1_col2, "\\37").setLikeEscapeChar('\\');
+      equalTo(_table1_col2, "\\37").setLikeEscapeChar('\\');
       fail("IllegalArgumentException should have been thrown");
     } catch(IllegalArgumentException e) {}
   }
@@ -441,21 +443,21 @@ public class SqlBuilderTest extends BaseSqlTestCase
   {
     SelectQuery sq = new SelectQuery().addColumns(_table1_col1);
 
-    String reallyComplicatedConditionStr = ComboCondition.and(
-      BinaryCondition.lessThan(_table1_col1, "FOO", false),
-      ComboCondition.or(),
-      UnaryCondition.isNotNull(_defTable1_col_id),
+    String reallyComplicatedConditionStr = and(
+      lessThan(_table1_col1, "FOO", false),
+      or(),
+      isNotNull(_defTable1_col_id),
       new ComboCondition(ComboCondition.Op.OR,
                          new CustomCondition("IM REALLY SNAZZY")
                            .setDisableParens(true),
                          new NotCondition(
-                           BinaryCondition.like(_defTable2_col5,
+                           like(_defTable2_col5,
                                                 "BUZ%")),
                          new BinaryCondition(BinaryCondition.Op.EQUAL_TO,
-                                             new CustomSql("YOU"),
+                                             customSql("YOU"),
                                              "ME"))
         .setDisableParens(true),
-      ComboCondition.or(
+      or(
         new UnaryCondition(UnaryCondition.Op.IS_NULL,
                            _table1_col2)),
       new InCondition(_defTable2_col4,
@@ -463,9 +465,9 @@ public class SqlBuilderTest extends BaseSqlTestCase
                       new NumberValueObject(37))
       .addObject(new NumberValueObject(42))
       .setDisableParens(true),
-      BinaryCondition.notLike(_table1_col2, "\\_%").setLikeEscapeChar('\\')
+      notLike(_table1_col2, "\\_%").setLikeEscapeChar('\\')
         .setDisableParens(true),
-      UnaryCondition.exists(sq))
+      exists(sq))
       .toString();
     checkResult(reallyComplicatedConditionStr,
                 "((t0.col1 < 'FOO') AND (t1.col_id IS NOT NULL) AND IM REALLY SNAZZY OR (NOT (t2.col5 LIKE 'BUZ%')) OR (YOU = 'ME') AND (t0.col2 IS NULL) AND t2.col4 IN ('this string',37,42) AND t0.col2 NOT LIKE '\\_%' ESCAPE '\\' AND (EXISTS (SELECT t0.col1 FROM Schema1.Table1 t0)))");
@@ -473,13 +475,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
   public void testExpression()
   {
-    Expression expr = ComboExpression.add(
+    Expression expr = add(
         37, _defTable2_col5,
-        new NegateExpression(
-            ComboExpression.multiply(_table1_col1, 4.7f)),
-        ComboExpression.subtract(),
+        negate(multiply(_table1_col1, 4.7f)),
+        subtract(),
         new NegateExpression((Object)Expression.EMPTY),
-        "PI", new CustomSql("8 - 3"));
+        "PI", customSql("8 - 3"));
     String reallyComplicatedExpression = expr.toString();
     checkResult(reallyComplicatedExpression,
                 "(37 + t2.col5 + (- (t0.col1 * 4.7)) + 'PI' + (8 - 3))");
@@ -489,8 +490,8 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .validate().toString();
     checkResult(exprQuery, "SELECT (37 + t2.col5 + (- (t0.col1 * 4.7)) + 'PI' + (8 - 3)),t0.col2 FROM Table2 t2,Schema1.Table1 t0");
 
-    String concatExpression = ComboExpression.concatenate(
-        "The answer is ", ComboExpression.add(40, 2), ".")
+    String concatExpression = concatenate(
+        "The answer is ", add(40, 2), ".")
       .toString();
     checkResult(concatExpression,
                 "('The answer is ' || (40 + 2) || '.')");
@@ -553,14 +554,13 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String customStr1 = new SelectQuery()
       .addColumns(_defTable1_col_id)
       .addFromTable(_defTable1)
-      .addCustomFromTable(new CustomSql("otherTable"))
-      .addCustomColumns(new CustomSql("fooCol"), new CustomSql("BazzCol"))
-      .addCondition(ComboCondition.and(
-                      new BinaryCondition(BinaryCondition.Op.LESS_THAN,
-                                          new CustomSql("fooCol"),
+      .addCustomFromTable(customSql("otherTable"))
+      .addCustomColumns(customSql("fooCol"), customSql("BazzCol"))
+      .addCondition(and(
+                      lessThan(customSql("fooCol"),
                                           new ValueObject(37)),
                       new CustomCondition("bazzCol IS FUNKY")))
-      .addCondition(new NotCondition((Object)Condition.EMPTY))
+      .addCondition(new NotCondition(emptyCond()))
       .validate().toString();
     checkResult(customStr1,
                 "SELECT t1.col_id,fooCol,BazzCol FROM Table1 t1, otherTable WHERE ((fooCol < '37') AND (bazzCol IS FUNKY))");
@@ -576,8 +576,8 @@ public class SqlBuilderTest extends BaseSqlTestCase
                 "(CASE t0.col1 WHEN 1 THEN 'one' WHEN 2 THEN 'two' ELSE 'three' END)");
 
     String caseClause2 = new CaseStatement()
-      .addWhen(BinaryCondition.equalTo(_table1_col2, "13"), _table1_col3)
-      .addWhen(BinaryCondition.equalTo(_table1_col2, "14"), "14")
+      .addWhen(equalTo(_table1_col2, "13"), _table1_col3)
+      .addWhen(equalTo(_table1_col2, "14"), "14")
       .addElseNull().validate().toString();
 
     checkResult(caseClause2,
@@ -619,7 +619,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
   public void testDelete()
   {
     String deleteQuery1 = new DeleteQuery(_table1)
-      .addCondition(BinaryCondition.equalTo(_table1_col2, "13"))
+      .addCondition(equalTo(_table1_col2, "13"))
       .validate().toString();
 
     checkResult(deleteQuery1,
@@ -632,7 +632,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     String updateQuery1 = new UpdateQuery(_table1)
       .addSetClause(_table1_col1, 47)
       .addSetClause(_table1_col3, "foo")
-      .addCondition(BinaryCondition.equalTo(_table1_col2, "13"))
+      .addCondition(equalTo(_table1_col2, "13"))
       .validate().toString();
 
     checkResult(updateQuery1,
@@ -718,9 +718,9 @@ public class SqlBuilderTest extends BaseSqlTestCase
   public void testSqlContext()
   {
     SqlContext context = new SqlContext();
-    Condition cond = ComboCondition.and(
-        BinaryCondition.equalTo(_defTable1_col3, "foo"),
-        BinaryCondition.lessThan(_table1_col1, 13, true));
+    Condition cond = and(
+        equalTo(_defTable1_col3, "foo"),
+        lessThan(_table1_col1, 13, true));
 
     String condStr1 = cond.toString(32, context);
     checkResult(condStr1,
@@ -825,14 +825,14 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     SelectQuery innerSelect = new SelectQuery()
       .addCustomColumns(_defTable2_col4)
-      .addCondition(BinaryCondition.equalTo(_table1_col1, _defTable2_col_id));
+      .addCondition(equalTo(_table1_col1, _defTable2_col_id));
     innerSelect.validate();
     String queryStr2 = innerSelect.toString();
     checkResult(queryStr2, "SELECT t2.col4 FROM Table2 t2,Schema1.Table1 t0 WHERE (t0.col1 = t2.col_id)");
     SelectQuery outerSelect = new SelectQuery()
       .addCustomColumns(_table1_col1, _table1_col2)
       .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1,
-               BinaryCondition.equalTo(_table1_col1, _defTable1_col_id))
+               equalTo(_table1_col1, _defTable1_col_id))
       .addCondition(new InCondition(_table1_col1, new Subquery(innerSelect)));
     outerSelect.validate();
     String queryStr3 = outerSelect.toString();
@@ -855,7 +855,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addCustomColumns(_defTable2_col4)
       .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable2, _table1_col1,
                _defTable2_col_id)
-      .addCondition(BinaryCondition.equalTo(_table1_col1, _defTable1_col_id));
+      .addCondition(equalTo(_table1_col1, _defTable1_col_id));
     String queryStr4 = innerSelect.toString();
     checkResult(queryStr4, "SELECT t2.col4 FROM Schema1.Table1 t0 INNER JOIN Table2 t2 ON (t0.col1 = t2.col_id) WHERE (t0.col1 = t1.col_id)");
 
@@ -868,7 +868,8 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addCustomColumns(_table1_col1, _table1_col2)
       .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1, _table1_col1,
                _defTable1_col_id)
-      .addCondition(new InCondition(_table1_col1, new Subquery(innerSelect)));
+      .addCondition(new InCondition(_table1_col1,
+                                    subquery(innerSelect)));
     outerSelect.validate();
     String queryStr5 = outerSelect.toString();
     checkResult(queryStr5, "SELECT t0.col1,t0.col2 FROM Schema1.Table1 t0 INNER JOIN Table1 t1 ON (t0.col1 = t1.col_id) WHERE (t0.col1 IN (SELECT t2.col4 FROM Schema1.Table1 t0 INNER JOIN Table2 t2 ON (t0.col1 = t2.col_id) WHERE (t0.col1 = t1.col_id)) )");
@@ -1017,7 +1018,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
   {
     SelectQuery query1 = new SelectQuery()
       .addColumns(_defTable1_col_id, _defTable1_col2)
-      .addCondition(UnaryCondition.isNotNull(_defTable1_col_id));
+      .addCondition(isNotNull(_defTable1_col_id));
     SelectQuery query2 = new SelectQuery().addAllTableColumns(_defTable2);
 
     String createStr1 = new CreateViewQuery(_table1)
@@ -1097,12 +1098,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
   public void testBetweenCondition()
   {
-    String conditionStr = ComboCondition.and(
-      BinaryCondition.lessThan(_table1_col1, "FOO", false),
-      ComboCondition.or(),
-      new BetweenCondition(_defTable2_col4,
-                      "this string",
-                      new NumberValueObject(37)))
+    String conditionStr = and(
+      lessThan(_table1_col1, "FOO", false),
+      or(),
+      between(_defTable2_col4,
+              "this string",
+              new NumberValueObject(37)))
       .toString();
     checkResult(conditionStr,
                 "((t0.col1 < 'FOO') AND (t2.col4 BETWEEN 'this string' AND 37))");
@@ -1110,7 +1111,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
   public void testExtractExpression()
   {
-    String exprStr = BinaryCondition.equalTo(
+    String exprStr = equalTo(
         "2016",
         new ExtractExpression(ExtractExpression.DatePart.YEAR, "2016-01-01"))
       .toString();

@@ -5,6 +5,11 @@
   </properties>
   <body>
     <release version="3.0.1" date="TBD">
+      <action dev="jahlborn" type="update" system="SourceForge2Features" issue="27">
+        Added Conditions and Expressions classes with static methods for
+        generating most condition and expression types.  Useful for static
+        imports for writing more succinct code.
+      </action>
       <action dev="jahlborn" type="update" system="SourceForge2Features" issue="26">
         Add more useful info to some validation failures.
       </action>

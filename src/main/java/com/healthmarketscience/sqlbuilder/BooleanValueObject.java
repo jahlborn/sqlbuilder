@@ -36,12 +36,12 @@ import com.healthmarketscience.common.util.AppendableExt;
  */
 public class BooleanValueObject extends Expression
 {
-  public static final String USE_BOOLEAN_LITERALS_PROPERTY = 
+  public static final String USE_BOOLEAN_LITERALS_PROPERTY =
     "com.healthmarketscience.sqlbuilder.useBooleanLiterals";
 
-  private static final boolean USE_LITERAL_VALUES = 
+  private static final boolean USE_LITERAL_VALUES =
     Boolean.getBoolean(USE_BOOLEAN_LITERALS_PROPERTY);
-  
+
   private static final Object TRUE_VALUE = (USE_LITERAL_VALUES ? "TRUE" : 1);
   private static final Object FALSE_VALUE = (USE_LITERAL_VALUES ? "FALSE" : 0);
 
@@ -62,9 +62,16 @@ public class BooleanValueObject extends Expression
   }
 
   /**
-   * Returns a BooleanValueObject for the given boolean value.
+   * Returns a BooleanValueObject for the given Boolean value.
    */
   public static BooleanValueObject valueOf(Boolean value) {
+    return value ? TRUE : FALSE;
+  }
+
+  /**
+   * Returns a BooleanValueObject for the given boolean value.
+   */
+  public static BooleanValueObject valueOf(boolean value) {
     return value ? TRUE : FALSE;
   }
 
@@ -74,7 +81,7 @@ public class BooleanValueObject extends Expression
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
   }
-  
+
   @Override
   public void appendTo(AppendableExt app) throws IOException {
     app.append(toSqlValue(_value));

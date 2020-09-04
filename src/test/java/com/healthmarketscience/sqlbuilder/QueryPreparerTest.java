@@ -22,10 +22,10 @@ import java.lang.reflect.Proxy;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
+import static com.healthmarketscience.sqlbuilder.Conditions.*;
 
 /**
  * @author james
@@ -71,23 +71,20 @@ public class QueryPreparerTest extends BaseSqlTestCase {
     SelectQuery query = new SelectQuery()
       .addCustomColumns(sph2, sph3, sph4, sph5, sph6, sph7)
       .addCondition(
-          ComboCondition.and(
-              BinaryCondition.lessThan(_table1_col1, ph1, false),
-              BinaryCondition.lessThan(_table1_col2, mph1, true),
-              UnaryCondition.isNotNull(_defTable1_col_id),
-              new ComboCondition(ComboCondition.Op.OR,
-                                 new CustomCondition("IM REALLY SNAZZY"),
-                                 new NotCondition(
-                                     BinaryCondition.like(_defTable2_col5,
-                                                          ph2)),
-                                 new BinaryCondition(BinaryCondition.Op.EQUAL_TO,
-                                                     new CustomSql("YOU"),
-                                                     sph1)),
-              new InCondition(_table1_col2, lph2).setNegate(true),
-              ComboCondition.or(
-                  new UnaryCondition(UnaryCondition.Op.IS_NULL,
-                                     _table1_col2),
-                  BinaryCondition.notEqualTo(mph1, mph1),
+          and(
+              lessThan(_table1_col1, ph1, false),
+              lessThan(_table1_col2, mph1, true),
+              isNotNull(_defTable1_col_id),
+              or(customCond("IM REALLY SNAZZY"),
+                 not(
+                     like(_defTable2_col5,
+                          ph2)),
+                 equalTo(new CustomSql("YOU"),
+                         sph1)),
+              notIn(_table1_col2, lph2),
+              or(
+                  isNull(_table1_col2),
+                  notEqualTo(mph1, mph1),
                   new InCondition(_defTable1_col_id, lph1))));
     String queryStr = query.toString();
     checkResult(queryStr,
