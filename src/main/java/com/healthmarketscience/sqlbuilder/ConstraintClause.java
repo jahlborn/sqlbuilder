@@ -168,20 +168,7 @@ public class ConstraintClause extends SqlObject
    * {@link Constraint#Type}.
    */
   private static Type getType(Constraint.Type consType) {
-    switch(consType) {
-    case NOT_NULL:
-      return Type.NOT_NULL;
-    case UNIQUE:
-      return Type.UNIQUE;
-    case PRIMARY_KEY:
-      return Type.PRIMARY_KEY;
-    case FOREIGN_KEY:
-      return Type.FOREIGN_KEY;
-    case CHECK:
-      return Type.CHECK;
-    default:
-      throw new RuntimeException("Unexpected constraint type " + consType);
-    }
+    return Type.valueOf(consType.name());
   }
 
   /**
