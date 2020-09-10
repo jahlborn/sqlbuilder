@@ -30,10 +30,37 @@ import com.healthmarketscience.sqlbuilder.dbspec.ForeignKeyConstraint;
  *
  * @author James Ahlborn
  */
-public class ForeignKeyConstraintClause extends ConstraintClause 
+public class ForeignKeyConstraintClause extends ConstraintClause
 {
+  /**
+   * Enum representing the referential action to be taken on update/delete.
+   */
+  public enum ReferentialAction
+  {
+    CASCADE("CASCADE"),
+    /** @See "SQL 99" */
+    RESTRICT("RESTRICT"),
+    SET_NULL("SET NULL"),
+    SET_DEFAULT("SET DEFAULT"),
+    NO_ACTION("NO ACTION");
+
+    private final String _str;
+
+    private ReferentialAction(String str) {
+      _str = str;
+    }
+
+    @Override
+    public String toString() {
+      return _str;
+    }
+  }
+
+
   protected SqlObject _refTable;
   protected SqlObjectList<SqlObject> _refColumns = SqlObjectList.create();
+  protected Object _onDeleteAction;
+  protected Object _onUpdateAction;
 
   public ForeignKeyConstraintClause(ForeignKeyConstraint fkConstraint) {
     this(fkConstraint, fkConstraint.getColumns(),
@@ -83,10 +110,30 @@ public class ForeignKeyConstraintClause extends ConstraintClause
     return this;
   }
 
+  /**
+   * Sets the referential action to be taken on delete.
+   *
+   * @see ReferentialAction
+   */
+  public ForeignKeyConstraintClause setOnDeleteAction(Object action) {
+    _onDeleteAction = action;
+    return this;
+  }
+
+  /**
+   * Sets the referential action to be taken on update.
+   *
+   * @see ReferentialAction
+   */
+  public ForeignKeyConstraintClause setOnUpdateAction(Object action) {
+    _onUpdateAction = action;
+    return this;
+  }
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
-    
+
     if(!vContext.isLocalOnly()) {
       // treat referenced objects as separate query objects
       ValidationContext refVContext = new ValidationContext(vContext);
@@ -97,7 +144,7 @@ public class ForeignKeyConstraintClause extends ConstraintClause
 
   @Override
   public void appendTo(AppendableExt app) throws IOException {
-    super.appendTo(app);
+    preAppendTo(app);
 
     if(SqlContext.getContext(app).getUseTableConstraints()) {
       app.append(" ").append(_type.toString(false));
@@ -106,5 +153,14 @@ public class ForeignKeyConstraintClause extends ConstraintClause
     if(!_refColumns.isEmpty()) {
       app.append(" (").append(_refColumns).append(")");
     }
+
+    if(_onDeleteAction != null) {
+      app.append(" ON DELETE ").append(_onDeleteAction);
+    }
+    if(_onUpdateAction != null) {
+      app.append(" ON UPDATE ").append(_onUpdateAction);
+    }
+
+    postAppendTo(app);
   }
 }

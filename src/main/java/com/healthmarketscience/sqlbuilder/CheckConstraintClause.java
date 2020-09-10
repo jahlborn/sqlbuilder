@@ -27,15 +27,14 @@ import com.healthmarketscience.sqlbuilder.dbspec.CheckConstraint;
  * <p>
  * Note that if no conditions are added, then this object will not output
  * anything.
- * 
+ *
  * @author James Ahlborn
  */
-public class CheckConstraintClause extends ConstraintClause 
+public class CheckConstraintClause extends ConstraintClause
 {
   private ComboCondition _condition = ComboCondition.and();
 
-  public CheckConstraintClause(CheckConstraint checkConstraint) 
-  {
+  public CheckConstraintClause(CheckConstraint checkConstraint) {
     this(checkConstraint, checkConstraint.getCondition());
   }
 
@@ -55,8 +54,8 @@ public class CheckConstraintClause extends ConstraintClause
   public ComboCondition getCondition() {
     return _condition;
   }
-  
-  /** 
+
+  /**
    * Adds a condition to the condition clause for the CHECK constraint (AND'd
    * with any other conditions).  Note that the CHECK constraint will only be
    * generated if some conditions have been added.
@@ -74,16 +73,18 @@ public class CheckConstraintClause extends ConstraintClause
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
-    
+
     _condition.collectSchemaObjects(vContext);
   }
-    
+
   @Override
   public void appendTo(AppendableExt app) throws IOException {
     if(!_condition.isEmpty()) {
-      super.appendTo(app);
-    
+      preAppendTo(app);
+
       app.append(" ").append(_condition);
+
+      postAppendTo(app);
     }
   }
 }

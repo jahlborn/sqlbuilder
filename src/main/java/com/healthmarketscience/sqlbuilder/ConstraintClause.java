@@ -37,7 +37,7 @@ public class ConstraintClause extends SqlObject
    * Enum representing the types of constraints supported for a column or
    * table.
    */
-  public enum Type 
+  public enum Type
   {
     NOT_NULL("NOT NULL"),
     UNIQUE("UNIQUE"),
@@ -56,16 +56,38 @@ public class ConstraintClause extends SqlObject
       _tableTypeStr = tableTypeStr;
       _colTypeStr = colTypeStr;
     }
-      
-    public String toString(boolean forTable) { 
+
+    public String toString(boolean forTable) {
       return (forTable ? _tableTypeStr : _colTypeStr);
     }
   }
 
-  
+  /**
+   * Enum representing the different times that a constraint can be checked.
+   */
+  public enum CheckTime
+  {
+    NOT_DEFERRABLE("NOT DEFERRABLE"),
+    DEFERRABLE_INITIALLY_DEFERRED("DEFERRABLE INITIALLY DEFERRED"),
+    DEFERRABLE_INITIALLY_IMMEDIATE("DEFERRABLE INITIALLY IMMEDIATE");
+
+    private final String _str;
+
+    private CheckTime(String str) {
+      _str = str;
+    }
+
+    @Override
+    public String toString() {
+      return _str;
+    }
+  }
+
+
   protected final Type _type;
   protected final SqlObject _name;
   protected SqlObjectList<SqlObject> _columns = SqlObjectList.create();
+  protected Object _checkTime;
 
   public ConstraintClause(Constraint constraint) {
     this(getType(constraint.getType()), constraint, constraint.getColumns());
@@ -99,6 +121,16 @@ public class ConstraintClause extends SqlObject
     return this;
   }
 
+  /**
+   * Sets the check time for this constraint.
+   *
+   * @see CheckTime
+   */
+  public ConstraintClause setCheckTime(Object checkTime) {
+    _checkTime = checkTime;
+    return this;
+  }
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     if(_name != null) {
@@ -109,6 +141,11 @@ public class ConstraintClause extends SqlObject
 
   @Override
   public void appendTo(AppendableExt app) throws IOException {
+    preAppendTo(app);
+    postAppendTo(app);
+  }
+
+  protected void preAppendTo(AppendableExt app) throws IOException {
     if(_name != null) {
       app.append(_name);
     }
@@ -118,6 +155,13 @@ public class ConstraintClause extends SqlObject
       app.append(" (").append(_columns).append(")");
     }
   }
+
+  protected void postAppendTo(AppendableExt app) throws IOException {
+    if(_checkTime != null) {
+      app.append(" ").append(_checkTime);
+    }
+  }
+
 
   /**
    * Returns the appropriate {@link Type} for the given
@@ -216,7 +260,7 @@ public class ConstraintClause extends SqlObject
    * @param name name of the constraint, may be {@code null}
    * @param refTableStr the table referenced by this constraint
    */
-  public static ForeignKeyConstraintClause foreignKey(Object name, 
+  public static ForeignKeyConstraintClause foreignKey(Object name,
                                                       Object refTableStr) {
     return new ForeignKeyConstraintClause(name, refTableStr);
   }
@@ -233,7 +277,7 @@ public class ConstraintClause extends SqlObject
    * @param name name of the constraint, may be {@code null}
    * @param checkCondition the check condition
    */
-  public static CheckConstraintClause checkCondition(Object name, 
+  public static CheckConstraintClause checkCondition(Object name,
                                                      Condition checkCondition) {
     return new CheckConstraintClause(name, checkCondition);
   }
@@ -254,7 +298,7 @@ public class ConstraintClause extends SqlObject
     protected void collectSchemaObjects(ValidationContext vContext) {
       _name.collectSchemaObjects(vContext);
     }
-    
+
     @Override
     public void appendTo(AppendableExt app) throws IOException {
       app.append("CONSTRAINT ").append(_name).append(" ");

@@ -10,6 +10,10 @@
         generating most condition and expression types.  Useful for static
         imports for writing more succinct code.
       </action>
+      <action dev="jahlborn" type="update">
+        Add support for setting the constraint check time and setting the
+        delete/update referential action for foreign key constraints.
+      </action>
       <action dev="jahlborn" type="update" system="SourceForge2Features" issue="26">
         Add more useful info to some validation failures.
       </action>

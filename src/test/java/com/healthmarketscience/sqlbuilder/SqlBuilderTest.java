@@ -70,12 +70,13 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addColumn(_defTable1_col3, CreateTableQuery.ColumnConstraint.NOT_NULL)
       .addColumnConstraint(_defTable1_col3,
                            ConstraintClause.foreignKey("col3_fk", _table1)
-                           .addRefColumns(_table1_col3))
+                           .addRefColumns(_table1_col3)
+                           .setOnDeleteAction(ForeignKeyConstraintClause.ReferentialAction.CASCADE))
       .addCustomColumn("col4 NUMBER", CreateTableQuery.ColumnConstraint.NOT_NULL)
       .addColumnConstraint(_table1_col1, CreateTableQuery.ColumnConstraint.UNIQUE)
       .validate().toString();
     checkResult(createStr4,
-                "CREATE TABLE Table1 (col_id NUMBER PRIMARY KEY,col2 VARCHAR(64) DEFAULT 'blah',col3 DATE NOT NULL CONSTRAINT col3_fk REFERENCES Schema1.Table1 (col3),col4 NUMBER NOT NULL)");
+                "CREATE TABLE Table1 (col_id NUMBER PRIMARY KEY,col2 VARCHAR(64) DEFAULT 'blah',col3 DATE NOT NULL CONSTRAINT col3_fk REFERENCES Schema1.Table1 (col3) ON DELETE CASCADE,col4 NUMBER NOT NULL)");
 
     String createStr5 = new CreateTableQuery(_defTable1, true)
       .addColumnConstraint(_defTable1_col_id,
@@ -86,13 +87,13 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addColumnConstraint(_defTable1_col_id, ConstraintClause.checkCondition(
                                greaterThan(_defTable1_col_id, 10, false)))
       .addColumnConstraint(_defTable1_col3,
-                           ConstraintClause.notNull())
+                           ConstraintClause.notNull().setCheckTime(ConstraintClause.CheckTime.NOT_DEFERRABLE))
       .setColumnDefaultValue(_defTable1_col3, new CustomSql("CURRENT_DATE"))
       .addCustomConstraints(ConstraintClause.unique()
                             .addColumns(_defTable1_col2, _defTable1_col3))
       .validate().toString();
     checkResult(createStr5,
-                "CREATE TABLE Table1 (col_id BIGINT NOT NULL CONSTRAINT id_pk PRIMARY KEY CHECK (col_id > 10),col2 VARCHAR(64) DEFAULT 'blah',col3 DATE DEFAULT CURRENT_DATE NOT NULL,altCol4 VARCHAR(255),UNIQUE (col2,col3))");
+                "CREATE TABLE Table1 (col_id BIGINT NOT NULL CONSTRAINT id_pk PRIMARY KEY CHECK (col_id > 10),col2 VARCHAR(64) DEFAULT 'blah',col3 DATE DEFAULT CURRENT_DATE NOT NULL NOT DEFERRABLE,altCol4 VARCHAR(255),UNIQUE (col2,col3))");
 
     String createStr6 = new CreateTableQuery(_defTable2, true)
       .setTableType(CreateTableQuery.TableType.TEMPORARY)
