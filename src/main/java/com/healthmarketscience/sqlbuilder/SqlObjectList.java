@@ -17,8 +17,8 @@ limitations under the License.
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -44,11 +44,11 @@ public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
   private final List<ObjType> _objects;
 
   public SqlObjectList() {
-    this(DEFAULT_DELIMITER, new LinkedList<ObjType>());
+    this(DEFAULT_DELIMITER, new ArrayList<ObjType>(4));
   }
 
   public SqlObjectList(String delimiter) {
-    this(delimiter, new LinkedList<ObjType>());
+    this(delimiter, new ArrayList<ObjType>(4));
   }
 
   public SqlObjectList(String delimiter, List<ObjType> objects) {

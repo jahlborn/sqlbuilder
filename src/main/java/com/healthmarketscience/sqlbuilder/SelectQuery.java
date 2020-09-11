@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -115,7 +114,7 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   private boolean _forUpdate;
   private SqlObjectList<SqlObject> _columns = SqlObjectList.create();
   private SqlObjectList<SqlObject> _joins = SqlObjectList.create("");
-  private List<SqlObject> _joinFromTables = new LinkedList<SqlObject>();
+  private List<SqlObject> _joinFromTables = new ArrayList<SqlObject>(4);
   private ComboCondition _condition = ComboCondition.and();
   private SqlObjectList<SqlObject> _grouping = SqlObjectList.create();
   private SqlObjectList<SqlObject> _ordering = SqlObjectList.create();
