@@ -38,7 +38,7 @@ public class ForeignKeyConstraintClause extends ConstraintClause
   public enum ReferentialAction
   {
     CASCADE("CASCADE"),
-    /** @See "SQL 99" */
+    /** @see "SQL 99" */
     RESTRICT("RESTRICT"),
     SET_NULL("SET NULL"),
     SET_DEFAULT("SET DEFAULT"),
