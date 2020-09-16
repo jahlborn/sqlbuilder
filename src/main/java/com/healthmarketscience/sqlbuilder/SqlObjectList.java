@@ -31,14 +31,24 @@ import com.healthmarketscience.common.util.AppendableExt;
  * <p>
  * Note that this class is generally intended to be used internally by the
  * other SqlObjects.
+ * <p>
+ * The default list item separator used by this framework is a simple ",".
+ * This is generally sufficient for interacting with most databases.  That
+ * said, sometimes it is desirable to have the more readable separator of
+ * ", ".  This can be enabled by setting the system property
+ * {@value USE_SPACE_AFTER_DELIMITER_PROPERTY} to {@code true}.
  *
  * @author James Ahlborn
  */
 public class SqlObjectList<ObjType extends SqlObject> extends SqlObject
   implements Iterable<ObjType>
 {
+  public static final String USE_SPACE_AFTER_DELIMITER_PROPERTY =
+    "com.healthmarketscience.sqlbuilder.useSpaceAfterDelimiter";
+
   /** the default delimiter used by a SqlObjectList */
-  public static final String DEFAULT_DELIMITER = ",";
+  public static final String DEFAULT_DELIMITER =
+    (Boolean.getBoolean(USE_SPACE_AFTER_DELIMITER_PROPERTY) ? ", " : ",");
 
   private final String _delimiter;
   private final List<ObjType> _objects;

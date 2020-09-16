@@ -4,6 +4,12 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="3.0.2" date="TBD">
+      <action dev="jahlborn" type="update">
+        Add system property which allows setting the default list item
+        separator to include a trailing space.
+      </action>
+    </release>
     <release version="3.0.1" date="2020-09-10">
       <action dev="jahlborn" type="update" system="SourceForge2Features" issue="27">
         Added Conditions and Expressions classes with static methods for

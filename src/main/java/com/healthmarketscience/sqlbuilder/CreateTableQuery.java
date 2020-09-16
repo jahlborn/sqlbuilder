@@ -44,14 +44,14 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   public enum Hook implements HookAnchor {
     /** Anchor for the beginning of the query, only supports {@link
         HookType#BEFORE} */
-    HEADER, 
+    HEADER,
     /** Anchor for the "TABLE " part of the "CREATE TABLE " clause */
-    TABLE, 
+    TABLE,
     /** Anchor for the end of the query, only supports {@link
         HookType#BEFORE} */
     TRAILER;
   }
-  
+
   /** column level constraints
    * @deprecated use {@link ConstraintClause} instead
    */
@@ -67,7 +67,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     private ColumnConstraint(String constraintClause) {
       _constraintClause = constraintClause;
     }
-    
+
     @Override
     public String toString() { return _constraintClause; }
   }
@@ -86,14 +86,14 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     private TableType(String typeClause) {
       _typeClause = typeClause;
     }
-    
+
     @Override
     public String toString() { return _typeClause; }
   }
 
   private TableType _tableType;
   protected SqlObjectList<SqlObject> _constraints = SqlObjectList.create();
-  
+
   public CreateTableQuery(Table table) {
     this(table, false);
   }
@@ -101,7 +101,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   /**
    * {@code Column} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#TYPED_COLUMN_TO_OBJ}.
-   * 
+   *
    * @param table the table to create
    * @param includeColumns iff <code>true</code>, all the columns and
    *                       constraints of this table will be added to the
@@ -143,7 +143,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     _tableType = tableType;
     return this;
   }
-  
+
   /**
    * Adds the given Objects as column descriptions, should look like
    * <code>"&lt;column&gt; &lt;type&gt; [&lt;constraint&gt; ... ]"</code>.
@@ -190,7 +190,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     return this;
   }
 
-  /** Sets the constraint on a previously added column 
+  /** Sets the constraint on a previously added column
    * @deprecated use {@link ConstraintClause} instead of ColumnConstraint
    */
   @Deprecated
@@ -199,7 +199,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   {
     return addColumnConstraint(column, constraint);
   }
-  
+
   /**
    * Adds the constraint on a previously added column
    * <p>
@@ -218,7 +218,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     }
     return this;
   }
-  
+
   /**
    * Sets the given value as the column default value on a previously added
    * column
@@ -271,7 +271,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
    * {@link Converter#CUSTOM_TO_CONSTRAINTCLAUSE}.
    */
   public CreateTableQuery addCustomConstraints(Object... constraintStrs) {
-    _constraints.addObjects(Converter.CUSTOM_TO_CONSTRAINTCLAUSE, 
+    _constraints.addObjects(Converter.CUSTOM_TO_CONSTRAINTCLAUSE,
                             constraintStrs);
     return this;
   }
@@ -283,7 +283,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
    *  <em>WARNING, this is not ANSI SQL compliant.</em>
    *
    * @see OraTableSpaceClause
-   * 
+   *
    * @deprecated Use {@code addCustomization(new OraTableSpaceClause(tableSpace))}
    *             instead.
    */
@@ -291,7 +291,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   public CreateTableQuery setTableSpace(String tableSpace) {
     return addCustomization(new OraTableSpaceClause(tableSpace));
   }
-  
+
   /**
    * Adds custom SQL to this query.  See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
    * custom SQL syntax.
@@ -304,11 +304,11 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
     super.addCustomization(hook, type, obj);
     return this;
   }
-  
+
   /**
    * Adds custom SQL to this query.  See {@link com.healthmarketscience.sqlbuilder.custom} for more details on
    * custom SQL syntax.
-   * @param obj the custom sql syntax on which the 
+   * @param obj the custom sql syntax on which the
    *            {@link CustomSyntax#apply(CreateTableQuery)} method will be
    *            invoked (may be {@code null}).
    */
@@ -337,13 +337,13 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
       throw new ValidationException("Table has no columns");
     }
   }
-  
+
   @Override
   protected void appendTo(AppendableExt app, SqlContext newContext)
     throws IOException
   {
     newContext.setUseTableAliases(false);
-    
+
     customAppendTo(app, Hook.HEADER);
 
     app.append("CREATE ");
@@ -354,13 +354,13 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
       .append(_object)
       .append(" (").append(_columns);
     if(!_constraints.isEmpty()) {
-      app.append(",").append(_constraints);
+      app.append(SqlObjectList.DEFAULT_DELIMITER).append(_constraints);
     }
     app.append(")");
 
     customAppendTo(app, Hook.TRAILER);
   }
-  
+
   /**
    * Wrapper around a column that adds a constraint specification.
    */
@@ -368,7 +368,7 @@ public class CreateTableQuery extends BaseCreateQuery<CreateTableQuery>
   {
     private SqlObject _column;
     private Object _constraint;
-  
+
     private ConstrainedColumn(SqlObject column, Object constraint) {
       _column = column;
       _constraint = constraint;

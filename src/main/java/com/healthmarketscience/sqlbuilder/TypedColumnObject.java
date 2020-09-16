@@ -75,7 +75,7 @@ class TypedColumnObject extends ColumnObject
   void setDefaultValue(Object val) {
     _defaultValue = Converter.toValueSqlObject(val);
   }
-   
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     super.collectSchemaObjects(vContext);
@@ -84,7 +84,7 @@ class TypedColumnObject extends ColumnObject
       _defaultValue.collectSchemaObjects(vContext);
     }
   }
- 
+
   @Override
   @SuppressWarnings("deprecation")
   public void appendTo(AppendableExt app) throws IOException {
@@ -99,7 +99,7 @@ class TypedColumnObject extends ColumnObject
         Iterator<?> iter = colQuals.iterator();
         app.append(iter.next());
         while(iter.hasNext()) {
-          app.append(",").append(iter.next());
+          app.append(SqlObjectList.DEFAULT_DELIMITER).append(iter.next());
         }
         app.append(")");
       }
@@ -122,12 +122,12 @@ class TypedColumnObject extends ColumnObject
       SqlContext context = SqlContext.pushContext(app);
       // generate constraint clauses in their "column" format
       context.setUseTableConstraints(false);
-    
+
       app.append(" ").append(_constraints);
 
       SqlContext.popContext(app, context);
     }
 
   }
-  
+
 }
