@@ -21,3 +21,5 @@ repository which is hosted on SourceForge:
 Homepage: https://openhms.sourceforge.io/sqlbuilder/
 
 Project: https://sourceforge.net/projects/openhms/
+
+Download: https://sourceforge.net/projects/openhms/files/latest/download
