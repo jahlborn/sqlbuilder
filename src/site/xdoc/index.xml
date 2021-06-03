@@ -139,7 +139,7 @@ String selectQuery =
         </ul>
         </li>
         <li>99% of the SqlBuilder codebase is ANSI SQL92 compliant.  (With
-            some recent additions from ANSI SQL99)</li>
+            some recent additions from ANSI SQL99 and SQL2003)</li>
         <li>JDBC escape syntax support (<a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcEscape.html">JdbcEscape</a>)</li>
         <li>Helpers for managing PreparedStatement parameters (<a href="apidocs/com/healthmarketscience/sqlbuilder/QueryPreparer.html">QueryPreparer</a>) and reading results (<a href="apidocs/com/healthmarketscience/sqlbuilder/QueryReader.html">QueryReader</a>)</li>
         <li>Optional <a href="apidocs/com/healthmarketscience/sqlbuilder/Query.html#validate()">query validation</a></li>

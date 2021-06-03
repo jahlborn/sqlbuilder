@@ -21,6 +21,10 @@
           As of the 2.1.2 release, some ANSI SQL99 features have been added
           (newer standards classes will be marked as such, e.g. "SQL 99").
         </p>
+        <p>
+          As of the 2.1.7 release, some ANSI SQL2003 features have been added
+          (newer standards classes will be marked as such, e.g. "SQL 2003").
+        </p>
       </answer>
     </faq>
 
@@ -107,14 +111,14 @@ GROUP BY a, b
           You can generate this output (modern equivalent to the original query):
         </p>
         <source>
-WITH cte (col1,col2,col3,col4) AS 
-  (SELECT t0.col1,t0.col2,t0.col3,t0.col4 FROM some_schema.some_table t0) 
-SELECT cte0.col1,cte0.col2,SUM(cte0.col3),AVG(cte0.col4) 
+WITH cte (col1,col2,col3,col4) AS
+  (SELECT t0.col1,t0.col2,t0.col3,t0.col4 FROM some_schema.some_table t0)
+SELECT cte0.col1,cte0.col2,SUM(cte0.col3),AVG(cte0.col4)
 FROM cte cte0
 </source>
       </answer>
     </faq>
-    
+
   </part>
 
 </faqs>
