@@ -45,8 +45,8 @@ public class OrderObject extends SqlObject
   }
 
   /**
-   * Enumeration representing the order of NULL 
-   * @see "SQL 2003" 
+   * Enumeration representing the order of NULL
+   * @see "SQL 2003"
    */
   public enum NullOrder {
     FIRST(" FIRST"),
@@ -62,7 +62,7 @@ public class OrderObject extends SqlObject
     public String toString() { return _dirStr; }
   }
 
-  
+
 
   private final Dir _dir;
   private final SqlObject _obj;
@@ -71,7 +71,7 @@ public class OrderObject extends SqlObject
   public OrderObject(Dir dir, Object obj) {
     this(dir, Converter.toCustomColumnSqlObject(obj));
   }
-  
+
   public OrderObject(Dir dir, SqlObject obj) {
     _dir = dir;
     _obj = obj;
@@ -89,12 +89,12 @@ public class OrderObject extends SqlObject
   SqlObject getObject() {
     return _obj;
   }
-  
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     _obj.collectSchemaObjects(vContext);
   }
-    
+
   @Override
   public void appendTo(AppendableExt app) throws IOException {
     app.append(_obj).append(_dir);
@@ -102,5 +102,26 @@ public class OrderObject extends SqlObject
       app.append(" NULLS").append(_nullOrder);
     }
   }
-  
+
+  /**
+   * Convenience method for generating an ascending OrderObject for the given
+   * column.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toCustomColumnSqlObject(Object)}.
+   */
+  public static OrderObject asc(Object obj) {
+    return new OrderObject(Dir.ASCENDING, obj);
+  }
+
+  /**
+   * Convenience method for generating a descending OrderObject for the given
+   * column.
+   * <p>
+   * {@code Object} -&gt; {@code SqlObject} conversions handled by
+   * {@link Converter#toCustomColumnSqlObject(Object)}.
+   */
+  public static OrderObject desc(Object obj) {
+    return new OrderObject(Dir.DESCENDING, obj);
+  }
 }

@@ -688,7 +688,7 @@ public class SqlBuilderTest extends BaseSqlTestCase
     unionQuery = UnionQuery.union(q1, q2)
       .addIndexedOrdering(1, OrderObject.Dir.DESCENDING)
       .addCustomOrderings(
-          new OrderObject(OrderObject.Dir.ASCENDING, _table1_col1)
+          OrderObject.asc(_table1_col1)
           .setNullOrder(OrderObject.NullOrder.FIRST));
 
     String unionQuery3 = unionQuery.validate().toString();

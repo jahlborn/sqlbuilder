@@ -26,7 +26,7 @@ import com.healthmarketscience.common.util.AppendableExt;
  * Can be used inline on a {@link FunctionCall} or via a named reference in a
  * {@link SelectQuery}.
  *
- * @see "SQL 2003" 
+ * @see "SQL 2003"
  * @author James Ahlborn
  */
 public class WindowDefinitionClause extends SqlObject
@@ -34,7 +34,7 @@ public class WindowDefinitionClause extends SqlObject
   /**
    * Outputs the units for the window frame clause.
    */
-  public enum FrameUnits 
+  public enum FrameUnits
   {
     ROWS,
     RANGE;
@@ -49,7 +49,7 @@ public class WindowDefinitionClause extends SqlObject
     GROUP("GROUP"),
     TIES("TIES"),
     NO_OTHERS("NO OTHERS");
-    
+
     private final String _str;
 
     private FrameExclusion(String str) {
@@ -71,7 +71,7 @@ public class WindowDefinitionClause extends SqlObject
 
   public WindowDefinitionClause() {
   }
-  
+
   /**
    * Adds the given columns to the PARTITION BY column list.
    * <p>
@@ -98,6 +98,9 @@ public class WindowDefinitionClause extends SqlObject
 
   /**
    * Adds the given columns to the "ORDER BY" clause
+   * <p>
+   * Note, NULL ordering can be specified by passing an appropriately
+   * configured instance of {@link OrderObject} to this method.
    * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#CUSTOM_COLUMN_TO_OBJ}.
@@ -159,14 +162,14 @@ public class WindowDefinitionClause extends SqlObject
    */
   public WindowDefinitionClause setFrameBetween(
       Object frameUnits, Object frameStart, Object frameEnd,
-      Object frameExclusion) 
+      Object frameExclusion)
   {
     return setFrameImpl(frameUnits, frameStart, frameEnd, frameExclusion);
   }
 
   private WindowDefinitionClause setFrameImpl(
       Object frameUnits, Object frameStart, Object frameEnd,
-      Object frameExclusion) 
+      Object frameExclusion)
   {
     _frameUnits = frameUnits;
     _frameStart = Converter.toCustomSqlObject(frameStart);
@@ -189,7 +192,7 @@ public class WindowDefinitionClause extends SqlObject
   public void appendTo(AppendableExt app) throws IOException {
 
     app.append("(");
-    
+
     boolean hasPreceding = false;
     if(!_columns.isEmpty()) {
       app.append("PARTITION BY ").append(_columns);
@@ -222,7 +225,7 @@ public class WindowDefinitionClause extends SqlObject
     }
 
     app.append(")");
-  }  
+  }
 
 
   /**
@@ -231,11 +234,11 @@ public class WindowDefinitionClause extends SqlObject
    */
   public static class FrameBound extends SqlObject
   {
-    public static final FrameBound UNBOUNDED_PRECEDING = 
+    public static final FrameBound UNBOUNDED_PRECEDING =
       new FrameBound("UNBOUNDED", "PRECEDING");
-    public static final FrameBound UNBOUNDED_FOLLOWING = 
+    public static final FrameBound UNBOUNDED_FOLLOWING =
       new FrameBound("UNBOUNDED", "FOLLOWING");
-    public static final FrameBound CURRENT_ROW = 
+    public static final FrameBound CURRENT_ROW =
       new FrameBound(null, "CURRENT ROW");
 
     private final Object _value;

@@ -344,6 +344,9 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   /**
    * Adds the given columns to the "ORDER BY" clause
    * <p>
+   * Note, NULL ordering can be specified by passing an appropriately
+   * configured instance of {@link OrderObject} to this method.
+   * <p>
    * {@code Object} -&gt; {@code SqlObject} conversions handled by
    * {@link Converter#CUSTOM_COLUMN_TO_OBJ}.
    */
