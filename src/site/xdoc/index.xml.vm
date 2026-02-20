@@ -126,6 +126,18 @@ String selectQuery =
         <li><a href="apidocs/index.html">Javadoc API documentation</a></li>
         <li><a href="xref/index.html">Complete source code (with cross references)</a></li>
       </ul>
+      <p>
+        In order to use SqlBuilder in your maven project, add the following to
+        your pom.xml:
+      </p>
+        <source>
+&lt;dependency&gt;
+  &lt;groupId&gt;com.healthmarketscience.sqlbuilder&lt;/groupId&gt;
+  &lt;artifactId&gt;sqlbuilder&lt;/artifactId&gt;
+  &lt;version&gt;${project.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</source>
+        <p></p>
     </section>
     <section name="Features">
       <ul>

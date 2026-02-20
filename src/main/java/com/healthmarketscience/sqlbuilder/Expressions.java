@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.healthmarketscience.sqlbuilder;
 
+import java.io.IOException;
+
+import com.healthmarketscience.common.util.AppendableExt;
 import com.healthmarketscience.sqlbuilder.custom.NamedParamObject;
 
 /**
@@ -26,6 +29,16 @@ import com.healthmarketscience.sqlbuilder.custom.NamedParamObject;
 public class Expressions
 {
   private Expressions() {}
+
+  /** An expression for the SQL standard function "CURRENT_TIMESTAMP" */
+  public static final Expression CURRENT_TIMESTAMP = new Expression() {
+      @Override
+      protected void collectSchemaObjects(ValidationContext vContext) {}
+      @Override
+      public void appendTo(AppendableExt app) throws IOException {
+        app.append("CURRENT_TIMESTAMP");
+      }
+  };
 
   /**
    * Convenience method for generating a ComboExpression for joining

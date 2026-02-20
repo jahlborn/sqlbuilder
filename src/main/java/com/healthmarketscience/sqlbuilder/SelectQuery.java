@@ -314,6 +314,14 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
                    Collections.singletonList(fromColumn), Collections.singletonList(toColumn));
   }
 
+  /** Adds all of the joins as INNER join type where each join is from
+      join.getFromTable() to join.getToTable() with a join condition
+      requiring each column in join.getFromColumns() to equal the
+      corresponding column in join.getToColumns(). */
+  public SelectQuery addJoins(Join... joins) {
+    return addJoins(JoinType.INNER, joins);
+  }
+
   /** Adds all of the joins of the given join type where each join is from
       join.getFromTable() to join.getToTable() with a join condition
       requiring each column in join.getFromColumns() to equal the

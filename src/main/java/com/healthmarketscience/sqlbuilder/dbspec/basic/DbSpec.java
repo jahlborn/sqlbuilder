@@ -60,11 +60,11 @@ public class DbSpec {
   public List<DbSchema> getSchemas() {
     return _schemas;
   }
-  
+
   public List<DbJoin> getJoins() {
     return _joins;
   }
-  
+
   /**
    * @return the next unused alias for this group of db objects
    */
@@ -99,7 +99,7 @@ public class DbSpec {
   public DbSchema addDefaultSchema() {
     return addSchema((String)null);
   }
-  
+
   /**
    * Creates and adds a schema with the given name to this spec.
    * <p>
@@ -133,7 +133,7 @@ public class DbSpec {
    * @param schemaTo schema for the right side of the join
    * @param tableTo table for the right side of the join
    * @param colNames the column names for the join (same for both tables)
-   * @return the freshly created schema
+   * @return the freshly created join
    */
   public DbJoin addJoin(String schemaFrom, String tableFrom,
                         String schemaTo, String tableTo,
@@ -142,7 +142,7 @@ public class DbSpec {
     return addJoin(schemaFrom, tableFrom, schemaTo, tableTo,
                    colNames, colNames);
   }
-  
+
   /**
    * Creates and adds a join with the given parameters to this spec.
    * <p>
@@ -153,7 +153,7 @@ public class DbSpec {
    * @param tableTo table for the right side of the join
    * @param fromColNames the column names for the left side of the join
    * @param toColNames the column names for the right side of the join
-   * @return the freshly created schema
+   * @return the freshly created join
    */
   public DbJoin addJoin(String schemaFrom, String tableFrom,
                         String schemaTo, String tableTo,
@@ -162,6 +162,23 @@ public class DbSpec {
     DbJoin join = createJoin(findSchema(schemaFrom).findTable(tableFrom),
                              findSchema(schemaTo).findTable(tableTo),
                              fromColNames, toColNames);
+    return addJoin(join);
+  }
+
+  /**
+   * Creates and adds a join with the given parameters to this spec.
+   * <p>
+   * Note, no effort is made to make sure the given join is unique.
+   * @param fromColumn the column for the left side of the join
+   * @param toColumn the column for the right side of the join
+   * @return the freshly created join
+   */
+  public DbJoin addJoin(DbColumn fromColumn, DbColumn toColumn)
+  {
+    DbJoin join = createJoin(fromColumn.getTable(),
+                             toColumn.getTable(),
+                             new DbColumn[]{fromColumn},
+                             new DbColumn[]{toColumn});
     return addJoin(join);
   }
 
@@ -176,7 +193,7 @@ public class DbSpec {
     _joins.add(checkOwnership(join));
     return join;
   }
-  
+
   /**
    * Creates and returns a new {@link DbSchema} with the given parameters.
    * <p>
@@ -186,7 +203,7 @@ public class DbSpec {
   {
     return new DbSchema(this, name);
   }
-  
+
   /**
    * Creates and returns a new {@link DbTable} with the given parameters.
    * <p>
@@ -196,7 +213,7 @@ public class DbSpec {
   {
     return new DbTable(parent, name);
   }
-  
+
   /**
    * Creates and returns a new {@link DbColumn} with the given parameters.
    * <p>
@@ -207,16 +224,30 @@ public class DbSpec {
   {
     return new DbColumn(parent, name, typeName, typeQualifiers);
   }
-  
+
+  /**
+   * Creates and returns a new {@link DbJoin} with the given parameters.
+   * <p>
+   * @deprecated override {@link #createJoin(DbTable, DbTable, DbColumn[], DbColumn[])}
+   *             instead
+   */
+  @Deprecated
+  public DbJoin createJoin(DbTable fromTable, DbTable toTable,
+                           String[] fromColNames, String[] toColNames)
+  {
+    return createJoin(fromTable, toTable, fromTable.findColumns(fromColNames),
+                      toTable.findColumns(toColNames));
+  }
+
   /**
    * Creates and returns a new {@link DbJoin} with the given parameters.
    * <p>
    * This method can be overriden to utilize custom model subclasses.
    */
   public DbJoin createJoin(DbTable fromTable, DbTable toTable,
-                           String[] fromColNames, String[] toColNames)
+                           DbColumn[] fromColumns, DbColumn[] toColumns)
   {
-    return new DbJoin(this, fromTable, toTable, fromColNames, toColNames);
+    return new DbJoin(this, fromTable, toTable, fromColumns, toColumns);
   }
 
   /**
@@ -228,7 +259,7 @@ public class DbSpec {
   {
     return new DbIndex(table, name, colNames);
   }
-  
+
   /**
    * Creates and returns a new {@link DbFunctionPackage} with the given
    * parameters.
@@ -249,7 +280,7 @@ public class DbSpec {
   {
     return new DbFunction(parent, name);
   }
-  
+
   /**
    * Creates and returns a new column {@link DbConstraint} with the given
    * parameters.
@@ -271,12 +302,12 @@ public class DbSpec {
    */
   public DbConstraint createTableConstraint(
       DbTable parent, String name,
-      com.healthmarketscience.sqlbuilder.dbspec.Constraint.Type type, 
+      com.healthmarketscience.sqlbuilder.dbspec.Constraint.Type type,
       String... colNames)
   {
     return new DbConstraint(parent, name, type, colNames);
   }
-  
+
   /**
    * Creates and returns a new column {@link DbForeignKeyConstraint} with the
    * given parameters.
@@ -299,7 +330,7 @@ public class DbSpec {
    * This method can be overriden to utilize custom model subclasses.
    */
   public DbForeignKeyConstraint createColumnForeignKeyConstraint(
-      DbColumn parent, String name, DbTable referencedTable, 
+      DbColumn parent, String name, DbTable referencedTable,
       DbColumn referencedColumn)
   {
     return new DbForeignKeyConstraint(parent, name, referencedTable,
@@ -360,7 +391,7 @@ public class DbSpec {
   {
     return new DbCheckConstraint(parent, name, condition);
   }
-    
+
   /**
    * @throws IllegalArgumentException if the parent of the given object is not
    *         this object
@@ -373,5 +404,5 @@ public class DbSpec {
     }
     return obj;
   }
-  
+
 }

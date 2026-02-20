@@ -4,6 +4,14 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="3.0.3" date="2026-02-20">
+      <action dev="jahlborn" type="update">
+        Add a variety of useful helpers for schema setup.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add CURRENT_TIMESTAMP expression.
+      </action>
+    </release>
     <release version="3.0.2" date="2021-06-03">
       <action dev="jahlborn" type="update">
         Add system property which allows setting the default list item

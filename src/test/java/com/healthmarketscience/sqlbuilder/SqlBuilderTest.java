@@ -23,17 +23,17 @@ import java.util.Arrays;
 import java.util.Date;
 
 import com.healthmarketscience.common.util.AppendableExt;
+import static com.healthmarketscience.sqlbuilder.Conditions.*;
+import static com.healthmarketscience.sqlbuilder.Expressions.*;
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.RejoinTable;
+import com.healthmarketscience.sqlbuilder.dbspec.SimpleJoin;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbFunction;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbFunctionPackage;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbIndex;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbSpec;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
-
-import static com.healthmarketscience.sqlbuilder.Conditions.*;
-import static com.healthmarketscience.sqlbuilder.Expressions.*;
 
 /**
  * @author James Ahlborn
@@ -381,13 +381,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
     RejoinTable noAliasTable = new RejoinTable(_table1, null);
     Column col1 = noAliasTable.findColumnByName("col1");
 
+    SimpleJoin newJoin = new SimpleJoin(col1, _defTable1_col2);
+
     SelectQuery selectQuery1 = new SelectQuery()
       .addColumns(col1, _defTable1_col2, _defTable2_col5);
 
-    String selectStr1 = selectQuery1.addJoin(
-        SelectQuery.JoinType.INNER,
-        noAliasTable, _defTable1,
-        col1, _defTable1_col2)
+    String selectStr1 = selectQuery1.addJoins(newJoin)
         .addJoins(SelectQuery.JoinType.LEFT_OUTER, _idJoin)
         .validate().toString();
       checkResult(selectStr1,
@@ -490,6 +489,12 @@ public class SqlBuilderTest extends BaseSqlTestCase
       .addCustomColumns(expr, _table1_col2)
       .validate().toString();
     checkResult(exprQuery, "SELECT (37 + t2.col5 + (- (t0.col1 * 4.7)) + 'PI' + (8 - 3)),t0.col2 FROM Table2 t2,Schema1.Table1 t0");
+
+    String tsQuery = new SelectQuery()
+      .addColumns(_table1_col2).addCondition(
+          Conditions.lessThan(_table1_col2, Expressions.CURRENT_TIMESTAMP))
+      .validate().toString();
+    checkResult(tsQuery, "SELECT t0.col2 FROM Schema1.Table1 t0 WHERE (t0.col2 < CURRENT_TIMESTAMP)");
 
     String concatExpression = concatenate(
         "The answer is ", add(40, 2), ".")
