@@ -27,7 +27,7 @@ import com.healthmarketscience.sqlbuilder.dbspec.Join;
  * @author James Ahlborn
  */
 public class DbJoin extends DbObject<DbObject<?>> implements Join {
-  
+
   /** the spec in which this schema exists */
   private final DbSpec _spec;
   /** left table of the join */
@@ -44,7 +44,7 @@ public class DbJoin extends DbObject<DbObject<?>> implements Join {
     this(spec, fromTable, toTable, fromTable.findColumns(fromColNames),
          toTable.findColumns(toColNames));
   }
-  
+
   public DbJoin(DbSpec spec, DbTable fromTable, DbTable toTable,
                 DbColumn[] fromColumns, DbColumn[] toColumns) {
     super(null, null);
@@ -64,7 +64,7 @@ public class DbJoin extends DbObject<DbObject<?>> implements Join {
   public DbTable getFromTable() {
     return _fromTable;
   }
-    
+
   @Override
   public DbTable getToTable() {
     return _toTable;
@@ -74,10 +74,15 @@ public class DbJoin extends DbObject<DbObject<?>> implements Join {
   public List<DbColumn> getFromColumns() {
     return _fromColumns;
   }
-    
+
   @Override
   public List<DbColumn> getToColumns() {
     return _toColumns;
   }
 
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() +
+      " from " + _fromColumns + " to " + _toColumns;
+  }
 }
