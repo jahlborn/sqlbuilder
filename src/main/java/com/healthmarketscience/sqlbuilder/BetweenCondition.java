@@ -23,8 +23,8 @@ import com.healthmarketscience.common.util.AppendableExt;
 
 /**
  * Outputs a "BETWEEN" condition
- * <code>"(&lt;column&gt; [NOT] BETWEEN (&lt;rightObj1&gt;, &lt;rightObj2&gt;, ...) )"</code>
- * 
+ * <code>"(&lt;column&gt; [NOT] BETWEEN (&lt;rightObj1&gt;, &lt;rightObj2&gt;, ...))"</code>
+ *
  * @author James Ahlborn
  */
 public class BetweenCondition extends Condition {
@@ -49,14 +49,14 @@ public class BetweenCondition extends Condition {
     _negate = negate;
     return this;
   }
-  
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     _value.collectSchemaObjects(vContext);
     _minValue.collectSchemaObjects(vContext);
     _maxValue.collectSchemaObjects(vContext);
   }
-  
+
   @Override
   public void appendTo(AppendableExt app) throws IOException {
     // (x between min and max )

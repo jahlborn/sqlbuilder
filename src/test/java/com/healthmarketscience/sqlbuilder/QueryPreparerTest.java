@@ -88,7 +88,7 @@ public class QueryPreparerTest extends BaseSqlTestCase {
                   new InCondition(_defTable1_col_id, lph1))));
     String queryStr = query.toString();
     checkResult(queryStr,
-                "SELECT ?,?,?,?,?,? FROM Schema1.Table1 t0,Table1 t1,Table2 t2 WHERE ((t0.col1 < ?) AND (t0.col2 <= ?) AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE ?)) OR (YOU = ?)) AND (t0.col2 NOT IN (?,?,?) ) AND ((t0.col2 IS NULL) OR (? <> ?) OR (t1.col_id IN (?,?,?,?,?) )))");
+                "SELECT ?,?,?,?,?,? FROM Schema1.Table1 t0,Table1 t1,Table2 t2 WHERE ((t0.col1 < ?) AND (t0.col2 <= ?) AND (t1.col_id IS NOT NULL) AND ((IM REALLY SNAZZY) OR (NOT (t2.col5 LIKE ?)) OR (YOU = ?)) AND (t0.col2 NOT IN (?,?,?)) AND ((t0.col2 IS NULL) OR (? <> ?) OR (t1.col_id IN (?,?,?,?,?))))");
 
     assertEquals((0 + startIndex), sph2.getIndex());
     assertEquals((1 + startIndex), sph3.getIndex());

@@ -26,8 +26,8 @@ import com.healthmarketscience.common.util.AppendableExt;
 
 /**
  * Outputs an "IN" condition
- * <code>"(&lt;column&gt; [NOT] IN (&lt;rightObj1&gt;, &lt;rightObj2&gt;, ...) )"</code>
- * 
+ * <code>"(&lt;column&gt; [NOT] IN (&lt;rightObj1&gt;, &lt;rightObj2&gt;, ...))"</code>
+ *
  * @author Eric Bernstein
  */
 public class InCondition extends Condition {
@@ -46,7 +46,7 @@ public class InCondition extends Condition {
     this(leftObj,
          (rightObjs != null ?
           Arrays.asList(rightObjs) :
-          Collections.emptyList())); 
+          Collections.emptyList()));
   }
 
   /**
@@ -69,7 +69,7 @@ public class InCondition extends Condition {
   public InCondition addObject(Object obj) {
     return addObjects(obj);
   }
-  
+
   /**
    * Adds the given objects to the tested values.
    * <p>
@@ -80,7 +80,7 @@ public class InCondition extends Condition {
     _rightValues.addObjects(Converter.COLUMN_VALUE_TO_OBJ, objs);
     return this;
   }
-  
+
   /** Sets whether or not the in condition should be negated or not */
   public InCondition setNegate(boolean negate) {
     _negate = negate;
@@ -93,7 +93,7 @@ public class InCondition extends Condition {
     // and "empty" condition, so don't bother outputting anything
     return(_negate && _rightValues.isEmpty());
   }
-  
+
   @Override
   protected void collectSchemaObjects(ValidationContext vContext) {
     _leftValue.collectSchemaObjects(vContext);
@@ -111,17 +111,9 @@ public class InCondition extends Condition {
   }
 
   @Override
-  protected void closeParen(AppendableExt app) throws IOException {
-    if(!isDisableParens()) {
-      // backwards compat, separate the 2 closing parens
-      app.append(" )");
-    } 
-  }
-  
-  @Override
   public void appendTo(AppendableExt app) throws IOException {
     if(!isEmpty()) {
-      // (x in (y1,y2,y3) )
+      // (x in (y1,y2,y3))
       openParen(app);
       app.append(_leftValue)
         .append(_negate ? " NOT IN " : " IN ");

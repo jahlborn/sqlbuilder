@@ -4,6 +4,12 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="3.1.0" date="TBD">
+      <action dev="jahlborn" type="update">
+        Ditch no longer useful backwards compatibility hack of an extra space
+        at the end of IN conditions.
+      </action>
+    </release>
     <release version="3.0.3" date="2026-02-20">
       <action dev="jahlborn" type="update">
         Add a variety of useful helpers for schema setup.
