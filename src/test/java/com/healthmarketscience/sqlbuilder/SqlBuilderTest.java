@@ -356,9 +356,9 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
       new SelectQuery()
         .addColumns(_table1_col1)
-        .addJoin(SelectQuery.JoinType.INNER, _table1, _defTable1,
-                 Arrays.asList(_table1_col1),
-                 Arrays.asList(_defTable1_col_id))
+        .addJoin(SelectQuery.JoinType.INNER,
+                 _table1_col1,
+                 _defTable1_col_id)
         .addJoin(SelectQuery.JoinType.INNER, table3, _defTable2,
                  Arrays.asList(_defTable1_col_id),
                  Arrays.asList(_defTable2_col_id))

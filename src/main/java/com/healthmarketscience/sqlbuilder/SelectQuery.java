@@ -302,6 +302,18 @@ public class SelectQuery extends BaseCTEQuery<SelectQuery>
   }
 
   /**
+   * Adds a join of the given type from the tables for the given columns with
+   * a join condition requiring fromColumn to equal toColumn.
+   */
+  public SelectQuery addJoin(JoinType joinType,
+                             Column fromColumn,
+                             Column toColumn)
+  {
+    return addJoin(joinType, fromColumn.getTable(), toColumn.getTable(),
+                   fromColumn, toColumn);
+  }
+
+  /**
    * Adds a join of the given type from fromTable to toTable with a join
    * condition requiring fromColumn to equal toColumn.
    */
