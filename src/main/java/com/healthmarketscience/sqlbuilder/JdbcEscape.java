@@ -17,6 +17,7 @@ limitations under the License.
 package com.healthmarketscience.sqlbuilder;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -130,6 +131,12 @@ public class JdbcEscape extends Expression
               nanoseconds) */
   public static JdbcEscape timestamp(LocalDateTime d) {
     return timestamp(java.sql.Timestamp.valueOf(d));
+  }
+
+  /** @return a JDBC escaped value with the given Instant (including
+              nanoseconds)*/
+  public static JdbcEscape timestamp(Instant i) {
+    return timestamp(java.sql.Timestamp.from(i));
   }
 
   /** @return a JDBC escaped value with the date-time portion of the given

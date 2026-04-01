@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.healthmarketscience.sqlbuilder;
 
+import java.time.temporal.TemporalAccessor;
+import java.util.Date;
+
 import com.healthmarketscience.sqlbuilder.dbspec.Column;
 import com.healthmarketscience.sqlbuilder.dbspec.Constraint;
 import com.healthmarketscience.sqlbuilder.dbspec.Function;
@@ -475,6 +478,8 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@code null} -&gt; {@link SqlObject#NULL_VALUE}</li>
    * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
+   * <li>{@link java.util.Date} -&gt; {@link DateValueObject}</li>
+   * <li>{@link java.time.temporal.TemporalAccessor} -&gt; {@link DateValueObject}</li>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link ValueObject}</li>
    * </ul>
@@ -489,6 +494,8 @@ public abstract class Converter<SrcType, DstType>
       return BooleanValueObject.valueOf((Boolean)obj);
     } else if(obj instanceof Number) {
       return new NumberValueObject((Number)obj);
+    } else if((obj instanceof Date) || (obj instanceof TemporalAccessor)) {
+      return DateValueObject.of(obj);
     } else if(obj instanceof SqlObject) {
       return (SqlObject)obj;
     }
@@ -527,6 +534,8 @@ public abstract class Converter<SrcType, DstType>
    * <li>{@link SqlObject} -&gt; {@link SqlObject}</li>
    * <li>{@link java.lang.Boolean} -&gt; {@link BooleanValueObject}</li>
    * <li>{@link java.lang.Number} -&gt; {@link NumberValueObject}</li>
+   * <li>{@link java.util.Date} -&gt; {@link DateValueObject}</li>
+   * <li>{@link java.time.temporal.TemporalAccessor} -&gt; {@link DateValueObject}</li>
    * <li>{@link java.lang.Object} -&gt; {@link CustomSql}</li>
    * </ul>
    *
@@ -534,19 +543,18 @@ public abstract class Converter<SrcType, DstType>
    * @return a SqlObject for the given Object.
    */
   public static SqlObject toCustomSqlObject(Object obj) {
-    SqlObject rtnObj;
     if(obj == null) {
-      rtnObj = SqlObject.NULL_VALUE;
+      return SqlObject.NULL_VALUE;
     } else if(obj instanceof SqlObject) {
-      rtnObj = (SqlObject)obj;
+      return (SqlObject)obj;
     } else if(obj instanceof Boolean) {
       return BooleanValueObject.valueOf((Boolean)obj);
     } else if(obj instanceof Number) {
-      rtnObj = new NumberValueObject((Number)obj);
-    } else {
-      rtnObj = new CustomSql(obj);
+      return new NumberValueObject((Number)obj);
+    } else if((obj instanceof Date) || (obj instanceof TemporalAccessor)) {
+      return DateValueObject.of(obj);
     }
-    return rtnObj;
+    return new CustomSql(obj);
   }
 
   /**

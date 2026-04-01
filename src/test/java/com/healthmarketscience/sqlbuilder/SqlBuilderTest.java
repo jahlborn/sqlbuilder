@@ -1188,4 +1188,23 @@ public class SqlBuilderTest extends BaseSqlTestCase
 
     checkResult(queryStr, "SELECT t0.col1,t0.col2,AVG() OVER w AS average FROM Schema1.Table1 t0,Table1 t1 WINDOW w AS (PARTITION BY t1.col_id ORDER BY t1.col2 ROWS BETWEEN UNBOUNDED PRECEDING AND 5 FOLLOWING EXCLUDE CURRENT ROW)");
   }
+
+  public void testDateValueObject() {
+    long time = 1775009961663L;
+
+    String queryStr = new SelectQuery().addColumns(_table1_col1)
+      .addCondition(Conditions.equalTo(_table1_col1, new java.sql.Time(time)))
+      .validate().toString();
+    checkResult(queryStr, "SELECT t0.col1 FROM Schema1.Table1 t0 WHERE (t0.col1 = TIME '22:19:21')");
+
+    queryStr = new SelectQuery().addColumns(_table1_col1)
+      .addCondition(Conditions.equalTo(_table1_col1, new java.sql.Date(time)))
+      .validate().toString();
+    checkResult(queryStr, "SELECT t0.col1 FROM Schema1.Table1 t0 WHERE (t0.col1 = DATE '2026-03-31')");
+
+    queryStr = new SelectQuery().addColumns(_table1_col1)
+      .addCondition(Conditions.equalTo(_table1_col1, new java.sql.Timestamp(time)))
+      .validate().toString();
+    checkResult(queryStr, "SELECT t0.col1 FROM Schema1.Table1 t0 WHERE (t0.col1 = TIMESTAMP '2026-03-31 22:19:21.663')");
+  }
 }
