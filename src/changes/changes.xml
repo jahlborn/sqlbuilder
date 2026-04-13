@@ -4,6 +4,11 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
+    <release version="3.1.1" date="TBD">
+      <action dev="jahlborn" type="update">
+        Tweak display string for type placeholders.
+      </action>
+    </release>
     <release version="3.1.0" date="2026-04-07">
       <action dev="jahlborn" type="update">
         Ditch no longer useful backwards compatibility hack of an extra space

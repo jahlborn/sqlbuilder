@@ -1258,6 +1258,11 @@ public class QueryPreparer
     {
       setObject(_val, _sqlType, ps);
     }
+
+    @Override
+    public String displayToString() {
+      return super.displayToString() + " (" + _sqlType + ")";
+    }
   }
 
   /**
