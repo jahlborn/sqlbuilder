@@ -208,7 +208,7 @@
   <distributionManagement>
     <site>
       <id>openhms-build-site</id>
-      <url>scp://shell.sourceforge.net/home/project-web/openhms/htdocs/sqlbuilder</url>
+      <url>scp://web.sourceforge.net/home/project-web/openhms/htdocs/sqlbuilder</url>
     </site>
   </distributionManagement>
 </project>
