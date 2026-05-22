@@ -4,7 +4,7 @@
     <author email="jahlborn@users.sf.net">James Ahlborn</author>
   </properties>
   <body>
-    <release version="3.1.1" date="TBD">
+    <release version="3.1.1" date="2026-05-22">
       <action dev="jahlborn" type="update">
         Tweak display string for type placeholders.
       </action>
