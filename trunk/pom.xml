@@ -1,0 +1,221 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.healthmarketscience</groupId>
+    <artifactId>openhms-parent</artifactId>
+    <version>2.0.16</version>
+  </parent>
+  <groupId>com.healthmarketscience.sqlbuilder</groupId>
+  <artifactId>sqlbuilder</artifactId>
+  <name>SQL Query Builders</name>
+  <description>Builder style classes for creating SQL queries</description>
+  <version>3.1.2</version>
+  <url>https://openhms.sourceforge.io/sqlbuilder</url>
+  <inceptionYear>2006</inceptionYear>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>jahlborn</id>
+      <name>James Ahlborn</name>
+      <email>jahlborn@users.sf.net</email>
+      <timezone>-5</timezone>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <name>Eric Bernstein</name>
+      <email>ebernstein@users.sf.net</email>
+      <timezone>-5</timezone>
+    </contributor>
+    <contributor>
+      <name>Kevin Mudrick</name>
+      <timezone>-5</timezone>
+    </contributor>
+    <contributor>
+      <name>Mike DeLaurentis</name>
+      <timezone>-5</timezone>
+    </contributor>
+    <contributor>
+      <name>Jay Liang</name>
+      <timezone>-5</timezone>
+    </contributor>
+    <contributor>
+      <name>Tim McCune</name>
+      <email>javajedi@users.sf.net</email>
+    </contributor>
+    <contributor>
+      <name>Rob Di Marco</name>
+      <email>robdimarco@users.sf.net</email>
+    </contributor>
+  </contributors>
+  <scm>
+    <connection>scm:svn:svn://svn.code.sf.net/p/openhms/code/sqlbuilder/tags/sqlbuilder-3.1.2</connection>
+    <!-- read/write svn connection -->
+    <developerConnection>scm:svn:svn+ssh://svn.code.sf.net/p/openhms/code/sqlbuilder/tags/sqlbuilder-3.1.2</developerConnection>
+    <url>http://svn.code.sf.net/p/openhms/code/sqlbuilder/tags/sqlbuilder-3.1.2</url>
+  </scm>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <forkMode>once</forkMode>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+          </instructions>
+        </configuration>
+        <executions>
+          <execution>
+            <id>bundle-manifest</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>manifest</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <minmemory>128m</minmemory>
+          <maxmemory>512</maxmemory>
+          <links>
+            <list>https://docs.oracle.com/javase/8/docs/api/</list>
+          </links>
+          <source>1.8</source>
+          <stylesheetfile>${basedir}/src/site/javadoc/stylesheet.css</stylesheetfile>
+          <groups>
+            <group>
+              <title>SqlBuilder Core Package</title>
+              <packages>com.healthmarketscience.sqlbuilder</packages>
+            </group>
+            <group>
+              <title>Database Specification Packages</title>
+              <packages>com.healthmarketscience.sqlbuilder.dbspec*</packages>
+            </group>
+            <group>
+              <title>Custom Database Packages</title>
+              <packages>com.healthmarketscience.sqlbuilder.custom*</packages>
+            </group>
+            <group>
+              <title>Utility Package</title>
+              <packages>com.healthmarketscience.common*</packages>
+            </group>
+          </groups>
+          <quiet>true</quiet>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <configuration>
+          <rulesets>
+            <ruleset>${basedir}/src/site/pmd/custom-ruleset.xml</ruleset>
+          </rulesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-changes-plugin</artifactId>
+        <configuration>
+          <issueLinkTemplatePerSystem>
+            <SourceForge2Features>https://sourceforge.net/p/openhms/feature-requests/%ISSUE%</SourceForge2Features>
+            <SourceForge2Patches>https://sourceforge.net/p/openhms/patches/%ISSUE%</SourceForge2Patches>
+          </issueLinkTemplatePerSystem>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>changes-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <minmemory>128m</minmemory>
+          <maxmemory>512</maxmemory>
+          <links>
+            <list>https://docs.oracle.com/javase/8/docs/api/</list>
+          </links>
+          <source>1.8</source>
+          <stylesheetfile>${basedir}/src/site/javadoc/stylesheet.css</stylesheetfile>
+          <groups>
+            <group>
+              <title>SqlBuilder Core Package</title>
+              <packages>com.healthmarketscience.sqlbuilder</packages>
+            </group>
+            <group>
+              <title>Database Specification Packages</title>
+              <packages>com.healthmarketscience.sqlbuilder.dbspec*</packages>
+            </group>
+            <group>
+              <title>Custom Database Packages</title>
+              <packages>com.healthmarketscience.sqlbuilder.custom*</packages>
+            </group>
+            <group>
+              <title>Utility Package</title>
+              <packages>com.healthmarketscience.common*</packages>
+            </group>
+          </groups>
+          <quiet>true</quiet>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <configuration>
+          <excludeFilterFile>src/test/resources/findBugsExcludes.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+  <distributionManagement>
+    <site>
+      <id>openhms-build-site</id>
+      <url>sftp://web.sourceforge.net/home/project-web/openhms/htdocs/sqlbuilder</url>
+    </site>
+  </distributionManagement>
+</project>

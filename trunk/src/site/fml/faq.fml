@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+
+<faqs title="Frequently Asked Questions">
+
+  <part id="general">
+    <title>General</title>
+
+    <faq id="customdb">
+      <question>How can I get Oracle (DB2, SQL Server, MySQL...) specific syntax?</question>
+      <answer>
+        <p>
+          In general, the SqlBuilder package has strived to use ANSI SQL92
+          syntax only (with a few minor deviances).
+        </p>
+        <p>
+          As of the 2.1.1 release,
+          SqlBuilder supports a <a href="apidocs/com/healthmarketscience/sqlbuilder/custom/package-summary.html">syntax customization framework</a>,
+          with a few database specific constructs currently built-in.
+        </p>
+        <p>
+          As of the 2.1.2 release, some ANSI SQL99 features have been added
+          (newer standards classes will be marked as such, e.g. "SQL 99").
+        </p>
+        <p>
+          As of the 2.1.7 release, some ANSI SQL2003 features have been added
+          (newer standards classes will be marked as such, e.g. "SQL 2003").
+        </p>
+      </answer>
+    </faq>
+
+    <faq id="customsyn">
+      <question>I don't want to use the DbSchema objects for just one
+                query...</question>
+      <answer>
+        <p>
+          Well, that's not really a question, but we get where you're coming
+          from.  Pretty much every method has a "custom" counterpart which can
+          be used to inject pretty much any custom syntax you want.  The
+          queries use different converters to interpret the arguments to these
+          methods.  In most cases these converters "do the right thing", but
+          if they do not, you generally just need to wrap your custom object
+          in a CustomSql object.
+        </p>
+      </answer>
+    </faq>
+
+    <faq id="joinselect">
+      <question>How do I use a select sub-query as a join source?</question>
+      <answer>
+        <p>
+          In some SQL dialects, complex queries can be constructed where a
+          select sub-query is used as a "table" like source for an outer query.
+        </p>
+        <p>
+          Example:
+        </p>
+        <source>
+SELECT col1,
+       col2,
+       sum(col3) as col3,
+       avg(col4) as col4
+FROM (
+    SELECT (&lt;complex_expression&gt;) t0.col1,
+           (&lt;complex_expression&gt;) t0.col2,
+           (&lt;complex_expression&gt;) t0.col3,
+           (&lt;complex_expression&gt;) t0.col4
+    from table t0
+)
+GROUP BY a, b
+</source>
+        <p>
+          SqlBuilder does not support this type of query.  However, there is a
+          modern SQL construct known as a Common Table Expression (CTE) which
+          is the now standardized replacement for this legacy syntax.
+          SqlBuilder has full support for <a
+          href="apidocs/com/healthmarketscience/sqlbuilder/CommonTableExpression.html">CTE
+          queries</a>.
+        </p>
+        <p>
+          Using this example code:
+        </p>
+        <source>
+    DbSchema schema = new DbSpec().addSchema("some_schema");
+
+    DbTable table = schema.addTable("some_table");
+
+    // It is implied that the columns of the table are defined only in one place
+    DbColumn col1 = table.addColumn("col1","number", null);
+    DbColumn col2 = table.addColumn("col2","number", null);
+    DbColumn col3 = table.addColumn("col3","number", null);
+    DbColumn col4 = table.addColumn("col4","number", null);
+
+    SelectQuery innerQuery = new SelectQuery()
+      .addColumns(col1, col2, col3, col4);
+
+    CommonTableExpression cte = new CommonTableExpression("cte")
+      .setQuery(innerQuery);
+
+    Column cteCol1 = cte.addColumn("col1");
+    Column cteCol2 = cte.addColumn("col2");
+    Column cteCol3 = cte.addColumn("col3");
+    Column cteCol4 = cte.addColumn("col4");
+
+    SelectQuery outerQuery = new SelectQuery()
+      .addCommonTableExpression(cte)
+      .addCustomColumns(cteCol1, cteCol2,
+                  FunctionCall.sum().addColumnParams(cteCol3),
+                  FunctionCall.avg().addColumnParams(cteCol4));]
+</source>
+        <p>
+          You can generate this output (modern equivalent to the original query):
+        </p>
+        <source>
+WITH cte (col1,col2,col3,col4) AS
+  (SELECT t0.col1,t0.col2,t0.col3,t0.col4 FROM some_schema.some_table t0)
+SELECT cte0.col1,cte0.col2,SUM(cte0.col3),AVG(cte0.col4)
+FROM cte cte0
+</source>
+      </answer>
+    </faq>
+
+  </part>
+
+</faqs>

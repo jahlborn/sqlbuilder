@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<FindBugsFilter>
+  <!-- These are not bugs. -->
+  <Match>
+    <Class name="com.healthmarketscience.sqlbuilder.dbspec.basic.DbObject" />
+    <Bug pattern="ES_COMPARING_PARAMETER_STRING_WITH_EQ" />
+  </Match>
+</FindBugsFilter>

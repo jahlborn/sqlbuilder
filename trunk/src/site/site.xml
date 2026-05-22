@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<project name="SqlBuilder">
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.6</version>
+  </skin>
+  <bannerLeft>
+    <name>${project.name}</name>
+  </bannerLeft>
+  <body>
+    <menu name="SqlBuilder">
+      <item name="About" href="index.html"/>
+      <item name="Downloads" href="https://sourceforge.net/project/showfiles.php?group_id=185339&amp;package_id=269188"/>
+      <item name="SourceForge Project" href="https://sourceforge.net/projects/openhms/"/>
+      <item name="Examples" href="example.html"/>
+      <item name="Syntax Reference" href="syntax_reference.html"/>
+      <item name="FAQ" href="faq.html"/>
+      <item name="Support" href="https://sourceforge.net/projects/openhms/support"/>
+      <item name="GitHub Mirror" href="https://github.com/jahlborn/sqlbuilder"/>
+    </menu>
+
+    <menu ref="reports"/>
+
+  </body>
+
+  <custom>
+    <fluidoSkin>
+      <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+      <copyrightClass>center</copyrightClass>
+      <gitHub>
+        <projectId>jahlborn/sqlbuilder</projectId>
+        <ribbonOrientation>right</ribbonOrientation>
+        <ribbonColor>gray</ribbonColor>        
+      </gitHub>
+    </fluidoSkin>
+  </custom>
+
+</project>

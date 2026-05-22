@@ -1,0 +1,274 @@
+<document>
+  <properties>
+    <title>Release notes</title>
+    <author email="jahlborn@users.sf.net">James Ahlborn</author>
+  </properties>
+  <body>
+    <release version="3.1.2" date="2026-05-22">
+      <action dev="jahlborn" type="update">
+        Tweak display string for type placeholders.
+      </action>
+    </release>
+    <release version="3.1.1" date="2026-05-22">
+      <action dev="jahlborn" type="update">
+        Incomplete release, ignore.
+      </action>
+    </release>
+    <release version="3.1.0" date="2026-04-07">
+      <action dev="jahlborn" type="update">
+        Ditch no longer useful backwards compatibility hack of an extra space
+        at the end of IN conditions.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add support for date/time sql literals.
+      </action>
+    </release>
+    <release version="3.0.3" date="2026-02-20">
+      <action dev="jahlborn" type="update">
+        Add a variety of useful helpers for schema setup.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add CURRENT_TIMESTAMP expression.
+      </action>
+    </release>
+    <release version="3.0.2" date="2021-06-03">
+      <action dev="jahlborn" type="update">
+        Add system property which allows setting the default list item
+        separator to include a trailing space.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add convenience methods for constructing OrderObject instances. Add
+        documention about using OrderObject to control null ordering.
+      </action>
+    </release>
+    <release version="3.0.1" date="2020-09-10">
+      <action dev="jahlborn" type="update" system="SourceForge2Features" issue="27">
+        Added Conditions and Expressions classes with static methods for
+        generating most condition and expression types.  Useful for static
+        imports for writing more succinct code.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add support for setting the constraint check time and setting the
+        delete/update referential action for foreign key constraints.
+      </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features" issue="26">
+        Add more useful info to some validation failures.
+      </action>
+    </release>
+    <release version="3.0.0" date="2019-02-10" description="Update to Java 8">
+      <action dev="jahlborn" type="update">
+        SqlBuilder now requires a Java 8+ runtime.  As part of this update,
+        all dependencies have been updated to their latest versions.
+      </action>
+      <action dev="jahlborn" type="update">
+        The separate common-util dependency has been removed.  The few classes
+        which were utilized from that dependency are now included in this
+        project directly.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add convenience methods to convert Java 8 Temporal types into jdbc
+        date/time escape syntax.
+      </action>
+    </release>
+    <release version="2.1.7" date="2017-04-21">
+      <action dev="jahlborn" type="add" system="SourceForge2Patches" issue="4">
+        Add the EXTRACT expression (thanks to Andrey Karepin).
+      </action>
+      <action dev="jahlborn" type="add" system="SourceForge2Patches" issue="3">
+        Add support for window functions (ideas from Andrey Karepin).
+      </action>
+    </release>
+    <release version="2.1.6" date="2016-12-18">
+      <action dev="jahlborn" type="update" system="SourceForge2Features" issue="19">
+        Add the BETWEEN condition.
+      </action>
+    </release>
+    <release version="2.1.5" date="2016-09-20">
+      <action dev="jahlborn" type="update">
+        Add a few convenience methods for RejoinTable and table aliases.
+      </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features" issue="18">
+        Add support for some custom postgresql binary conditions (ilike,
+        similar to, and posix regex matching).
+      </action>
+    </release>
+    <release version="2.1.4" date="2016-07-01">
+      <action dev="jahlborn" type="update" system="SourceForge2" issue="20">
+        Add OSGi support to jar manifest.
+      </action>
+    </release>
+    <release version="2.1.3" date="2016-05-30">
+      <action dev="jahlborn" type="update" system="SourceForge2" issue="18">
+        Add support for sqlserver TOP syntax as custom SQL.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add support for SQL 2008 OFFSET and FETCH NEXT clauses in SELECT queries.
+      </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features" issue="17">
+        Add support for cross schema foreign key column references.
+      </action>
+    </release>
+    <release version="2.1.2" date="2016-01-30">
+      <action dev="jahlborn" type="update">
+        New site style!
+      </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features"
+              issue="15">
+        Initial foray into SQL99 syntax with Common Table Expression support.
+      </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features"
+              issue="16">
+        Add system property for using SQL boolean literals for boolean values.
+      </action>
+    </release>
+    <release version="2.1.1" date="2015-07-01">
+      <action dev="jahlborn" type="update" system="SourceForge2Features"
+              issue="14">
+        Add a framework for enabling SqlBuilder queries to support custom SQL
+        syntax.  Add a few common database-specific customizations.
+      </action>
+      <action dev="jahlborn" type="update" system="SourceForge2Features"
+              issue="5">
+        Add NamedParamObject which supports the "named" param syntax used by
+        some SQL or SQL-like frameworks.
+      </action>
+      <action dev="jahlborn" type="add">
+        Add CheckConstraint for handling table/column CHECK constraints.
+      </action>
+    </release>
+    <release version="2.1.0" date="2015-04-16"
+             description="Relicense to Apache License">
+      <action dev="jahlborn" type="add">
+        OpenHMS relicenses to Apache License, 2.0!
+      </action>
+    </release>
+    <release version="2.0.13" date="2014-12-27">
+      <action dev="jahlborn" type="add" system="SourceForge2Features"
+              issue="13">
+        Add QueryPreparer.ListPlaceHolder to simplify working with lists of
+        PlaceHolders (common in IN expressions).
+      </action>
+    </release>
+    <release version="2.0.12" date="2012-10-01">
+      <action dev="jahlborn" type="update" issue="3536960">
+        Add support for arbitrary column type qualifiers (e.g. scale and
+        precision).
+      </action>
+    </release>
+    <release version="2.0.11" date="2012-01-10">
+      <action dev="jahlborn" type="add">
+          Added the AddColumnAction to the AlterTableQuery, thanks to Eric
+          Fennell.
+      </action>
+      <action dev="jahlborn" type="update">
+          Add support for column default values.
+      </action>
+    </release>
+    <release version="2.0.10" date="2011-10-19">
+      <action dev="jahlborn" type="update" issue="3421696">
+        Add more flexible table aliasing: handle Table with no alias and allow
+        DbTable alias to be passed in constructor.
+      </action>
+      <action dev="jahlborn" type="update" issue="3421713">
+        Add SelectQuery.addCustomJoin(Object) for fully customizable join
+        clauses.
+      </action>
+      <action dev="jahlborn" type="update" issue="3422262">
+        Allow ComboCondition,UnaryCondition,BinaryCondition,ComboExpression to
+        have custom operators.
+      </action>
+      <action dev="jahlborn" type="update" issue="3422262">
+        Add option to disable wrapping parentheses in Conditions and
+        Expressions which utilize them.
+      </action>
+    </release>
+    <release version="2.0.9" date="2011-08-25">
+      <action dev="jahlborn" type="update">
+        Make DbSpec the factory for all other DbObject classes.
+      </action>
+      <action dev="jahlborn" type="update" issue="3397693">
+        Add methods/constructors to enable more flexible usage of DbObject
+        classes with custom subclasses (thanks to Douglas Russell for some
+        code contributions)
+      </action>
+    </release>
+    <release version="2.0.8" date="2011-04-22">
+      <action dev="jahlborn" type="fix" issue="3237822">
+        Fix date tests so that they are TimeZone agnostic.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add support for updatable ResultSets to QueryReader.
+      </action>
+    </release>
+    <release version="2.0.7" date="2011-03-07">
+      <action dev="jahlborn" type="update" issue="3125765">
+        Make Constraints first class citizens of the dbspec model.  Add
+        ConstraintClause and enhance various constructs to use improved
+        constraint implementations.  Deprecated simplified constraint support
+        in CreateTableQuery and AlterTableQuery.
+      </action>
+    </release>
+    <release version="2.0.6" date="2009-10-12">
+      <action dev="jahlborn" type="fix" issue="2817484">
+        Add hasParens() method to NestableClause so that InCondition can
+        accurately determine if the values need to be wrapped in parens or
+        not.
+      </action>
+    </release>
+    <release version="2.0.5" date="2009-05-24">
+      <action dev="jahlborn" type="update" issue="2794171">
+        Add support for additional query "set operators" (EXCEPT, INTERSECT),
+        and add support for mixed usage of said operators.
+      </action>
+      <action dev="jahlborn" type="update">
+        Add UnaryCondition EXISTS and UNIQUE operators.
+      </action>
+      <action dev="jahlborn" type="update">
+        Minor cleanups for some of the generic types.
+      </action>
+      <action dev="jahlborn" type="fix">
+        Fix isEmpty implementation for Subquery.
+      </action>
+      <action dev="jahlborn" type="update">
+        Don't put double parens around IN condition with subexpression.
+      </action>
+    </release>
+    <release version="2.0.4" date="2008-10-05">
+      <action dev="jahlborn" type="fix">
+        Handle BigDecimal/BigInteger instances better in
+        NumberValueObject.isFloatingPoint.
+      </action>
+      <action dev="jahlborn" type="fix" issue="2138885">
+        Fixed handling of boolean values (handle them as numbers because Sql92
+        has no notion of a real boolean type), implemented BooleanValueObject.
+      </action>
+    </release>
+    <release version="2.0.3" date="2008-06-05">
+      <action dev="jahlborn" type="add">
+        Added support for view creation (CreateViewQuery) and deletion
+        (DropQuery.Type.VIEW).
+      </action>
+    </release>
+    <release version="2.0.2" date="2008-04-28">
+      <action dev="jahlborn" type="fix" issue="1943120">
+        Change how state is maintained during query validation.  Use the
+        ValidationContext instead of a few collections in order to enable more
+        complicated subquery handling.  This change allows subqueries to be
+        validated correctly and opens the door for sub-clause validation.
+      </action>
+      <action dev="jahlborn" type="update">
+        Extend the unit test coverage.
+      </action>
+    </release>
+    <release version="2.0.1" date="2008-04-07">
+      <action dev="jahlborn" type="update">
+        Fold numeric conversions into normal value conversions.
+      </action>
+    </release>
+    <release version="2.0.0" date="2008-03-31">
+      <action dev="jahlborn" type="add">
+        Initial open source release.
+      </action>
+    </release>
+  </body>
+</document>

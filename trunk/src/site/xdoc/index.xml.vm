@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <author email="jahlborn@users.sf.net">James Ahlborn</author>
+    <title>Builder style classes for creating SQL queries</title>
+  </properties>
+  <body>
+    <section name="SqlBuilder">
+      <p>
+        SqlBuilder is a library which attempts to take the pain out of
+        generating SQL queries within Java programs.  Using one programming
+        language (Java) to generate code for another language (i.e. SQL) is
+        always a challenge.  There are always issues with escaping characters
+        within string literals, getting spaces in the right place, and getting
+        the parentheses to match up.  And often, even after the code is
+        debugged and fully tested, it is still very fragile.  The slightest
+        change will throw things out of balance and require another round of
+        testing and tweaking.
+      </p>
+      <p>
+        SqlBuilder changes that whole scenario by wrapping the SQL syntax
+        within very lightweight and easy to use Java objects which follow the
+        "builder" paradigm (similar to StringBuilder).  <i>This changes many
+        common SQL syntactical, runtime errors into Java compile-time
+        errors!</i>  Let's dive right in to some quick examples to to see how
+        it all works.
+      </p>
+      <subsection name="SelectQuery Example">
+        <p>
+          A fairly simple SQL select query embedded in a Java program
+          might currently look something like this:
+        </p>
+        <source>
+// assuming a variety of predefined string constants
+String selectQuery = "SELECT " + T1_COL1 + "," + T1_COL2 + "," +
+  T2_COL1 + " FROM " + TABLE1 + " " + T1 + " INNER JOIN " +
+  TABLE2 + " " + T2 + " ON (" + T1_IDCOL + " = " + T2_IDCOL +
+  ") ORDER BY " + T1_COL1;
+</source>
+        <p>
+          Whenever this query is modified, you will need to make sure there
+          are sufficient commas, parentheses, and spaces to generate the
+          correct query (not to mention the correct columns for the given
+          tables and the correct aliases for those tables).
+        </p>
+        <p>
+          An attempted improvement may look something like this:
+        </p>
+        <source>
+String selectQuery = MessageFormat.format(
+  "SELECT {0},{1},{2} FROM {3} {4} INNER JOIN {5} {6} ON ({7} = {8}) " +
+  "ORDER BY {9}",
+  T1_COL1, T2_COL2, T2_COL1, TABLE1, T1, TABLE2, T2,
+  T1_IDCOL, T2_IDCOL, T1_COL1);
+</source>
+        <p>
+          This technique at least removes some of the formatting issues, as
+          the query syntax is in one contiguous string.  However, matching up
+          the placeholders with the arguments is no simple task and simple
+          rearrangements can easily mess up the resulting query string.
+          Additionally, this is still not a viable solution for any sort of
+          dynamic query generation.
+        </p>
+        <p>
+          Now, let's see how this query looks using SqlBuilder classes:
+        </p>
+        <source>
+// assuming these objects have already been created
+Table table1, table2;
+Column t1Col1, t1Col2, t2Col1;
+Join joinOfT1AndT2;
+
+String selectQuery =
+  (new SelectQuery())
+  .addColumns(t1Col1, t1Col2, t2Col1)
+  .addJoin(SelectQuery.JoinType.INNER_JOIN, joinOfT1AndT2)
+  .addOrderings(t1Col1)
+  .validate().toString();
+</source>
+        <p>
+          See how easy that was?  Not a single embedded comma, space, or
+          parenthesis to be seen!  Notice how much more readable this version
+          is compared to the previous versions?  While the Java is a bit more
+          verbose, turning the SQL into Java allows you to utilize your
+          existing Java toolset when writing SQL (think compile-time syntax
+          checking and IDE code completion).  This added functionality is well
+          worth the trade-off.
+        </p>
+        <p>
+          On top of that, check out the <code>validate()</code> method call
+          slipped into the end of the statement.  That call will verify that
+          the columns and tables in the query actually make sense.
+          Maintainability, readability, and verifiability all wrapped into one
+          easy to use package.
+        </p>
+      </subsection>
+      <subsection>
+        <p>
+          That was a very simple example of course.  Imagine a much more
+          complicated query with multiple sub-expressions in the where clause,
+          and it should be easy to see the power and utility of the SqlBuilder
+          library.
+        </p>
+        <p>
+          As a final note--for all that the SqlBuilder package is, there are a
+          couple of things it is <em>not</em>.  This package will <em>not</em>
+          help you write SQL if you do not already know how to write SQL and
+          use JDBC.  It does not abstract away the knowledge necessary to deal
+          with a database, but instead provides tools for avoiding the more
+          error-prone parts of generating SQL queries.  If you want a tool to
+          completely abstract away the database, check out
+          <a href="http://www.hibernate.org">Hibernate</a> instead.  There is
+          a time and place for straight SQL and a time and place for an ORM
+          tool.  If you are currently in the former time and place, then
+          SqlBuilder is a tool you should definitely check out.
+        </p>
+      </subsection>
+    </section>
+    <section name="Getting Started">
+      <ul>
+        <li><a href="example.html">Basic examples</a></li>
+        <li>Additional code examples in the <a href="apidocs/overview-summary.html#overview_description">sqlbuilder overview javadocs</a></li>
+        <li>Major highlights of the supported syntax in the <a href="syntax_reference.html">Syntax Reference</a></li>
+        <li>Examples for all the classes in the <a href="xref-test/index.html">unit tests</a></li>
+        <li><a href="apidocs/index.html">Javadoc API documentation</a></li>
+        <li><a href="xref/index.html">Complete source code (with cross references)</a></li>
+      </ul>
+      <p>
+        In order to use SqlBuilder in your maven project, add the following to
+        your pom.xml:
+      </p>
+        <source>
+&lt;dependency&gt;
+  &lt;groupId&gt;com.healthmarketscience.sqlbuilder&lt;/groupId&gt;
+  &lt;artifactId&gt;sqlbuilder&lt;/artifactId&gt;
+  &lt;version&gt;${project.version}&lt;/version&gt;
+&lt;/dependency&gt;
+</source>
+        <p></p>
+    </section>
+    <section name="Features">
+      <ul>
+        <li>Good portion of commonly used SQL (see the <a href="apidocs/com/healthmarketscience/sqlbuilder/package-summary.html#package_description">package summary</a> for a
+            more complete list), including:
+        <ul>
+          <li><code>SELECT, UPDATE, DELETE, INSERT, CREATE, DROP,
+              UNION</code></li>
+          <li>Most boolean logic</li>
+          <li>Most numeric expressions</li>
+        </ul>
+        </li>
+        <li>99% of the SqlBuilder codebase is ANSI SQL92 compliant.  (With
+            some recent additions from ANSI SQL99 and SQL2003)</li>
+        <li>JDBC escape syntax support (<a href="apidocs/com/healthmarketscience/sqlbuilder/JdbcEscape.html">JdbcEscape</a>)</li>
+        <li>Helpers for managing PreparedStatement parameters (<a href="apidocs/com/healthmarketscience/sqlbuilder/QueryPreparer.html">QueryPreparer</a>) and reading results (<a href="apidocs/com/healthmarketscience/sqlbuilder/QueryReader.html">QueryReader</a>)</li>
+        <li>Optional <a href="apidocs/com/healthmarketscience/sqlbuilder/Query.html#validate()">query validation</a></li>
+        <li>Two usage modes:
+        <ul>
+          <li>Predefined, strongly verifiable <a href="apidocs/com/healthmarketscience/sqlbuilder/dbspec/package-summary.html">database model</a> (optionally using the included <a href="apidocs/com/healthmarketscience/sqlbuilder/dbspec/basic/package-summary.html">basic implementation</a>)</li>
+          <li>Fully customized, weakly verifiable constants using <a href="apidocs/com/healthmarketscience/sqlbuilder/CustomSql.html">CustomSql</a></li>
+        </ul>
+        </li>
+        <li>Does <i>not</i> do any form of SQL string escaping:
+        <ul>
+          <li>SQL escapes are database dependent</li>
+          <li>SQL escaping is pretty much impossible to do correctly in a
+              library external to the database</li>
+          <li>PreparedStatements should always be used to avoid any need for
+              string escaping (use <a href="apidocs/com/healthmarketscience/sqlbuilder/QueryPreparer.html">QueryPreparer</a> for a convenient helper)</li>
+        </ul>
+        </li>
+      </ul>
+    </section>
+  </body>
+</document>

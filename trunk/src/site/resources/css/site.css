@@ -1,0 +1,71 @@
+/* You can override this file with your own styles */
+
+li.L1,li.L3,li.L5,li.L7,li.L9 {
+    color:#888
+}
+li.L0,li.L2,li.L4,li.L6,li.L8 {
+    color:#888
+}
+a.externalLink[href^=https] {
+    background:url('../images/internet-web-browser.png') right center no-repeat;
+    padding-right:18px
+}
+tt {
+    background:#eee
+}
+.indented {
+    padding-left: 10pt;
+    padding-right: 100pt;
+}
+.source {
+    padding-top: 5pt;
+    padding-left: 10pt;
+    padding-right: 100pt;
+}
+dl {
+    background-color: #ffc;
+    border: 1px solid #aaa;
+    padding: 4px 4px 4px 6px;
+}
+dd {
+    padding-top:5pt;
+}
+dt {
+    padding:5pt;
+}
+hr {
+    border-color:#aaa;
+}
+.table-striped tbody>tr:nth-child(even)>td {
+    background-color:#EEE
+}
+th {
+    background-color: #BBB;
+}
+.section h3 {
+    padding: 0px 8px;
+    border: 1px solid #AAA;
+    background-color: #EEE;
+    color: #BF7D30;
+    font-size: large;
+}
+.section h2 {
+    padding: 0px 8px;
+    border: 1px solid #999;
+    background-color: #DDD;
+    color: #BF7D30;
+    font-size: x-large;
+}    
+.table-striped tbody>tr:nth-child(even)>th,.table-striped tbody>tr:nth-child(odd)>th {
+    background-color:#BBB;
+    color: #FFF;
+}
+.section h2 > a,.section h3 > a {
+    color: #BF7D30;
+}
+#bannerLeft h2 {
+    color: #005985;
+}
+#breadcrumbs > ul {
+    padding-right: 50pt;    
+}

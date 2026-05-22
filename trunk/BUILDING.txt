@@ -1,0 +1,4 @@
+To build from source:
+1) Install Maven 2.x (http://maven.apache.org/).
+2) mvn package
+3) Find output in "target" directory.
